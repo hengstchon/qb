@@ -1,7 +1,7 @@
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { ActionFunction, Form } from 'react-router-dom'
+import { ActionFunction, Form, redirect } from 'react-router-dom'
 import axios, { AxiosRequestConfig } from 'axios'
 
 export const Login = () => {
@@ -35,9 +35,10 @@ export const Login = () => {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
-  const data = Object.fromEntries(formData)
+  let data = Object.fromEntries(formData)
+  data = { username: 'aadmin', password: 'VVwZvHyc6LdY65' }
 
-  const op1 = {
+  const options = {
     method: 'POST',
     url: '/api/v2/auth/login',
     headers: {
@@ -45,15 +46,15 @@ export const action: ActionFunction = async ({ request }) => {
     },
     data,
   }
-  const o1 = await axios.request(op1)
-  console.log(o1)
-
-  const op2: AxiosRequestConfig = {
-    method: 'GET',
-    url: '/api/v2/app/version',
+  const res = await axios.request(options)
+  console.log(res)
+  if (res.status == 200) {
+    if (res.data == 'Ok.') {
+      return redirect('/')
+    } else {
+      return 'Wrong username or password!'
+    }
+  } else {
+    return 'Error!'
   }
-  const o2 = await axios.request(op2)
-  console.log(o2)
-
-  return null
 }
