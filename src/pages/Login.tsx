@@ -20,7 +20,7 @@ export const Login = () => {
             </Label>
             <Input id="password" />
           </div>
-          <div className="mx-auto mt-2">
+          <div className="mt-2 w-full text-center">
             <Button className="bg-blue-200 px-12 py-2">Sign in</Button>
           </div>
         </div>
