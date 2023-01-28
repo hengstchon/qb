@@ -1,9 +1,7 @@
+import React from 'react'
 import { cn } from '@/utils'
-import * as React from 'react'
 
-interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
-  className?: string
-}
+interface InputProps extends React.ComponentPropsWithoutRef<'input'> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {

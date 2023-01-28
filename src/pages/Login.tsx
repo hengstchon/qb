@@ -1,3 +1,4 @@
+import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
 
@@ -20,9 +21,7 @@ export const Login = () => {
             <Input id="password" />
           </div>
           <div className="mx-auto mt-2">
-            <button className="rounded-md bg-blue-100 p-2 px-12">
-              Sign in
-            </button>
+            <Button className="bg-blue-200 px-12 py-2">Sign in</Button>
           </div>
         </div>
       </div>
