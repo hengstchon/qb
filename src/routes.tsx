@@ -14,4 +14,8 @@ export const router = createHashRouter([
     element: <Login />,
     action: loginAction,
   },
+  {
+    path: '/*',
+    element: <ErrorPage />,
+  },
 ])

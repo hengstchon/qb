@@ -4,16 +4,19 @@ import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes'
 import { SWRConfig, SWRConfiguration } from 'swr'
-import axios from 'axios'
+import axi from '@/utils/axi'
+import { ToastProvider } from '@/ui/Toast'
 
 const swrConfig: SWRConfiguration = {
-  fetcher: (url) => axios.get(url).then((res) => res.data),
+  fetcher: (url) => axi.get(url).then((res) => res.data),
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <SWRConfig value={swrConfig}>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </SWRConfig>
   </React.StrictMode>
 )
