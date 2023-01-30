@@ -4,7 +4,9 @@ Yet Another Qbittorrent WebUI
 
 ### Qbittorrent test client
 
-#### Go to `docker` directory,
+#### Start container
+
+Go to `docker` directory,
 
 ```bash
 docker-compose up -d
