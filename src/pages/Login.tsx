@@ -3,30 +3,27 @@ import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
 import { ActionFunction, Form, redirect, useActionData } from 'react-router-dom'
 import axi from '@/utils/axi'
-import {
-  ToastDescription,
-  ToastProvider,
-  ToastRoot,
-  ToastTitle,
-  ToastViewport,
-} from '@/ui/Toast'
+import { Toast, ToastViewport } from '@/ui/Toast'
+import { useState } from 'react'
 
 export const Login = () => {
   const errors = useActionData()
   console.log(errors)
 
+  const [count, setCount] = useState(0)
+
   return (
     <>
-      {errors && (
-        <>
-          <ToastRoot duration={100000}>
-            <ToastTitle>login fail</ToastTitle>
-            <ToastDescription>{errors as string}</ToastDescription>
-          </ToastRoot>
-          <ToastViewport />
-        </>
-      )}
-      <Form method="post">
+      {errors &&
+        Array.from({ length: count }).map((_, index) => (
+          <Toast
+            key={index}
+            title="login fail"
+            description="{errors as string}"
+          />
+        ))}
+
+      <Form method="post" onSubmit={() => setCount((c) => c + 1)}>
         <div className="flex min-h-screen items-center justify-center">
           <div className="flex w-full max-w-md flex-col">
             <h1 className="text-center text-3xl font-semibold">Welcome</h1>
