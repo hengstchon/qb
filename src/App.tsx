@@ -1,21 +1,23 @@
-import { Link } from 'react-router-dom'
-import useSWR from 'swr'
-import { Button } from './ui/Button'
-import axi from './utils/axi'
+import { RouterProvider } from 'react-router-dom'
+import { SWRConfig, SWRConfiguration } from 'swr'
+import { createStore, Provider } from 'jotai'
+import { router } from './routes'
+import './index.css'
+import axi from '@/utils/axi'
+
+const swrConfig: SWRConfiguration = {
+  fetcher: (url) => axi.get(url).then((res) => res.data),
+}
+
+export const store = createStore()
 
 const App = () => {
-  const { data } = useSWR('/app/version')
-  console.log(data)
-
   return (
-    <div className="">
-      <div>App version: {data}</div>
-      <Link to="/login">Login</Link>
-      <br />
-      <Button className="" onClick={() => axi.post('/auth/logout')}>
-        Logout
-      </Button>
-    </div>
+    <SWRConfig value={swrConfig}>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </SWRConfig>
   )
 }
 

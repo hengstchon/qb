@@ -1,15 +1,40 @@
+import { useEffect, useState } from 'react'
+import {
+  ActionFunction,
+  Form,
+  useActionData,
+  useNavigate,
+} from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { ActionFunction, Form, redirect, useActionData } from 'react-router-dom'
 import axi from '@/utils/axi'
+import { store } from '@/App'
+import { isAuthedAtom } from './Auth'
+import { useAtom } from 'jotai'
 
 export const Login = () => {
-  const errors = useActionData()
-  console.log(errors)
+  const [isAuthed] = useAtom(isAuthedAtom)
+  const navigate = useNavigate()
+  const err = useActionData() as string | undefined
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (isAuthed) navigate('/')
+  }, [isAuthed])
+
+  useEffect(() => {
+    err && setIsLoading(false)
+  }, [err, isLoading])
 
   return (
-    <Form method="post">
+    <Form
+      method="post"
+      onSubmit={() => {
+        setIsLoading(true)
+      }}
+    >
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex w-full max-w-md flex-col">
           <h1 className="text-center text-3xl font-semibold">Welcome</h1>
@@ -26,8 +51,15 @@ export const Login = () => {
               </Label>
               <Input id="password" name="password" />
             </div>
-            <div className="mt-2 w-full text-center">
-              <Button className="bg-blue-200 px-12 py-2">Sign in</Button>
+            <div className="w-full space-y-2 text-center">
+              <p className="h-6 text-red-400">{err}</p>
+              <Button className="w-full bg-blue-200 px-12 py-2">
+                {isLoading ? (
+                  <Loader2 className="mx-auto h-6 w-6 animate-spin" />
+                ) : (
+                  'Sign in'
+                )}
+              </Button>
             </div>
           </div>
         </div>
@@ -38,23 +70,22 @@ export const Login = () => {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
-  let data = Object.fromEntries(formData)
-  // data = { username: 'admin', password: 'VVwZvHyc6LdY65' }
+  const data = Object.fromEntries(formData)
 
   const res = await axi.post('/auth/login', data, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   })
-  // console.log(res)
 
   if (res.status == 200) {
     if (res.data == 'Ok.') {
-      return redirect('/')
+      store.set(isAuthedAtom, true)
+      return null
     } else {
-      return 'Wrong username or password!'
+      return 'Invalid Username or Password!'
     }
   } else {
-    return 'Error!'
+    return 'Unknown Error!'
   }
 }
