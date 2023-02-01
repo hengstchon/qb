@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-  ActionFunction,
-  Form,
-  useActionData,
-  useNavigate,
-} from 'react-router-dom'
+import { ActionFunction, Form, Navigate, useActionData } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
@@ -12,23 +8,20 @@ import { Label } from '@/ui/Label'
 import axi from '@/utils/axi'
 import { store } from '@/App'
 import { isAuthedAtom } from './Auth'
-import { useAtom } from 'jotai'
 
 export const Login = () => {
-  const [isAuthed] = useAtom(isAuthedAtom)
-  const navigate = useNavigate()
+  const isAuthed = useAtomValue(isAuthedAtom)
+
   const err = useActionData() as string | undefined
   const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    if (isAuthed) navigate('/')
-  }, [isAuthed])
 
   useEffect(() => {
     err && setIsLoading(false)
   }, [err, isLoading])
 
-  return (
+  return isAuthed ? (
+    <Navigate to="/" />
+  ) : (
     <Form
       method="post"
       onSubmit={() => {
