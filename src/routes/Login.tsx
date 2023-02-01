@@ -8,6 +8,7 @@ import { Label } from '@/ui/Label'
 import axi from '@/utils/axi'
 import { store } from '@/App'
 import { isAuthedAtom } from './Auth'
+import { API } from '@/utils/api'
 
 export const Login = () => {
   const isAuthed = useAtomValue(isAuthedAtom)
@@ -65,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
-  const res = await axi.post('/auth/login', data, {
+  const res = await axi.post(API.login, data, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
