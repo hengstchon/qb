@@ -13,6 +13,7 @@
     "@tanstack/react-table": "^8.7.9",
     "axios": "^1.3.0",
     "clsx": "^1.2.1",
+    "dayjs": "^1.11.7",
     "jotai": "^2.0.0",
     "lucide-react": "^0.108.0",
     "react": "^18.2.0",

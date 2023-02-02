@@ -1,7 +1,7 @@
 import { cn } from '@/utils'
 import { atom, useAtomValue } from 'jotai'
 
-export const showSidebarAtom = atom(true)
+export const showSidebarAtom = atom(false)
 
 const Sidebar = () => {
   const showSidebar = useAtomValue(showSidebarAtom)
