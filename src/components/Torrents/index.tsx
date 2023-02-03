@@ -2,6 +2,7 @@ import { Torrent } from '@/types'
 import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
 import { API } from '@/utils/api'
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -16,44 +17,56 @@ import useSWR from 'swr'
 const ch = createColumnHelper<Torrent>()
 
 const columns = [
-  ch.accessor('name', {}),
+  ch.accessor('name', {
+    header: 'Name',
+  }),
   ch.accessor('size', {
+    header: 'Size',
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('total_size', {
-    header: 'total size',
+    header: 'Total Size',
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('progress', {
+    header: 'Progress',
     cell: (p) => formatPercentage(p.getValue()),
   }),
   ch.accessor('downloaded', {
-    header: 'downloaded',
+    header: 'Downloaded',
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('uploaded', {
-    header: 'uploaded',
+    header: 'Uploaded',
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('state', {
-    header: 'status',
+    header: 'Status',
   }),
   ch.accessor((row) => `${row.num_seeds}(${row.num_complete})`, {
-    header: 'seeds',
+    header: 'Seeds',
   }),
   ch.accessor((row) => `${row.num_leechs}(${row.num_incomplete})`, {
-    header: 'peers',
+    header: 'Peers',
   }),
   ch.accessor('dlspeed', {
-    header: 'down speed',
+    header: 'Down Speed',
   }),
   ch.accessor('upspeed', {
-    header: 'up speed',
+    header: 'Up Speed',
   }),
-  ch.accessor('eta', {}),
-  ch.accessor('ratio', {}),
-  ch.accessor('category', {}),
-  ch.accessor('tags', {}),
+  ch.accessor('eta', {
+    header: 'ETA',
+  }),
+  ch.accessor('ratio', {
+    header: 'Ratio',
+  }),
+  ch.accessor('category', {
+    header: 'Category',
+  }),
+  ch.accessor('tags', {
+    header: 'Tags',
+  }),
   ch.accessor('added_on', {
     header: 'Added On',
     cell: (p) => formatTimestamp(p.getValue()),
@@ -62,31 +75,55 @@ const columns = [
     header: 'Completed On',
     cell: (p) => formatTimestamp(p.getValue()),
   }),
-  ch.accessor('tracker', {}),
-  ch.accessor('dl_limit', {}),
-  ch.accessor('up_limit', {}),
-  ch.accessor('downloaded_session', {}),
-  ch.accessor('uploaded_limit', {}),
-  ch.accessor('time_active', {}),
+  ch.accessor('tracker', {
+    header: 'Tracker',
+  }),
+  ch.accessor('dl_limit', {
+    header: 'DL Limit',
+  }),
+  ch.accessor('up_limit', {
+    header: 'UP_limit',
+  }),
+  ch.accessor('downloaded_session', {
+    header: 'Downloaded Session',
+  }),
+  ch.accessor('uploaded_limit', {
+    header: 'Uploaded Limit',
+  }),
+  ch.accessor('time_active', {
+    header: 'Time Active',
+  }),
   ch.accessor('amount_left', {
     header: 'Remaining',
     cell: (p) => formatBytes(p.getValue()),
   }),
-  ch.accessor('save_path', {}),
+  ch.accessor('save_path', {
+    header: 'Save Path',
+  }),
   ch.accessor('completed', {
+    header: 'Completed',
     cell: (p) => formatTimestamp(p.getValue()),
   }),
-  ch.accessor('ratio_limit', {}),
+  ch.accessor('ratio_limit', {
+    header: 'Ratio Limit',
+  }),
   ch.accessor('seen_complete', {
-    header: (p) => p.column.id.replace('_', ' '),
+    header: 'Seen Complete',
     cell: (p) => formatTimestamp(p.getValue()),
   }),
   ch.accessor('last_activity', {
-    header: (p) => p.column.id.replace('_', ' '),
+    header: 'Last Activity',
     cell: (p) => formatTimestamp(p.getValue()),
   }),
-  ch.accessor('availability', {}),
+  ch.accessor('availability', {
+    header: 'Availability',
+  }),
 ]
+
+const headers = columns.map((c) => c.header)
+
+// console.log(columns)
+console.log(headers)
 
 const tableStateAtom = atomWithStorage<TableState>('tableState', {
   columnSizing: {},
@@ -140,8 +177,8 @@ const Torrents = () => {
   if (isLoading) return <div>Loading...</div>
 
   return (
-    <div className="min-w-0 flex-1 bg-yellow-50">
-      <div className="w-full overflow-x-auto">
+    <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">
+      <div className="w-full flex-1 overflow-x-auto">
         <div
           className="table border"
           style={{ width: table.getCenterTotalSize() }}
@@ -190,67 +227,67 @@ const Torrents = () => {
             ))}
           </div>
         </div>
-        <div className="mt-2 flex items-center gap-2">
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                table.setPageIndex(page)
-              }}
-              className="w-16 rounded border p-1"
-            />
-          </span>
-          <select
-            value={table.getState().pagination.pageSize}
+      </div>
+      <div className="flex items-center justify-center gap-2 bg-green-50">
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<<'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>>'}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            defaultValue={table.getState().pagination.pageIndex + 1}
             onChange={(e) => {
-              table.setPageSize(Number(e.target.value))
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              table.setPageIndex(page)
             }}
-          >
-            {[1, 2].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
+            className="w-16 rounded border p-1"
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[1, 2].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
       </div>
       {/* <Log tors={data} /> */}
     </div>
