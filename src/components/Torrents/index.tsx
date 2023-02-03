@@ -6,6 +6,7 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  TableState,
   useReactTable,
 } from '@tanstack/react-table'
 import { useAtom } from 'jotai'
@@ -79,7 +80,7 @@ const columns = [
   ch.accessor('availability', {}),
 ]
 
-const tableStateAtom = atomWithStorage('tableState', {
+const tableStateAtom = atomWithStorage<TableState>('tableState', {
   columnSizing: {},
   columnSizingInfo: {
     startOffset: null,
@@ -104,6 +105,7 @@ const tableStateAtom = atomWithStorage('tableState', {
     pageIndex: 0,
     pageSize: 10,
   },
+  globalFilter: null,
 })
 
 const Torrents = () => {
@@ -250,7 +252,7 @@ const Torrents = () => {
 const Log = ({ tors }: { tors: Torrent[] }) => {
   return (
     <div>
-      {tors.map((t, i) => (
+      {tors.slice(0, -1).map((t, i) => (
         <div key={i}>
           <span>-------------------------------</span>
           <div key={i} className="mb-4">
