@@ -1,8 +1,14 @@
 import { Torrent } from '@/types'
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuPortal,
+  ContextMenuTrigger,
+} from '@/ui/ContextMenu'
 import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
 import { API } from '@/utils/api'
 import {
-  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -29,7 +35,7 @@ const columns = [
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('progress', {
-    header: 'Progress',
+    header: 'Done',
     cell: (p) => formatPercentage(p.getValue()),
   }),
   ch.accessor('downloaded', {
@@ -79,23 +85,23 @@ const columns = [
     header: 'Tracker',
   }),
   ch.accessor('dl_limit', {
-    header: 'DL Limit',
+    header: 'Down Limit',
   }),
   ch.accessor('up_limit', {
-    header: 'UP_limit',
+    header: 'Up limit',
   }),
   ch.accessor('downloaded_session', {
-    header: 'Downloaded Session',
+    header: 'Session Download',
   }),
-  ch.accessor('uploaded_limit', {
-    header: 'Uploaded Limit',
-  }),
-  ch.accessor('time_active', {
-    header: 'Time Active',
+  ch.accessor('uploaded_session', {
+    header: 'Session Upload',
   }),
   ch.accessor('amount_left', {
     header: 'Remaining',
     cell: (p) => formatBytes(p.getValue()),
+  }),
+  ch.accessor('time_active', {
+    header: 'Time Active',
   }),
   ch.accessor('save_path', {
     header: 'Save Path',
@@ -108,7 +114,7 @@ const columns = [
     header: 'Ratio Limit',
   }),
   ch.accessor('seen_complete', {
-    header: 'Seen Complete',
+    header: 'Last Seen Complete',
     cell: (p) => formatTimestamp(p.getValue()),
   }),
   ch.accessor('last_activity', {
@@ -121,9 +127,6 @@ const columns = [
 ]
 
 const headers = columns.map((c) => c.header)
-
-// console.log(columns)
-console.log(headers)
 
 const tableStateAtom = atomWithStorage<TableState>('tableState', {
   columnSizing: {},
@@ -183,34 +186,46 @@ const Torrents = () => {
           className="table border"
           style={{ width: table.getCenterTotalSize() }}
         >
-          <div className="thead">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <div key={headerGroup.id} className="tr flex">
-                {headerGroup.headers.map((header) => (
-                  <div
-                    key={header.id}
-                    className="th group relative truncate border capitalize"
-                    style={{ width: header.getSize() }}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                    <div
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
-                      className={cn(
-                        'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
-                        header.column.getIsResizing()
-                          ? 'bg-blue-500 opacity-100'
-                          : ''
-                      )}
-                    />
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <div className="thead">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <div key={headerGroup.id} className="tr flex">
+                    {headerGroup.headers.map((header) => (
+                      <div
+                        key={header.id}
+                        className="th group relative truncate border"
+                        style={{ width: header.getSize() }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        <div
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          className={cn(
+                            'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
+                            header.column.getIsResizing()
+                              ? 'bg-blue-500 opacity-100'
+                              : ''
+                          )}
+                        />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
-            ))}
-          </div>
+            </ContextMenuTrigger>
+            <ContextMenuContent className="">
+              {(headers as string[]).map((h) => (
+                <ContextMenuCheckboxItem key={h} onClick={() => {}}>
+                  {h}
+                </ContextMenuCheckboxItem>
+              ))}
+            </ContextMenuContent>
+          </ContextMenu>
+
           <div className="tbody">
             {table.getRowModel().rows.map((row) => (
               <div key={row.id} className="tr flex">
