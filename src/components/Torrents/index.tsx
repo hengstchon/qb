@@ -1,12 +1,15 @@
 import { Torrent } from '@/types'
-import { formatBytes, formatPercentage, formatTimestamp } from '@/utils'
+import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
 import { API } from '@/utils/api'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 import useSWR from 'swr'
 
 const ch = createColumnHelper<Torrent>()
@@ -76,42 +79,100 @@ const columns = [
   ch.accessor('availability', {}),
 ]
 
+const tableStateAtom = atomWithStorage('tableState', {
+  columnSizing: {},
+  columnSizingInfo: {
+    startOffset: null,
+    startSize: null,
+    deltaOffset: null,
+    deltaPercentage: null,
+    isResizingColumn: false,
+    columnSizingStart: [],
+  },
+  rowSelection: {},
+  expanded: {},
+  grouping: [],
+  sorting: [],
+  columnFilters: [],
+  columnPinning: {
+    left: [],
+    right: [],
+  },
+  columnOrder: [],
+  columnVisibility: {},
+  pagination: {
+    pageIndex: 0,
+    pageSize: 10,
+  },
+})
+
 const Torrents = () => {
   const { data, isLoading } = useSWR(API.torrentInfo(), {
     fallbackData: [],
   })
 
-  const { getHeaderGroups, getRowModel } = useReactTable({
+  const [state, setState] = useAtom(tableStateAtom)
+
+  const table = useReactTable({
     data,
     columns,
+    columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
+
+  table.setOptions((prev) => ({
+    ...prev,
+    state,
+    onStateChange: setState,
+  }))
 
   if (isLoading) return <div>Loading...</div>
 
   return (
     <div className="min-w-0 flex-1 bg-yellow-50">
-      <div className="w-full overflow-auto">
-        <table className="w-full table-auto border-collapse border text-sm">
+      <div className="w-full overflow-x-auto">
+        <table
+          className="text-sm"
+          style={{ width: table.getCenterTotalSize() }}
+        >
           <thead>
-            {getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="border capitalize">
+                  <th
+                    key={header.id}
+                    className="group relative border capitalize"
+                    style={{ width: header.getSize() }}
+                  >
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
+                    <div
+                      onMouseDown={header.getResizeHandler()}
+                      onTouchStart={header.getResizeHandler()}
+                      className={cn(
+                        'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
+                        header.column.getIsResizing()
+                          ? 'bg-blue-500 opacity-100'
+                          : ''
+                      )}
+                    />
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
           <tbody>
-            {getRowModel().rows.map((row) => (
+            {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="border">
+                  <td
+                    key={cell.id}
+                    className="border"
+                    style={{ width: cell.column.getSize() }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -119,6 +180,67 @@ const Torrents = () => {
             ))}
           </tbody>
         </table>
+        <div className="flex items-center gap-2">
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<<'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>>'}
+          </button>
+          <span className="flex items-center gap-1">
+            <div>Page</div>
+            <strong>
+              {table.getState().pagination.pageIndex + 1} of{' '}
+              {table.getPageCount()}
+            </strong>
+          </span>
+          <span className="flex items-center gap-1">
+            | Go to page:
+            <input
+              type="number"
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                table.setPageIndex(page)
+              }}
+              className="w-16 rounded border p-1"
+            />
+          </span>
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value))
+            }}
+          >
+            {[1, 2].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <Log tors={data} />
     </div>
