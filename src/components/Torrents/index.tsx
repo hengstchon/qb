@@ -73,10 +73,18 @@ const columns = [
     cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('save_path', {}),
-  ch.accessor('completed', {}),
+  ch.accessor('completed', {
+    cell: (p) => formatTimestamp(p.getValue()),
+  }),
   ch.accessor('ratio_limit', {}),
-  ch.accessor('seen_complete', {}),
-  ch.accessor('last_activity', {}),
+  ch.accessor('seen_complete', {
+    header: (p) => p.column.id.replace('_', ' '),
+    cell: (p) => formatTimestamp(p.getValue()),
+  }),
+  ch.accessor('last_activity', {
+    header: (p) => p.column.id.replace('_', ' '),
+    cell: (p) => formatTimestamp(p.getValue()),
+  }),
   ch.accessor('availability', {}),
 ]
 
@@ -134,17 +142,17 @@ const Torrents = () => {
   return (
     <div className="min-w-0 flex-1 bg-yellow-50">
       <div className="w-full overflow-x-auto">
-        <table
-          className="text-sm"
+        <div
+          className="table border"
           style={{ width: table.getCenterTotalSize() }}
         >
-          <thead>
+          <div className="thead">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+              <div key={headerGroup.id} className="tr flex">
                 {headerGroup.headers.map((header) => (
-                  <th
+                  <div
                     key={header.id}
-                    className="group relative border capitalize"
+                    className="th group relative truncate border capitalize"
                     style={{ width: header.getSize() }}
                   >
                     {flexRender(
@@ -161,28 +169,28 @@ const Torrents = () => {
                           : ''
                       )}
                     />
-                  </th>
+                  </div>
                 ))}
-              </tr>
+              </div>
             ))}
-          </thead>
-          <tbody>
+          </div>
+          <div className="tbody">
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+              <div key={row.id} className="tr flex">
                 {row.getVisibleCells().map((cell) => (
-                  <td
+                  <div
                     key={cell.id}
-                    className="border"
+                    className="truncate border"
                     style={{ width: cell.column.getSize() }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  </div>
                 ))}
-              </tr>
+              </div>
             ))}
-          </tbody>
-        </table>
-        <div className="flex items-center gap-2">
+          </div>
+        </div>
+        <div className="mt-2 flex items-center gap-2">
           <button
             className="rounded border p-1"
             onClick={() => table.setPageIndex(0)}
@@ -244,7 +252,7 @@ const Torrents = () => {
           </select>
         </div>
       </div>
-      <Log tors={data} />
+      {/* <Log tors={data} /> */}
     </div>
   )
 }
