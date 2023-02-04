@@ -5,6 +5,7 @@ import { isAuthedAtom } from '@/routes/Auth'
 import axi from '@/utils/axi'
 import { showSidebarAtom } from '../Sidebar'
 import { API } from '@/utils/api'
+import FilterInput from './FilterInput'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -28,6 +29,7 @@ const Toolbar = () => {
       >
         <LogOutIcon />
       </Button>
+      <FilterInput />
     </div>
   )
 }

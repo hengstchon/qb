@@ -13,6 +13,7 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   Header,
   Table,
@@ -147,7 +148,7 @@ const initialState: TableState = {
   expanded: {},
   grouping: [],
   sorting: [],
-  columnFilters: [],
+  columnFilters: [{ id: 'name', value: '' }],
   columnPinning: {
     left: [],
     right: [],
@@ -160,7 +161,11 @@ const initialState: TableState = {
   },
   globalFilter: null,
 }
-const tableStateAtom = atomWithStorage('tableState', initialState)
+
+export const tableStateAtom = atomWithStorage<TableState>(
+  'tableState',
+  initialState
+)
 
 const reorderColumn = (
   draggedColumnId: string,
@@ -236,15 +241,16 @@ const Torrents = () => {
     fallbackData: [],
   })
 
-  const [state, setState] = useAtom(tableStateAtom)
-
   const table = useReactTable({
     data,
     columns,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   })
+
+  const [state, setState] = useAtom<TableState>(tableStateAtom)
 
   table.setOptions((prev) => ({
     ...prev,
