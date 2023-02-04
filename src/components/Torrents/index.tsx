@@ -3,7 +3,6 @@ import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
-  ContextMenuPortal,
   ContextMenuTrigger,
 } from '@/ui/ContextMenu'
 import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
@@ -50,9 +49,11 @@ const columns = [
     header: 'Status',
   }),
   ch.accessor((row) => `${row.num_seeds}(${row.num_complete})`, {
+    id: 'seeds',
     header: 'Seeds',
   }),
   ch.accessor((row) => `${row.num_leechs}(${row.num_incomplete})`, {
+    id: 'peers',
     header: 'Peers',
   }),
   ch.accessor('dlspeed', {
@@ -126,9 +127,7 @@ const columns = [
   }),
 ]
 
-const headers = columns.map((c) => c.header)
-
-const tableStateAtom = atomWithStorage<TableState>('tableState', {
+const initialState: TableState = {
   columnSizing: {},
   columnSizingInfo: {
     startOffset: null,
@@ -154,7 +153,8 @@ const tableStateAtom = atomWithStorage<TableState>('tableState', {
     pageSize: 10,
   },
   globalFilter: null,
-})
+}
+const tableStateAtom = atomWithStorage('tableState', initialState)
 
 const Torrents = () => {
   const { data, isLoading } = useSWR(API.torrentInfo(), {
@@ -218,9 +218,13 @@ const Torrents = () => {
               </div>
             </ContextMenuTrigger>
             <ContextMenuContent className="">
-              {(headers as string[]).map((h) => (
-                <ContextMenuCheckboxItem key={h} onClick={() => {}}>
-                  {h}
+              {table.getAllColumns().map((c) => (
+                <ContextMenuCheckboxItem
+                  key={c.id}
+                  checked={c.getIsVisible()}
+                  onClick={c.getToggleVisibilityHandler()}
+                >
+                  {c.columnDef.header as string}
                 </ContextMenuCheckboxItem>
               ))}
             </ContextMenuContent>
@@ -232,7 +236,7 @@ const Torrents = () => {
                 {row.getVisibleCells().map((cell) => (
                   <div
                     key={cell.id}
-                    className="truncate border"
+                    className="truncate border text-sm"
                     style={{ width: cell.column.getSize() }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
