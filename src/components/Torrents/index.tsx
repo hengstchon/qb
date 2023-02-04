@@ -8,16 +8,22 @@ import {
 import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
 import { API } from '@/utils/api'
 import {
+  Column,
+  ColumnOrderState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  Header,
+  Table,
   TableState,
   useReactTable,
 } from '@tanstack/react-table'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import useSWR from 'swr'
+import { useDrag, useDrop } from 'react-dnd'
+import { FC } from 'react'
 
 const ch = createColumnHelper<Torrent>()
 
@@ -156,6 +162,75 @@ const initialState: TableState = {
 }
 const tableStateAtom = atomWithStorage('tableState', initialState)
 
+const reorderColumn = (
+  draggedColumnId: string,
+  targetColumnId: string,
+  columnOrder: string[]
+): ColumnOrderState => {
+  columnOrder.splice(
+    columnOrder.indexOf(targetColumnId),
+    0,
+    columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
+  )
+  return [...columnOrder]
+}
+
+const DraggableColumnHeader: FC<{
+  header: Header<Torrent, unknown>
+  table: Table<Torrent>
+}> = ({ header, table }) => {
+  const { getState, setColumnOrder } = table
+  let { columnOrder } = getState()
+  const { column } = header
+
+  const [{ isDragging }, dragRef, previewRef] = useDrag({
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    item: () => column,
+    type: 'column',
+  })
+
+  const [, dropRef] = useDrop({
+    accept: 'column',
+    drop: (draggedColumn: Column<Torrent>) => {
+      if (!columnOrder.length) {
+        columnOrder = table.getAllColumns().map((c) => c.id)
+      }
+      const newColumnOrder = reorderColumn(
+        draggedColumn.id,
+        column.id,
+        columnOrder
+      )
+      setColumnOrder(newColumnOrder)
+    },
+  })
+
+  return (
+    <div
+      key={header.id}
+      ref={dropRef}
+      className="th group relative select-none truncate border"
+      style={{ width: header.getSize(), opacity: isDragging ? 0.5 : 1 }}
+    >
+      <div
+        ref={isDragging ? previewRef : dragRef}
+        className={cn(isDragging ? 'cursor-move' : 'cursor-pointer')}
+      >
+        {flexRender(header.column.columnDef.header, header.getContext())}
+      </div>
+      <div
+        onMouseDown={header.getResizeHandler()}
+        onTouchStart={header.getResizeHandler()}
+        className={cn(
+          'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
+          header.column.getIsResizing() ? 'bg-blue-500 opacity-100' : ''
+        )}
+      />
+    </div>
+  )
+}
+
 const Torrents = () => {
   const { data, isLoading } = useSWR(API.torrentInfo(), {
     fallbackData: [],
@@ -192,26 +267,11 @@ const Torrents = () => {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <div key={headerGroup.id} className="tr flex">
                     {headerGroup.headers.map((header) => (
-                      <div
+                      <DraggableColumnHeader
                         key={header.id}
-                        className="th group relative truncate border"
-                        style={{ width: header.getSize() }}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        <div
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          className={cn(
-                            'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
-                            header.column.getIsResizing()
-                              ? 'bg-blue-500 opacity-100'
-                              : ''
-                          )}
-                        />
-                      </div>
+                        header={header}
+                        table={table}
+                      />
                     ))}
                   </div>
                 ))}
