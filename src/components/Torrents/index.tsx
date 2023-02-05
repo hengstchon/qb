@@ -15,6 +15,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   Header,
   Table,
   TableState,
@@ -25,6 +26,7 @@ import { atomWithStorage } from 'jotai/utils'
 import useSWR from 'swr'
 import { useDrag, useDrop } from 'react-dnd'
 import { FC } from 'react'
+import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 
 const ch = createColumnHelper<Torrent>()
 
@@ -215,14 +217,24 @@ const DraggableColumnHeader: FC<{
     <div
       key={header.id}
       ref={dropRef}
-      className="th group relative select-none truncate border"
+      className="th group relative border"
       style={{ width: header.getSize(), opacity: isDragging ? 0.5 : 1 }}
     >
       <div
         ref={isDragging ? previewRef : dragRef}
-        className={cn(isDragging ? 'cursor-move' : 'cursor-pointer')}
+        className={cn(
+          'flex select-none items-center gap-1',
+          isDragging ? 'cursor-move' : 'cursor-pointer'
+        )}
+        onClick={header.column.getToggleSortingHandler()}
       >
-        {flexRender(header.column.columnDef.header, header.getContext())}
+        <span className="truncate">
+          {flexRender(header.column.columnDef.header, header.getContext())}
+        </span>
+        {{
+          asc: <ArrowUpIcon className="h-4 w-4 flex-none" />,
+          desc: <ArrowDownIcon className="h-4 w-4 flex-none" />,
+        }[header.column.getIsSorted() as string] ?? null}
       </div>
       <div
         onMouseDown={header.getResizeHandler()}
@@ -247,6 +259,7 @@ const Torrents = () => {
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   })
 
