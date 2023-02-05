@@ -1,5 +1,17 @@
 Yet Another Qbittorrent WebUI
 
+## Features
+
+Customization of headers:
+
+- Column Visibility(right click on column)
+- Column Ordering(drag and drop)
+- Column Sizing(move the right edge of column)
+- Filter on name column
+- Sorting(asc, desc, and none)
+- Row Selection
+- Pagination
+
 ## Development
 
 ### Qbittorrent test client
