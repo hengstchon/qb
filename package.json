@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.1",
     "@radix-ui/react-context-menu": "^2.1.1",
     "@radix-ui/react-label": "^2.0.0",
     "@tanstack/react-table": "^8.7.9",

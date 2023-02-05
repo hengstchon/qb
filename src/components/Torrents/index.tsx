@@ -27,10 +27,35 @@ import useSWR from 'swr'
 import { useDrag, useDrop } from 'react-dnd'
 import { FC } from 'react'
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
+import { Checkbox } from '@/ui/Checkbox'
 
 const ch = createColumnHelper<Torrent>()
 
 const columns = [
+  ch.display({
+    id: 'select',
+    enableSorting: false,
+    enableResizing: false,
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsSomeRowsSelected()
+            ? 'indeterminate'
+            : table.getIsAllRowsSelected()
+        }
+        onCheckedChange={(e) => {
+          table.toggleAllRowsSelected(e as boolean)
+        }}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={row.getToggleSelectedHandler()}
+        disabled={!row.getCanSelect()}
+      />
+    ),
+  }),
   ch.accessor('name', {
     header: 'Name',
   }),
@@ -223,7 +248,7 @@ const DraggableColumnHeader: FC<{
       <div
         ref={isDragging ? previewRef : dragRef}
         className={cn(
-          'flex select-none items-center gap-1',
+          'flex select-none items-center gap-1 px-1',
           isDragging ? 'cursor-move' : 'cursor-pointer'
         )}
         onClick={header.column.getToggleSortingHandler()}
@@ -236,14 +261,16 @@ const DraggableColumnHeader: FC<{
           desc: <ArrowDownIcon className="h-4 w-4 flex-none" />,
         }[header.column.getIsSorted() as string] ?? null}
       </div>
-      <div
-        onMouseDown={header.getResizeHandler()}
-        onTouchStart={header.getResizeHandler()}
-        className={cn(
-          'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
-          header.column.getIsResizing() ? 'bg-blue-500 opacity-100' : ''
-        )}
-      />
+      {header.column.getCanResize() && (
+        <div
+          onMouseDown={header.getResizeHandler()}
+          onTouchStart={header.getResizeHandler()}
+          className={cn(
+            'absolute right-0 top-0 h-full w-[5px] cursor-col-resize touch-none select-none bg-black bg-opacity-50 opacity-0 group-hover:opacity-100',
+            header.column.getIsResizing() ? 'bg-blue-500 opacity-100' : ''
+          )}
+        />
+      )}
     </div>
   )
 }
@@ -276,51 +303,83 @@ const Torrents = () => {
   return (
     <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">
       <div className="w-full flex-1 overflow-x-auto">
-        <div
-          className="table border"
-          style={{ width: table.getCenterTotalSize() }}
-        >
+        <div className="table border">
           <ContextMenu>
             <ContextMenuTrigger>
               <div className="thead">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <div key={headerGroup.id} className="tr flex">
-                    {headerGroup.headers.map((header) => (
-                      <DraggableColumnHeader
-                        key={header.id}
-                        header={header}
-                        table={table}
-                      />
-                    ))}
+                    {headerGroup.headers.map((header) => {
+                      return header.id === 'select' ? (
+                        <div
+                          key={header.id}
+                          className="th group relative flex items-center justify-center border px-1"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </div>
+                      ) : (
+                        <DraggableColumnHeader
+                          key={header.id}
+                          header={header}
+                          table={table}
+                        />
+                      )
+                    })}
                   </div>
                 ))}
               </div>
             </ContextMenuTrigger>
             <ContextMenuContent className="">
-              {table.getAllColumns().map((c) => (
-                <ContextMenuCheckboxItem
-                  key={c.id}
-                  checked={c.getIsVisible()}
-                  onClick={c.getToggleVisibilityHandler()}
-                >
-                  {c.columnDef.header as string}
-                </ContextMenuCheckboxItem>
-              ))}
+              {table.getAllColumns().map((c) => {
+                const { id, header } = c.columnDef
+                return (
+                  <ContextMenuCheckboxItem
+                    key={c.id}
+                    className="capitalize"
+                    checked={c.getIsVisible()}
+                    onClick={c.getToggleVisibilityHandler()}
+                  >
+                    {typeof header == 'string' ? header : id}
+                  </ContextMenuCheckboxItem>
+                )
+              })}
             </ContextMenuContent>
           </ContextMenu>
 
           <div className="tbody">
             {table.getRowModel().rows.map((row) => (
               <div key={row.id} className="tr flex">
-                {row.getVisibleCells().map((cell) => (
-                  <div
-                    key={cell.id}
-                    className="truncate border text-sm"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const isFirstCol = cell.column.id === 'select'
+                  return (
+                    <div
+                      key={cell.id}
+                      className="flex items-center border px-1"
+                      style={
+                        isFirstCol
+                          ? undefined
+                          : { width: cell.column.getSize() }
+                      }
+                    >
+                      {isFirstCol ? (
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
+                      ) : (
+                        <span className="truncate text-sm">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             ))}
           </div>

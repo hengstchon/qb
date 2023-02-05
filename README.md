@@ -12,6 +12,7 @@ Customization of headers:
 - Row Selection
 - Pagination
 
+
 ## Development
 
 ### Qbittorrent test client
