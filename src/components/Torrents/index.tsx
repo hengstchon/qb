@@ -5,7 +5,14 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from '@/ui/ContextMenu'
-import { cn, formatBytes, formatPercentage, formatTimestamp } from '@/utils'
+import {
+  cn,
+  formatBytes,
+  formatDuration,
+  formatPercentage,
+  formatTimestamp,
+  MAX_ETA,
+} from '@/utils'
 import { API } from '@/utils/api'
 import {
   Column,
@@ -16,18 +23,27 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  useReactTable,
   Header,
   Table,
   TableState,
-  useReactTable,
+  SortingFn,
 } from '@tanstack/react-table'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import useSWR from 'swr'
 import { useDrag, useDrop } from 'react-dnd'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import { Checkbox } from '@/ui/Checkbox'
+
+const sortingFnWithField =
+  <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
+  (rowA, rowB, columnId) =>
+    (rowA.getValue(columnId) as T)[field] >
+    (rowB.getValue(columnId) as T)[field]
+      ? 1
+      : -1
 
 const ch = createColumnHelper<Torrent>()
 
@@ -82,25 +98,42 @@ const columns = [
   ch.accessor('state', {
     header: 'Status',
   }),
-  ch.accessor((row) => `${row.num_seeds}(${row.num_complete})`, {
+  ch.accessor(({ num_seeds, num_complete }) => ({ num_seeds, num_complete }), {
     id: 'seeds',
     header: 'Seeds',
+    cell: (p) => {
+      const { num_seeds, num_complete } = p.getValue()
+      return `${num_seeds}(${num_complete})`
+    },
+    sortingFn: sortingFnWithField('num_seeds'),
   }),
-  ch.accessor((row) => `${row.num_leechs}(${row.num_incomplete})`, {
-    id: 'peers',
-    header: 'Peers',
-  }),
+  ch.accessor(
+    ({ num_leechs, num_incomplete }) => ({ num_leechs, num_incomplete }),
+    {
+      id: 'peers',
+      header: 'Peers',
+      cell: (p) => {
+        const { num_leechs, num_incomplete } = p.getValue()
+        return `${num_leechs}(${num_incomplete})`
+      },
+      sortingFn: sortingFnWithField('num_leechs'),
+    }
+  ),
   ch.accessor('dlspeed', {
     header: 'Down Speed',
+    cell: (p) => formatBytes(p.getValue(), 1) + '/s',
   }),
   ch.accessor('upspeed', {
     header: 'Up Speed',
+    cell: (p) => formatBytes(p.getValue(), 1) + '/s',
   }),
   ch.accessor('eta', {
     header: 'ETA',
+    cell: (p) => formatDuration(p.getValue(), MAX_ETA),
   }),
   ch.accessor('ratio', {
     header: 'Ratio',
+    cell: (p) => p.getValue().toFixed(2),
   }),
   ch.accessor('category', {
     header: 'Category',
@@ -114,39 +147,57 @@ const columns = [
   }),
   ch.accessor('completion_on', {
     header: 'Completed On',
-    cell: (p) => formatTimestamp(p.getValue()),
+    cell: (p) => p.getValue() > 0 && formatTimestamp(p.getValue()),
   }),
   ch.accessor('tracker', {
     header: 'Tracker',
   }),
   ch.accessor('dl_limit', {
     header: 'Down Limit',
+    cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
   }),
   ch.accessor('up_limit', {
     header: 'Up limit',
+    cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
   }),
   ch.accessor('downloaded_session', {
     header: 'Session Download',
+    cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('uploaded_session', {
     header: 'Session Upload',
+    cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('amount_left', {
     header: 'Remaining',
     cell: (p) => formatBytes(p.getValue()),
   }),
-  ch.accessor('time_active', {
-    header: 'Time Active',
-  }),
+  ch.accessor(
+    ({ time_active, seeding_time }) => ({ time_active, seeding_time }),
+    {
+      id: 'time_active',
+      header: 'Time Active',
+      cell: (p) => {
+        const { time_active, seeding_time } = p.getValue()
+        const fmActive = formatDuration(time_active)
+        const fmSeeding = formatDuration(seeding_time)
+        return seeding_time > 0
+          ? `${fmActive} (seeded for ${fmSeeding})`
+          : fmActive
+      },
+      sortingFn: sortingFnWithField('time_active'),
+    }
+  ),
   ch.accessor('save_path', {
     header: 'Save Path',
   }),
   ch.accessor('completed', {
     header: 'Completed',
-    cell: (p) => formatTimestamp(p.getValue()),
+    cell: (p) => formatBytes(p.getValue(), 1),
   }),
   ch.accessor('ratio_limit', {
     header: 'Ratio Limit',
+    cell: (p) => (p.getValue() >= 0 ? p.getValue() : '∞'),
   }),
   ch.accessor('seen_complete', {
     header: 'Last Seen Complete',
@@ -154,10 +205,15 @@ const columns = [
   }),
   ch.accessor('last_activity', {
     header: 'Last Activity',
-    cell: (p) => formatTimestamp(p.getValue()),
+    cell: (p) => {
+      const timestamp = p.getValue()
+      if (timestamp < 1) return '∞'
+      return `${formatDuration(new Date().valueOf() / 1000 - timestamp)} ago`
+    },
   }),
   ch.accessor('availability', {
     header: 'Availability',
+    cell: (p) => p.getValue().toFixed(3),
   }),
 ]
 
