@@ -4,9 +4,9 @@ import Torrents from '@/components/Torrents'
 
 const MainPage = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col">
       <Toolbar />
-      <div className="flex flex-1">
+      <div className="flex h-[calc(100vh-3rem)] flex-1">
         <Sidebar />
         <Torrents />
       </div>

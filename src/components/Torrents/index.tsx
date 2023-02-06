@@ -25,7 +25,7 @@ import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import useSWR from 'swr'
 import { useDrag, useDrop } from 'react-dnd'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import { Checkbox } from '@/ui/Checkbox'
 
@@ -184,7 +184,7 @@ const initialState: TableState = {
   columnVisibility: {},
   pagination: {
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 50,
   },
   globalFilter: null,
 }
@@ -242,13 +242,13 @@ const DraggableColumnHeader: FC<{
     <div
       key={header.id}
       ref={dropRef}
-      className="th group relative border"
+      className="th group relative border border-dotted"
       style={{ width: header.getSize(), opacity: isDragging ? 0.5 : 1 }}
     >
       <div
         ref={isDragging ? previewRef : dragRef}
         className={cn(
-          'flex select-none items-center gap-1 px-1',
+          'flex select-none items-center gap-1 px-1 text-sm font-semibold',
           isDragging ? 'cursor-move' : 'cursor-pointer'
         )}
         onClick={header.column.getToggleSortingHandler()}
@@ -288,6 +288,7 @@ const Torrents = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    // debugAll: true,
   })
 
   const [state, setState] = useAtom<TableState>(tableStateAtom)
@@ -302,8 +303,8 @@ const Torrents = () => {
 
   return (
     <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">
-      <div className="w-full flex-1 overflow-x-auto">
-        <div className="table border">
+      <div className="flex-1 overflow-auto">
+        <div className="table border border-dotted">
           <ContextMenu>
             <ContextMenuTrigger>
               <div className="thead">
@@ -313,7 +314,7 @@ const Torrents = () => {
                       return header.id === 'select' ? (
                         <div
                           key={header.id}
-                          className="th group relative flex items-center justify-center border px-1"
+                          className="th group relative flex items-center justify-center border border-dotted px-1"
                         >
                           {flexRender(
                             header.column.columnDef.header,
@@ -357,7 +358,7 @@ const Torrents = () => {
                   return (
                     <div
                       key={cell.id}
-                      className="flex items-center border px-1"
+                      className="flex items-center border border-dotted px-1"
                       style={
                         isFirstCol
                           ? undefined
@@ -439,7 +440,7 @@ const Torrents = () => {
             table.setPageSize(Number(e.target.value))
           }}
         >
-          {[1, 2].map((pageSize) => (
+          {[10, 20, 30, 50, 100].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
