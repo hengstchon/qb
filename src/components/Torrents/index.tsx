@@ -74,29 +74,36 @@ const columns = [
   }),
   ch.accessor('name', {
     header: 'Name',
+    size: 360,
   }),
   ch.accessor('size', {
     header: 'Size',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('total_size', {
     header: 'Total Size',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('progress', {
     header: 'Done',
     cell: (p) => formatPercentage(p.getValue()),
+    size: 120,
   }),
   ch.accessor('downloaded', {
     header: 'Downloaded',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('uploaded', {
     header: 'Uploaded',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('state', {
     header: 'Status',
+    size: 120,
   }),
   ch.accessor(({ num_seeds, num_complete }) => ({ num_seeds, num_complete }), {
     id: 'seeds',
@@ -106,6 +113,7 @@ const columns = [
       return `${num_seeds}(${num_complete})`
     },
     sortingFn: sortingFnWithField('num_seeds'),
+    size: 120,
   }),
   ch.accessor(
     ({ num_leechs, num_incomplete }) => ({ num_leechs, num_incomplete }),
@@ -117,37 +125,46 @@ const columns = [
         return `${num_leechs}(${num_incomplete})`
       },
       sortingFn: sortingFnWithField('num_leechs'),
+      size: 120,
     }
   ),
   ch.accessor('dlspeed', {
     header: 'Down Speed',
     cell: (p) => formatBytes(p.getValue(), 1) + '/s',
+    size: 120,
   }),
   ch.accessor('upspeed', {
     header: 'Up Speed',
     cell: (p) => formatBytes(p.getValue(), 1) + '/s',
+    size: 120,
   }),
   ch.accessor('eta', {
     header: 'ETA',
     cell: (p) => formatDuration(p.getValue(), MAX_ETA),
+    size: 120,
   }),
   ch.accessor('ratio', {
     header: 'Ratio',
     cell: (p) => p.getValue().toFixed(2),
+    size: 120,
   }),
   ch.accessor('category', {
     header: 'Category',
+    size: 120,
   }),
   ch.accessor('tags', {
     header: 'Tags',
+    size: 120,
   }),
   ch.accessor('added_on', {
     header: 'Added On',
     cell: (p) => formatTimestamp(p.getValue()),
+    size: 160,
   }),
   ch.accessor('completion_on', {
     header: 'Completed On',
     cell: (p) => p.getValue() > 0 && formatTimestamp(p.getValue()),
+    size: 160,
   }),
   ch.accessor('tracker', {
     header: 'Tracker',
@@ -155,22 +172,27 @@ const columns = [
   ch.accessor('dl_limit', {
     header: 'Down Limit',
     cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
+    size: 120,
   }),
   ch.accessor('up_limit', {
     header: 'Up limit',
     cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
+    size: 120,
   }),
   ch.accessor('downloaded_session', {
     header: 'Session Download',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('uploaded_session', {
     header: 'Session Upload',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor('amount_left', {
     header: 'Remaining',
     cell: (p) => formatBytes(p.getValue()),
+    size: 120,
   }),
   ch.accessor(
     ({ time_active, seeding_time }) => ({ time_active, seeding_time }),
@@ -186,6 +208,7 @@ const columns = [
           : fmActive
       },
       sortingFn: sortingFnWithField('time_active'),
+      size: 100,
     }
   ),
   ch.accessor('save_path', {
@@ -194,14 +217,17 @@ const columns = [
   ch.accessor('completed', {
     header: 'Completed',
     cell: (p) => formatBytes(p.getValue(), 1),
+    size: 120,
   }),
   ch.accessor('ratio_limit', {
     header: 'Ratio Limit',
     cell: (p) => (p.getValue() >= 0 ? p.getValue() : '∞'),
+    size: 100,
   }),
   ch.accessor('seen_complete', {
     header: 'Last Seen Complete',
     cell: (p) => formatTimestamp(p.getValue()),
+    size: 160,
   }),
   ch.accessor('last_activity', {
     header: 'Last Activity',
@@ -210,10 +236,12 @@ const columns = [
       if (timestamp < 1) return '∞'
       return `${formatDuration(new Date().valueOf() / 1000 - timestamp)} ago`
     },
+    size: 120,
   }),
   ch.accessor('availability', {
     header: 'Availability',
     cell: (p) => p.getValue().toFixed(3),
+    size: 120,
   }),
 ]
 
