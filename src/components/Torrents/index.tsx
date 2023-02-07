@@ -546,7 +546,9 @@ const Log = ({ tors }: { tors: TorrentType[] }) => {
             {Object.keys(t).map((k, i) => (
               <div key={i} className="whitespace-pre-wrap break-words">
                 <span>{k}:</span>
-                <span className="ml-4">{JSON.stringify(t[k])}</span>
+                <span className="ml-4">
+                  {JSON.stringify(t[k as keyof TorrentType])}
+                </span>
               </div>
             ))}
           </div>

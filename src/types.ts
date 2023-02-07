@@ -44,7 +44,6 @@ export type TorrentType = {
   uploaded: number
   uploaded_session: number
   upspeed: number
-  [key: string]: number | string | boolean
 }
 
 export type CategoryType = {
@@ -79,16 +78,20 @@ export type ServerStateType = {
   write_cache_overload: string
 }
 
-export type SyncDataType = {
+export type MainDataType = {
+  torrents: Record<string, TorrentType>
+  categories: Record<string, CategoryType>
+  tags: string[]
+  trackers: Record<string, string[]>
+  server_state: ServerStateType
+}
+
+export type SyncDataType = Partial<Omit<MainDataType, 'server_state'>> & {
   rid: number
   full_update?: boolean
-  torrents: Record<string, TorrentType>
   torrents_removed?: string[]
-  categories: Record<string, CategoryType>
   categories_removed?: string[]
-  tags: string[]
   tags_removed?: string[]
-  server_state: Partial<ServerStateType>
-  trackers: Record<string, string[]>
   trackers_removed?: string[]
+  server_state?: Partial<ServerStateType>
 }
