@@ -6,7 +6,6 @@ import useSWR from 'swr'
 
 const syncDataAtom = atom<SyncDataType>({
   rid: 0,
-  full_update: false,
   torrents: {},
   categories: {},
   tags: [],
