@@ -83,10 +83,12 @@ export type SyncDataType = {
   rid: number
   full_update: boolean
   torrents: Record<string, TorrentType>
-  torrents_removed: string[]
+  torrents_removed?: string[]
   categories: Record<string, CategoryType>
-  categories_removed: string[]
+  categories_removed?: string[]
   tags: string[]
-  tags_removed: string[]
+  tags_removed?: string[]
   server_state: Partial<ServerStateType>
+  trackers: Record<string, string[]>
+  trackers_removed?: string[]
 }
