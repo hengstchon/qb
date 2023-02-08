@@ -361,6 +361,7 @@ const DraggableColumnHeader: FC<{
 
 const Torrents = () => {
   const { data, isLoading } = useSWR(API.torrentInfo(), {
+    refreshInterval: 1000,
     fallbackData: [],
   })
 

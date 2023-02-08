@@ -133,7 +133,7 @@ const Test = () => {
   }, [data])
 
   // console.log(`data: ${new Date().toLocaleTimeString()}`, data)
-  // console.log(`syncData: ${new Date().toLocaleTimeString()}`, syncData)
+  console.log(`mainData: ${new Date().toLocaleTimeString()}`, mainData)
 
   return (
     <div className="h-screen overflow-auto bg-slate-700 p-8 text-slate-200">
