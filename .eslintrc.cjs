@@ -19,11 +19,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/no-empty-interface': [
-      'error',
-      {
-        allowSingleExtends: true,
-      },
-    ],
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 }

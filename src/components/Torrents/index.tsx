@@ -1,4 +1,4 @@
-import { TorrentType } from '@/types'
+import { Torrent } from '@/types'
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -38,14 +38,14 @@ import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import { Checkbox } from '@/ui/Checkbox'
 
 const sortingFnWithField =
-  <T extends Record<string, number>>(field: string): SortingFn<TorrentType> =>
+  <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
   (rowA, rowB, columnId) =>
     (rowA.getValue(columnId) as T)[field] >
     (rowB.getValue(columnId) as T)[field]
       ? 1
       : -1
 
-const ch = createColumnHelper<TorrentType>()
+const ch = createColumnHelper<Torrent>()
 
 const columns = [
   ch.display({
@@ -292,8 +292,8 @@ const reorderColumn = (
 }
 
 const DraggableColumnHeader: FC<{
-  header: Header<TorrentType, unknown>
-  table: Table<TorrentType>
+  header: Header<Torrent, unknown>
+  table: Table<Torrent>
 }> = ({ header, table }) => {
   const { getState, setColumnOrder } = table
   let { columnOrder } = getState()
@@ -309,7 +309,7 @@ const DraggableColumnHeader: FC<{
 
   const [, dropRef] = useDrop({
     accept: 'column',
-    drop: (draggedColumn: Column<TorrentType>) => {
+    drop: (draggedColumn: Column<Torrent>) => {
       if (!columnOrder.length) {
         columnOrder = table.getAllColumns().map((c) => c.id)
       }
@@ -536,7 +536,7 @@ const Torrents = () => {
   )
 }
 
-const Log = ({ tors }: { tors: TorrentType[] }) => {
+const Log = ({ tors }: { tors: Torrent[] }) => {
   return (
     <div>
       {tors.slice(0, -1).map((t, i) => (
@@ -547,7 +547,7 @@ const Log = ({ tors }: { tors: TorrentType[] }) => {
               <div key={i} className="whitespace-pre-wrap break-words">
                 <span>{k}:</span>
                 <span className="ml-4">
-                  {JSON.stringify(t[k as keyof TorrentType])}
+                  {JSON.stringify(t[k as keyof Torrent])}
                 </span>
               </div>
             ))}

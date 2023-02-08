@@ -1,4 +1,4 @@
-export type TorrentType = {
+export type Torrent = {
   added_on: number
   amount_left: number
   auto_tmm: boolean
@@ -46,12 +46,12 @@ export type TorrentType = {
   upspeed: number
 }
 
-export type CategoryType = {
+export type Category = {
   name: string
   savePath: string
 }
 
-export type ServerStateType = {
+export type ServerState = {
   alltime_dl: number
   alltime_ul: number
   average_time_queue: number
@@ -78,20 +78,20 @@ export type ServerStateType = {
   write_cache_overload: string
 }
 
-export type MainDataType = {
-  torrents: Record<string, TorrentType>
-  categories: Record<string, CategoryType>
+export interface MainData {
+  torrents: Record<string, Torrent>
+  categories: Record<string, Category>
   tags: string[]
   trackers: Record<string, string[]>
-  server_state: ServerStateType
+  server_state: ServerState
 }
 
-export type SyncDataType = Partial<Omit<MainDataType, 'server_state'>> & {
+export interface SyncData extends Partial<Omit<MainData, 'server_state'>> {
   rid: number
   full_update?: boolean
   torrents_removed?: string[]
   categories_removed?: string[]
   tags_removed?: string[]
   trackers_removed?: string[]
-  server_state?: Partial<ServerStateType>
+  server_state?: Partial<ServerState>
 }

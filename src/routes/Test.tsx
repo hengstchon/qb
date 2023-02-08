@@ -1,19 +1,10 @@
-import { MainDataType, SyncDataType } from '@/types'
+import { MainData, SyncData } from '@/types'
 import { API } from '@/utils/api'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import useSWR from 'swr'
 
-const syncDataAtom = atom<SyncDataType>({
-  rid: 0,
-  torrents: {},
-  categories: {},
-  tags: [],
-  trackers: {},
-  server_state: {},
-})
-
-const mainDataAtom = atom<MainDataType>({
+const mainDataAtom = atom<MainData>({
   torrents: {},
   categories: {},
   tags: [],
@@ -54,60 +45,89 @@ const mainDataAtom = atom<MainDataType>({
 
 const ridAtom = atom(0)
 
-type InitSyncDataType = MainDataType & {
-  rid: number
-  full_update: boolean
-}
-
-const initMainDataAtom = atom(null, (_, set, val: InitSyncDataType) =>
+const updateDataAtom = atom(null, (_, set, val: SyncData) =>
   set(mainDataAtom, (prev) => {
-    // const o = {} as MainDataType
-    // for (const [k, v] of Object.entries(val)) {
-    //   if (k in prev) {
-    //     o[k as keyof MainDataType] = v as MainDataType[keyof MainDataType]
-    //   }
-    // }
-    // return o
-    Object.keys(val)
+    if (val.full_update) {
+      return Object.fromEntries(
+        Object.entries(val).filter(([k]) => k in prev)
+      ) as MainData
+    }
+
+    const o = prev
+    for (const key in val) {
+      switch (key) {
+        case 'tags':
+          o.tags = [...o.tags, ...val.tags!]
+          break
+        case 'tags_removed':
+          o.tags = o.tags.filter((e) => !val.tags?.includes(e))
+          break
+        case 'categories':
+          o.categories = { ...o.categories, ...val.categories }
+          break
+        case 'categories_removed':
+          o.categories = Object.fromEntries(
+            Object.entries(o.categories).filter(
+              ([k]) => !val.categories_removed?.includes(k)
+            )
+          )
+          break
+        case 'trackers':
+          o.categories = { ...o.categories, ...val.categories }
+          break
+        case 'trackers_removed':
+          o.categories = Object.fromEntries(
+            Object.entries(o.categories).filter(
+              ([k]) => !val.trackers_removed?.includes(k)
+            )
+          )
+          break
+        case 'torrents': {
+          for (const [hash, prop] of Object.entries(val.torrents!)) {
+            if (Object.keys(o.torrents).includes(hash)) {
+              o.torrents[hash] = { ...o.torrents[hash], ...prop }
+            } else {
+              o.torrents[hash] = prop
+            }
+          }
+          break
+        }
+        case 'torrents_removed':
+          o.torrents = Object.fromEntries(
+            Object.entries(o.torrents).filter(
+              ([k]) => !val.torrents_removed?.includes(k)
+            )
+          )
+          break
+
+        case 'server_state':
+          o.server_state = { ...o.server_state, ...val.server_state }
+          break
+        default:
+          break
+      }
+    }
+    return o
   })
 )
 
-const updateMainDataAtom = atom(null, (_, set, val: SyncDataType) =>
-  set(mainDataAtom, (prev) => ({ ...prev, ...val }))
-)
-
 const Test = () => {
-  const [rid] = useAtom(ridAtom)
+  const [rid, setRid] = useAtom(ridAtom)
   const [mainData] = useAtom(mainDataAtom)
-  const setInitDataAtom = useSetAtom(initMainDataAtom)
-  const setUpdateDataAtom = useSetAtom(updateMainDataAtom)
+  const setUpdateDataAtom = useSetAtom(updateDataAtom)
 
   const { data } = useSWR(API.syncMain(rid), {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    // onSuccess: (data) => {
-    //   setTimeout(() => {
-    //     if (data.full_update) {
-    //       setInitDataAtom(data)
-    //     } else {
-    //       // setUpdateDataAtom(data)
-    //     }
-    //   }, 3000)
-    // },
-    // fallbackData: {},
   })
 
   useEffect(() => {
     if (!data?.rid) return
-
     console.log(`data: ${new Date().toLocaleTimeString()}`, data)
     const pollingInterval = 3000
     const id = setTimeout(() => {
-      if (data.full_update) {
-        setInitDataAtom(data)
-      } else {
-        // setUpdateDataAtom(data)
-      }
+      setRid(data.rid)
+      setUpdateDataAtom(data)
     }, pollingInterval)
     return () => clearTimeout(id)
   }, [data])
@@ -134,7 +154,7 @@ const Test = () => {
             <div key={i} className="whitespace-pre-wrap break-words">
               <span>{k}:</span>
               <span className="ml-4 opacity-60">
-                {JSON.stringify(mainData[k as keyof MainDataType])}
+                {JSON.stringify(mainData[k as keyof MainData])}
               </span>
             </div>
           ))}
