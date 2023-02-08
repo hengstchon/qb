@@ -1,61 +1,52 @@
-import { Torrent } from '@/types'
-import { API } from '@/utils/api'
+import { atom, useAtom } from 'jotai'
+import useSWR from 'swr'
 import {
+  ColumnFiltersState,
+  ColumnOrderState,
+  ColumnSizingState,
+  PaginationState,
+  RowSelectionState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  TableState,
   useReactTable,
 } from '@tanstack/react-table'
-import { atomWithStorage } from 'jotai/utils'
-import useSWR from 'swr'
 import Pagination from './Pagination'
 import Row from './Row'
 import DraggableColumnHeader from './DraggableColumnHeader'
 import HeaderContextMenu from './ContextMenu'
 import { columns } from './columns'
-import { useAtom } from 'jotai'
+import { Torrent } from '@/types'
+import { API } from '@/utils/api'
 
-const initialState: TableState = {
-  columnSizing: {},
-  columnSizingInfo: {
-    startOffset: null,
-    startSize: null,
-    deltaOffset: null,
-    deltaPercentage: null,
-    isResizingColumn: false,
-    columnSizingStart: [],
-  },
-  rowSelection: {},
-  expanded: {},
-  grouping: [],
-  sorting: [],
-  columnFilters: [{ id: 'name', value: '' }],
-  columnPinning: {
-    left: [],
-    right: [],
-  },
-  columnOrder: [],
-  columnVisibility: {},
-  pagination: {
-    pageIndex: 0,
-    pageSize: 50,
-  },
-  globalFilter: null,
-}
-
-export const tableStateAtom = atomWithStorage<TableState>(
-  'tableState',
-  initialState
-)
+const columnOrderAtom = atom<ColumnOrderState>([])
+const columnSizingAtom = atom<ColumnSizingState>({})
+const columnVisibilityAtom = atom<VisibilityState>({})
+export const colFiltersAtom = atom<ColumnFiltersState>([
+  { id: 'name', value: '' },
+])
+const sortingAtom = atom<SortingState>([])
+const paginationAtom = atom<PaginationState>({ pageIndex: 0, pageSize: 20 })
+const rowSelectionAtom = atom<RowSelectionState>({})
 
 const Torrents = () => {
   const { data, isLoading } = useSWR(API.torrentInfo(), {
     refreshInterval: 1000,
     fallbackData: [],
   })
+
+  const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
+  const [columnSizing, onColumnSizingChange] = useAtom(columnSizingAtom)
+  const [columnVisibility, onColumnVisibilityChange] =
+    useAtom(columnVisibilityAtom)
+  const [columnFilters, onColumnFiltersChange] = useAtom(colFiltersAtom)
+  const [sorting, onSortingChange] = useAtom(sortingAtom)
+  const [pagination, onPaginationChange] = useAtom(paginationAtom)
+  const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
 
   const table = useReactTable({
     data,
@@ -65,15 +56,28 @@ const Torrents = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnOrderChange,
+    onColumnSizingChange,
+    onColumnVisibilityChange,
+    onColumnFiltersChange,
+    onSortingChange,
+    onPaginationChange,
+    onRowSelectionChange,
     // debugAll: true,
   })
 
-  const [state, setState] = useAtom<TableState>(tableStateAtom)
-
   table.setOptions((prev) => ({
     ...prev,
-    state,
-    onStateChange: setState,
+    state: {
+      ...table.initialState,
+      columnOrder,
+      columnSizing,
+      columnVisibility,
+      columnFilters,
+      sorting,
+      pagination,
+      rowSelection,
+    },
   }))
 
   if (isLoading) return <div>Loading...</div>
