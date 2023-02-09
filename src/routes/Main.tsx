@@ -4,8 +4,9 @@ import Torrents from '@/components/Torrents'
 import { MainData, SyncData, Torrent, Category, ServerState } from '@/types'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import { API } from '@/utils/api'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 const mainDataAtom = atom<MainData>({
   torrents: {},
@@ -144,27 +145,28 @@ const MainPage = () => {
   const [mainData] = useAtom(mainDataAtom)
   const setUpdateDataAtom = useSetAtom(updateDataAtom)
 
-  const { data } = useSWR(API.syncMain(rid), {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
+  const { data } = useSWRImmutable(API.syncMain(rid), {
+    onSuccess: (data) => {
+      setUpdateDataAtom(data)
+    },
   })
   useEffect(() => {
     if (!data?.rid) return
-    setUpdateDataAtom(data)
-    const pollingInterval = 5000
+    const pollingInterval = 1000
     const id = setTimeout(() => {
-      // setRid(data.rid)
+      setRid(data.rid)
     }, pollingInterval)
     return () => clearTimeout(id)
   }, [data])
   // useEffect(() => {
   //   console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
   // }, [mainData])
-  useEffect(() => {
-    console.log(`data: ${new Date().toJSON()}`, data)
-  }, [data])
+  // useEffect(() => {
+  //   console.log(`data: ${new Date().toJSON()}`, data)
+  // }, [data])
 
-  // console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
+  // const torrents = useMemo(() => mainData.torrents, [mainData])
+  // console.log(`torrents: ${new Date().toJSON()}`, torrents)
 
   // const { data: torrents } = useSWR(API.torrentInfo(), {
   //   refreshInterval: 1000,
@@ -178,7 +180,9 @@ const MainPage = () => {
       <div className="flex h-[calc(100vh-3rem)] flex-1">
         <Sidebar />
         {/* {Math.random()} */}
-        {/* {torrents && <Torrents torrents={torrents} />} */}
+        {Object.keys(mainData.torrents).length && (
+          <Torrents torrents={Object.values(mainData.torrents)} />
+        )}
       </div>
     </div>
   )
