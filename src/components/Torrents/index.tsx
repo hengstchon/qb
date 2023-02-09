@@ -21,7 +21,6 @@ import DraggableColumnHeader from './DraggableColumnHeader'
 import HeaderContextMenu from './ContextMenu'
 import { columns } from './columns'
 import { Torrent } from '@/types'
-import { API } from '@/utils/api'
 
 const columnOrderAtom = atom<ColumnOrderState>([])
 const columnSizingAtom = atom<ColumnSizingState>({})
@@ -33,12 +32,7 @@ const sortingAtom = atom<SortingState>([])
 const paginationAtom = atom<PaginationState>({ pageIndex: 0, pageSize: 20 })
 const rowSelectionAtom = atom<RowSelectionState>({})
 
-const Torrents = () => {
-  const { data, isLoading } = useSWR(API.torrentInfo(), {
-    refreshInterval: 1000,
-    fallbackData: [],
-  })
-
+const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(columnSizingAtom)
   const [columnVisibility, onColumnVisibilityChange] =
@@ -49,7 +43,7 @@ const Torrents = () => {
   const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
 
   const table = useReactTable({
-    data,
+    data: torrents,
     columns,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
@@ -79,8 +73,6 @@ const Torrents = () => {
       rowSelection,
     },
   }))
-
-  if (isLoading) return <div>Loading...</div>
 
   return (
     <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">

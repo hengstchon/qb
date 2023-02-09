@@ -1,7 +1,7 @@
 import Toolbar from '@/components/Toolbar'
 import Sidebar from '@/components/Sidebar'
 import Torrents from '@/components/Torrents'
-import { MainData, SyncData } from '@/types'
+import { MainData, SyncData, Torrent, Category, ServerState } from '@/types'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWR from 'swr'
 import { API } from '@/utils/api'
@@ -38,6 +38,37 @@ const mainDataAtom = atom<MainData>({
     use_alt_speed_limits: false,
     write_cache_overload: '',
   },
+})
+
+const torrentsAtom = atom<Record<string, Torrent>>({})
+const trackersAtom = atom<Record<string, string[]>>({})
+const categoriesAtom = atom<Record<string, Category>>({})
+const tagsAtom = atom<string[]>([])
+const serserStateAtom = atom<ServerState>({
+  alltime_dl: 0,
+  alltime_ul: 0,
+  average_time_queue: 0,
+  connection_status: '',
+  dht_nodes: 0,
+  dl_info_data: 0,
+  dl_info_speed: 0,
+  dl_rate_limit: 0,
+  free_space_on_disk: 0,
+  global_ratio: '',
+  queued_io_jobs: 0,
+  queueing: false,
+  read_cache_hits: '',
+  read_cache_overload: '',
+  refresh_interval: 0,
+  total_buffers_size: 0,
+  total_peer_connections: 0,
+  total_queued_size: 0,
+  total_wasted_session: 0,
+  up_info_data: 0,
+  up_info_speed: 0,
+  up_rate_limit: 0,
+  use_alt_speed_limits: false,
+  write_cache_overload: '',
 })
 
 const ridAtom = atom(0)
@@ -113,24 +144,33 @@ const MainPage = () => {
   const [mainData] = useAtom(mainDataAtom)
   const setUpdateDataAtom = useSetAtom(updateDataAtom)
 
-  // const { data } = useSWR(API.syncMain(rid), {
-  //   revalidateOnFocus: false,
-  //   revalidateOnReconnect: false,
-  // })
-  //
+  const { data } = useSWR(API.syncMain(rid), {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+  useEffect(() => {
+    if (!data?.rid) return
+    setUpdateDataAtom(data)
+    const pollingInterval = 5000
+    const id = setTimeout(() => {
+      // setRid(data.rid)
+    }, pollingInterval)
+    return () => clearTimeout(id)
+  }, [data])
   // useEffect(() => {
-  //   if (!data?.rid) return
-  //   // console.log(`data: ${new Date().toLocaleTimeString()}`, data)
-  //   const pollingInterval = 3000
-  //   const id = setTimeout(() => {
-  //     setRid(data.rid)
-  //     setUpdateDataAtom(data)
-  //   }, pollingInterval)
-  //   return () => clearTimeout(id)
-  // }, [data])
-  //
-  // // console.log(`data: ${new Date().toLocaleTimeString()}`, data)
-  // console.log(`mainData: ${new Date().toLocaleTimeString()}`, mainData)
+  //   console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
+  // }, [mainData])
+  useEffect(() => {
+    console.log(`data: ${new Date().toJSON()}`, data)
+  }, [data])
+
+  // console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
+
+  // const { data: torrents } = useSWR(API.torrentInfo(), {
+  //   refreshInterval: 1000,
+  //   fallbackData: [],
+  // })
+  // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
 
   return (
     <div className="flex h-screen flex-col">
@@ -138,7 +178,7 @@ const MainPage = () => {
       <div className="flex h-[calc(100vh-3rem)] flex-1">
         <Sidebar />
         {/* {Math.random()} */}
-        <Torrents />
+        {/* {torrents && <Torrents torrents={torrents} />} */}
       </div>
     </div>
   )
