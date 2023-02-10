@@ -8,15 +8,16 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
-export const formatBytes = (bytes: number, dp = 2) => {
+export const formatBytes = (bytes: number, dp?: number) => {
   if (bytes == 0) return '0 B'
   const k = 1024,
     units = ['iB', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'],
+    dps = [0, 1, 1, 2, 3, 3, 3, 3, 3],
     i = Math.floor(Math.log(bytes) / Math.log(k))
-  return (bytes / Math.pow(k, i)).toFixed(dp) + ' ' + units[i]
+  return (bytes / Math.pow(k, i)).toFixed(dp || dps[i]) + ' ' + units[i]
 }
 
-export const formatSpeed = (bytes: number, dp = 2) =>
+export const formatSpeed = (bytes: number, dp?: number) =>
   `${formatBytes(bytes, dp)}/s`
 
 export const formatPercentage = (data: number) =>

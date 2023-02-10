@@ -12,7 +12,6 @@ const StatusBar = () => {
     up_info_speed,
     up_info_data,
   } = serverState
-  console.log(serverState)
 
   return (
     <div className="flex h-8 items-center justify-end gap-8 px-2 text-sm">
