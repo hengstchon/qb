@@ -78,6 +78,11 @@ export type ServerState = {
   write_cache_overload: string
 }
 
+export type TorrentState = Record<string, Torrent>
+export type TrackerState = Record<string, string[]>
+export type CategoryState = Record<string, Category>
+export type TagState = string[]
+
 export interface MainData {
   torrents: Record<string, Torrent>
   categories: Record<string, Category>
