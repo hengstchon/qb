@@ -40,6 +40,7 @@ export type Torrent = {
   time_active: number
   total_size: number
   tracker: string
+  trackers_count: number
   up_limit: number
   uploaded: number
   uploaded_session: number
