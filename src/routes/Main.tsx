@@ -73,6 +73,7 @@ const serserStateAtom = atom<ServerState>({
 })
 
 const ridAtom = atom(0)
+export const refreshIntervalAtom = atom(5000)
 
 const updateDataAtom = atom(null, (_, set, val: SyncData) =>
   set(mainDataAtom, (prev) => {
@@ -142,6 +143,7 @@ const updateDataAtom = atom(null, (_, set, val: SyncData) =>
 
 const MainPage = () => {
   const [rid, setRid] = useAtom(ridAtom)
+  const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
   const [mainData] = useAtom(mainDataAtom)
   const setUpdateDataAtom = useSetAtom(updateDataAtom)
 
@@ -152,12 +154,12 @@ const MainPage = () => {
   })
   useEffect(() => {
     if (!data?.rid) return
-    const pollingInterval = 1000
+    const pollingInterval = refreshInterval
     const id = setTimeout(() => {
       setRid(data.rid)
     }, pollingInterval)
     return () => clearTimeout(id)
-  }, [data])
+  }, [data, refreshInterval])
   // useEffect(() => {
   //   console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
   // }, [mainData])
