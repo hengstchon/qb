@@ -1,5 +1,4 @@
 import { atom, useAtom } from 'jotai'
-import useSWR from 'swr'
 import {
   ColumnFiltersState,
   ColumnOrderState,
@@ -21,6 +20,19 @@ import DraggableColumnHeader from './DraggableColumnHeader'
 import HeaderContextMenu from './ContextMenu'
 import { columns } from './columns'
 import { Torrent } from '@/types'
+import { atomWithStorage } from 'jotai/utils'
+
+export const storageAtom = atomWithStorage('App', {
+  table: {
+    columnOrder: [],
+    columnSizing: {},
+    columnVisibility: {},
+    columnFilters: [{ id: 'name', value: '' }],
+    sorting: [],
+    pagination: { pageIndex: 0, pageSize: 20 },
+    rowSelection: {},
+  },
+})
 
 const columnOrderAtom = atom<ColumnOrderState>([])
 const columnSizingAtom = atom<ColumnSizingState>({})
@@ -29,8 +41,26 @@ export const colFiltersAtom = atom<ColumnFiltersState>([
   { id: 'name', value: '' },
 ])
 const sortingAtom = atom<SortingState>([])
-const paginationAtom = atom<PaginationState>({ pageIndex: 0, pageSize: 20 })
-const rowSelectionAtom = atom<RowSelectionState>({})
+// const paginationAtom = atom(
+//   (get) => get(storageAtom).table.pagination,
+//   (_, set, val) => {
+//     set(storageAtom, (prev: PaginationState) => ({
+//       ...prev,
+//       table: { ...prev.table, pagination: val },
+//     }))
+//   }
+// )
+const paginationAtom = atom<PaginationState>({ pageSize: 20, pageIndex: 0 })
+// const rowSelectionAtom = atom<RowSelectionState>({})
+const rowSelectionAtom = atom(
+  (get) => get(storageAtom).table.rowSelection,
+  (_, set, val: RowSelectionState) => {
+    console.log('val:', val)
+    set(storageAtom, (prev) => ({
+      table: { ...prev.table, rowSelection: val },
+    }))
+  }
+)
 
 const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
@@ -41,6 +71,9 @@ const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [sorting, onSortingChange] = useAtom(sortingAtom)
   const [pagination, onPaginationChange] = useAtom(paginationAtom)
   const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
+
+  // console.log(pagination)
+  console.log(rowSelection)
 
   const table = useReactTable({
     data: torrents,
