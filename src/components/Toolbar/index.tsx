@@ -3,10 +3,10 @@ import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { isAuthedAtom } from '@/routes/Auth'
 import axi from '@/utils/axi'
-import { openSidebarAtom } from '../Sidebar'
 import { API } from '@/utils/api'
 import FilterInput from './FilterInput'
 import { refreshIntervalAtom } from '@/components/Homepage/atoms'
+import { openSidebarAtom } from '@/components/Sidebar/atoms'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)

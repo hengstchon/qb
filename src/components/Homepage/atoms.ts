@@ -21,6 +21,7 @@ import { atomWithStorage } from 'jotai/utils'
 type StorageType = {
   app: {
     refreshInterval: number
+    sidebarWidth: number
     openSidebar: boolean
     openStatus: boolean
     openCategories: boolean
@@ -41,6 +42,7 @@ type StorageType = {
 export const storageAtom = atomWithStorage<StorageType>('App', {
   app: {
     refreshInterval: 5000,
+    sidebarWidth: 300,
     openSidebar: true,
     openStatus: true,
     openCategories: true,

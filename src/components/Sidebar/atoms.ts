@@ -55,3 +55,30 @@ export const openTrackersAtom = atom(
     }))
   }
 )
+
+export const openSidebarAtom = atom(
+  (get) => get(storageAtom).app.openSidebar,
+  (get, set, arg: SetStateAction<boolean>) => {
+    set(storageAtom, (prev) => ({
+      ...prev,
+      app: {
+        ...prev.app,
+        openSidebar:
+          typeof arg === 'function' ? arg(get(openSidebarAtom)) : arg,
+      },
+    }))
+  }
+)
+
+export const sidebarWidthAtom = atom(
+  (get) => get(storageAtom).app.sidebarWidth,
+  (_, set, arg: number) => {
+    set(storageAtom, (prev) => ({
+      ...prev,
+      app: {
+        ...prev.app,
+        sidebarWidth: arg,
+      },
+    }))
+  }
+)
