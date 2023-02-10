@@ -1,9 +1,9 @@
 import { createHashRouter } from 'react-router-dom'
-import MainPage from './Main'
 import { ErrorPage } from './ErrorPage'
 import { Login, action as loginAction } from './Login'
 import Auth from './Auth'
 import Test from './Test'
+import HomePage from '@/components/Homepage'
 
 export const router = createHashRouter([
   {
@@ -22,7 +22,7 @@ export const router = createHashRouter([
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: <HomePage />,
       },
     ],
   },

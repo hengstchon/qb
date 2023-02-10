@@ -8,32 +8,8 @@ import {
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table'
-import { atomWithStorage } from 'jotai/utils'
 import { SetStateAction } from 'react'
-
-type StorageType = {
-  table: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    columnFilters: ColumnFiltersState
-    sorting: SortingState
-    pagination: PaginationState
-    rowSelection: RowSelectionState
-  }
-}
-
-const storageAtom = atomWithStorage<StorageType>('App', {
-  table: {
-    columnOrder: [],
-    columnSizing: {},
-    columnVisibility: {},
-    columnFilters: [{ id: 'name', value: '' }],
-    sorting: [],
-    pagination: { pageIndex: 0, pageSize: 20 },
-    rowSelection: {},
-  },
-})
+import { storageAtom } from '@/components/Homepage/atoms'
 
 export const columnOrderAtom = atom(
   (get) => get(storageAtom).table.columnOrder,

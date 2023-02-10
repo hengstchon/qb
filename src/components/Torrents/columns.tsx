@@ -4,6 +4,7 @@ import {
   formatBytes,
   formatDuration,
   formatPercentage,
+  formatSpeed,
   formatTimestamp,
   MAX_ETA,
 } from '@/utils'
@@ -102,12 +103,12 @@ export const columns = [
   ),
   ch.accessor('dlspeed', {
     header: 'Down Speed',
-    cell: (p) => formatBytes(p.getValue(), 1) + '/s',
+    cell: (p) => formatSpeed(p.getValue(), 1),
     size: 120,
   }),
   ch.accessor('upspeed', {
     header: 'Up Speed',
-    cell: (p) => formatBytes(p.getValue(), 1) + '/s',
+    cell: (p) => formatSpeed(p.getValue(), 1),
     size: 120,
   }),
   ch.accessor('eta', {
@@ -143,12 +144,12 @@ export const columns = [
   }),
   ch.accessor('dl_limit', {
     header: 'Down Limit',
-    cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
+    cell: (p) => (p.getValue() > 0 ? formatSpeed(p.getValue(), 1) : '∞'),
     size: 120,
   }),
   ch.accessor('up_limit', {
     header: 'Up limit',
-    cell: (p) => (p.getValue() > 0 ? formatBytes(p.getValue(), 1) + '/s' : '∞'),
+    cell: (p) => (p.getValue() > 0 ? formatSpeed(p.getValue(), 1) : '∞'),
     size: 120,
   }),
   ch.accessor('downloaded_session', {

@@ -1,6 +1,3 @@
-import Toolbar from '@/components/Toolbar'
-import Sidebar from '@/components/Sidebar'
-import Torrents from '@/components/Torrents'
 import {
   SyncData,
   ServerState,
@@ -9,16 +6,62 @@ import {
   CategoryState,
   TagState,
 } from '@/types'
-import { atom, useAtom, useSetAtom } from 'jotai'
-import useSWRImmutable from 'swr/immutable'
-import { API } from '@/utils/api'
-import { useEffect } from 'react'
+import {
+  ColumnFiltersState,
+  ColumnOrderState,
+  ColumnSizingState,
+  PaginationState,
+  RowSelectionState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table'
+import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
-const torrentsAtom = atom<TorrentState>({})
-const trackersAtom = atom<TrackerState>({})
-const categoriesAtom = atom<CategoryState>({})
-const tagsAtom = atom<TagState>([])
-const serverStateAtom = atom<ServerState>({
+type StorageType = {
+  app: {
+    refreshInterval: number
+  }
+  table: {
+    columnOrder: ColumnOrderState
+    columnSizing: ColumnSizingState
+    columnVisibility: VisibilityState
+    columnFilters: ColumnFiltersState
+    sorting: SortingState
+    pagination: PaginationState
+    rowSelection: RowSelectionState
+  }
+}
+
+export const storageAtom = atomWithStorage<StorageType>('App', {
+  app: {
+    refreshInterval: 5000,
+  },
+  table: {
+    columnOrder: [],
+    columnSizing: {},
+    columnVisibility: {},
+    columnFilters: [{ id: 'name', value: '' }],
+    sorting: [],
+    pagination: { pageIndex: 0, pageSize: 20 },
+    rowSelection: {},
+  },
+})
+
+export const refreshIntervalAtom = atom(
+  (get) => get(storageAtom).app.refreshInterval,
+  (_, set, val: number) =>
+    set(storageAtom, (prev) => ({
+      ...prev,
+      app: { ...prev.app, refreshInterval: val },
+    }))
+)
+
+export const torrentsAtom = atom<TorrentState>({})
+export const trackersAtom = atom<TrackerState>({})
+export const categoriesAtom = atom<CategoryState>({})
+export const tagsAtom = atom<TagState>([])
+export const serverStateAtom = atom<ServerState>({
   alltime_dl: 0,
   alltime_ul: 0,
   average_time_queue: 0,
@@ -45,10 +88,9 @@ const serverStateAtom = atom<ServerState>({
   write_cache_overload: '',
 })
 
-const ridAtom = atom(0)
-export const refreshIntervalAtom = atom(3000)
+export const ridAtom = atom(0)
 
-const updateDataAtom = atom(null, (_, set, val: SyncData) => {
+export const updateDataAtom = atom(null, (_, set, val: SyncData) => {
   if (val.full_update) {
     set(torrentsAtom, val.torrents as TorrentState)
     set(trackersAtom, val.trackers as TrackerState)
@@ -117,54 +159,3 @@ const updateDataAtom = atom(null, (_, set, val: SyncData) => {
     }
   }
 })
-
-const MainPage = () => {
-  const [rid, setRid] = useAtom(ridAtom)
-  const [refreshInterval] = useAtom(refreshIntervalAtom)
-  const [torrents] = useAtom(torrentsAtom)
-  const setUpdateDataAtom = useSetAtom(updateDataAtom)
-
-  const { data } = useSWRImmutable(API.syncMain(rid), {
-    onSuccess: (data) => {
-      setUpdateDataAtom(data)
-    },
-  })
-  useEffect(() => {
-    if (!data?.rid) return
-    const pollingInterval = refreshInterval
-    const id = setTimeout(() => {
-      setRid(data.rid)
-    }, pollingInterval)
-    return () => clearTimeout(id)
-  }, [data, refreshInterval])
-  // useEffect(() => {
-  //   console.log(`torrents: ${new Date().toJSON()}`, mainData.torrents)
-  // }, [mainData])
-  // useEffect(() => {
-  //   console.log(`data: ${new Date().toJSON()}`, data)
-  // }, [data])
-
-  // const torrents = useMemo(() => mainData.torrents, [mainData])
-  // console.log(`torrents: ${new Date().toJSON()}`, torrents)
-
-  // const { data: torrents } = useSWR(API.torrentInfo(), {
-  //   refreshInterval: 1000,
-  //   fallbackData: [],
-  // })
-  // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
-
-  return (
-    <div className="flex h-screen flex-col">
-      <Toolbar />
-      <div className="flex h-[calc(100vh-3rem)] flex-1">
-        <Sidebar />
-        {/* {Math.random()} */}
-        {Object.keys(torrents).length && (
-          <Torrents torrents={Object.values(torrents)} />
-        )}
-      </div>
-    </div>
-  )
-}
-
-export default MainPage

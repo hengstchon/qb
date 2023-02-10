@@ -6,7 +6,7 @@ import axi from '@/utils/axi'
 import { showSidebarAtom } from '../Sidebar'
 import { API } from '@/utils/api'
 import FilterInput from './FilterInput'
-import { refreshIntervalAtom } from '@/routes/Main'
+import { refreshIntervalAtom } from '@/components/Homepage/atoms'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)

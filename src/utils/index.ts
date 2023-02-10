@@ -16,6 +16,9 @@ export const formatBytes = (bytes: number, dp = 2) => {
   return (bytes / Math.pow(k, i)).toFixed(dp) + ' ' + units[i]
 }
 
+export const formatSpeed = (bytes: number, dp = 2) =>
+  `${formatBytes(bytes, dp)}/s`
+
 export const formatPercentage = (data: number) =>
   `${Math.round(data * 10000) / 100}% `
 
