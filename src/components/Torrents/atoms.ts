@@ -14,92 +14,95 @@ import { storageAtom } from '@/components/Homepage/atoms'
 export const columnOrderAtom = atom(
   (get) => get(storageAtom).table.columnOrder,
   (get, set, arg: SetStateAction<ColumnOrderState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: {
-          ...prev.table,
-          columnOrder: arg(get(columnOrderAtom)),
-        },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        columnOrder:
+          typeof arg === 'function' ? arg(get(columnOrderAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const columnSizingAtom = atom(
   (get) => get(storageAtom).table.columnSizing,
   (get, set, arg: SetStateAction<ColumnSizingState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: {
-          ...prev.table,
-          columnSizing: arg(get(columnSizingAtom)),
-        },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        columnSizing:
+          typeof arg === 'function' ? arg(get(columnSizingAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const columnVisibilityAtom = atom(
   (get) => get(storageAtom).table.columnVisibility,
   (get, set, arg: SetStateAction<VisibilityState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: {
-          ...prev.table,
-          columnVisibility: arg(get(columnVisibilityAtom)),
-        },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        columnVisibility:
+          typeof arg === 'function' ? arg(get(columnVisibilityAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const columnFiltersAtom = atom(
   (get) => get(storageAtom).table.columnFilters,
   (get, set, arg: SetStateAction<ColumnFiltersState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: { ...prev.table, columnFilters: arg(get(columnFiltersAtom)) },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        columnFilters:
+          typeof arg === 'function' ? arg(get(columnFiltersAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const sortingAtom = atom(
   (get) => get(storageAtom).table.sorting,
   (get, set, arg: SetStateAction<SortingState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: { ...prev.table, sorting: arg(get(sortingAtom)) },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        sorting: typeof arg === 'function' ? arg(get(sortingAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const paginationAtom = atom(
   (get) => get(storageAtom).table.pagination,
   (get, set, arg: SetStateAction<PaginationState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: { ...prev.table, pagination: arg(get(paginationAtom)) },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        pagination: typeof arg === 'function' ? arg(get(paginationAtom)) : arg,
+      },
+    }))
   }
 )
 
 export const rowSelectionAtom = atom(
   (get) => get(storageAtom).table.rowSelection,
   (get, set, arg: SetStateAction<RowSelectionState>) => {
-    if (typeof arg === 'function') {
-      set(storageAtom, (prev) => ({
-        ...prev,
-        table: { ...prev.table, rowSelection: arg(get(rowSelectionAtom)) },
-      }))
-    }
+    set(storageAtom, (prev) => ({
+      ...prev,
+      table: {
+        ...prev.table,
+        rowSelection:
+          typeof arg === 'function' ? arg(get(rowSelectionAtom)) : arg,
+      },
+    }))
   }
 )

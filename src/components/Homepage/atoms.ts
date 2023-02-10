@@ -21,6 +21,11 @@ import { atomWithStorage } from 'jotai/utils'
 type StorageType = {
   app: {
     refreshInterval: number
+    openSidebar: boolean
+    openStatus: boolean
+    openCategories: boolean
+    openTags: boolean
+    openTrackers: boolean
   }
   table: {
     columnOrder: ColumnOrderState
@@ -36,6 +41,11 @@ type StorageType = {
 export const storageAtom = atomWithStorage<StorageType>('App', {
   app: {
     refreshInterval: 5000,
+    openSidebar: true,
+    openStatus: true,
+    openCategories: true,
+    openTags: true,
+    openTrackers: true,
   },
   table: {
     columnOrder: [],
