@@ -40,29 +40,26 @@ const HomePage = () => {
 
   const setSidebarWidth = useSetAtom(sidebarWidthAtom)
 
-  const [{ isDragging }, dragRef, previewRef] = useDrag({
-    type: 'sidebar',
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  })
-
-  const [, dropRef] = useDrop({
-    accept: 'sidebar',
-    drop: (item, monitor) => {
-      setSidebarWidth(monitor.getClientOffset().x)
-    },
-  })
+  // const [{ isDragging }, dragRef, previewRef] = useDrag({
+  //   type: 'sidebar',
+  //   collect: (monitor) => ({
+  //     isDragging: monitor.isDragging(),
+  //   }),
+  // })
+  //
+  // const [, dropRef] = useDrop({
+  //   accept: 'sidebar',
+  //   drop: (item, monitor) => {
+  //     setSidebarWidth(monitor.getClientOffset().x)
+  //   },
+  // })
 
   return (
     <div className="flex h-screen flex-col">
       <Toolbar />
-      <div className="relative flex flex-1 overflow-hidden" ref={dropRef}>
+      <div className="relative flex flex-1 overflow-hidden">
         <Sidebar />
-        <div
-          className="h-full w-1 bg-gray-50 hover:cursor-col-resize hover:bg-gray-500"
-          ref={dragRef}
-        ></div>
+        <div className="h-full w-1 bg-gray-50 hover:cursor-col-resize hover:bg-gray-500"></div>
 
         {/* {Math.random()} */}
         {Object.values(torrents).length && (

@@ -22,6 +22,7 @@ import {
   rowSelectionAtom,
   sortingAtom,
 } from './atoms'
+import { DndContext } from '@dnd-kit/core'
 
 const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
@@ -66,31 +67,33 @@ const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
       <div className="flex-1 overflow-auto">
         <div className="table border border-dotted">
           <div className="thead">
-            <HeaderContextMenu table={table}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <div key={headerGroup.id} className="tr flex">
-                  {headerGroup.headers.map((header) => {
-                    return header.id === 'select' ? (
-                      <div
-                        key={header.id}
-                        className="th group relative flex items-center justify-center border border-dotted px-1"
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </div>
-                    ) : (
-                      <DraggableColumnHeader
-                        key={header.id}
-                        header={header}
-                        table={table}
-                      />
-                    )
-                  })}
-                </div>
-              ))}
-            </HeaderContextMenu>
+            <DndContext>
+              <HeaderContextMenu table={table}>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <div key={headerGroup.id} className="tr flex">
+                    {headerGroup.headers.map((header) => {
+                      return header.id === 'select' ? (
+                        <div
+                          key={header.id}
+                          className="th group relative flex items-center justify-center border border-dotted px-1"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </div>
+                      ) : (
+                        <DraggableColumnHeader
+                          key={header.id}
+                          header={header}
+                          table={table}
+                        />
+                      )
+                    })}
+                  </div>
+                ))}
+              </HeaderContextMenu>
+            </DndContext>
           </div>
           <div className="tbody">
             {table.getRowModel().rows.map((row) => (

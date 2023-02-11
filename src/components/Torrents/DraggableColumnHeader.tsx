@@ -10,6 +10,7 @@ import {
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import { Torrent } from '@/types'
 import { cn } from '@/utils'
+import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core'
 
 const reorderColumn = (
   draggedColumnId: string,
@@ -32,43 +33,67 @@ const DraggableColumnHeader: FC<{
   let { columnOrder } = getState()
   const { column } = header
 
-  const [{ isDragging }, dragRef, previewRef] = useDrag({
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    item: () => column,
-    type: 'column',
+  // const [{ isDragging }, dragRef, previewRef] = useDrag({
+  //   collect: (monitor) => ({
+  //     isDragging: monitor.isDragging(),
+  //   }),
+  //   item: () => column,
+  //   type: 'column',
+  // })
+  //
+  // const [, dropRef] = useDrop({
+  //   accept: 'column',
+  //   drop: (draggedColumn: Column<Torrent>) => {
+  //     if (!columnOrder.length) {
+  //       columnOrder = table.getAllColumns().map((c) => c.id)
+  //     }
+  //     const newColumnOrder = reorderColumn(
+  //       draggedColumn.id,
+  //       column.id,
+  //       columnOrder
+  //     )
+  //     setColumnOrder(newColumnOrder)
+  //   },
+  // })
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: dragRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: header.id,
   })
 
-  const [, dropRef] = useDrop({
-    accept: 'column',
-    drop: (draggedColumn: Column<Torrent>) => {
-      if (!columnOrder.length) {
-        columnOrder = table.getAllColumns().map((c) => c.id)
-      }
-      const newColumnOrder = reorderColumn(
-        draggedColumn.id,
-        column.id,
-        columnOrder
-      )
-      setColumnOrder(newColumnOrder)
-    },
+  const { isOver, setNodeRef: dropRef } = useDroppable({
+    id: header.id,
   })
+  const dndContext = useDndContext()
 
   return (
     <div
       key={header.id}
       ref={dropRef}
       className="th group relative border border-dotted"
-      style={{ width: header.getSize(), opacity: isDragging ? 0.5 : 1 }}
+      style={{
+        width: header.getSize(),
+        opacity: isDragging ? 0.5 : 1,
+        backgroundColor: isOver ? 'purple' : undefined,
+        transform: transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
+      }}
     >
       <div
-        ref={isDragging ? previewRef : dragRef}
         className={cn(
           'flex select-none items-center gap-1 px-1 text-sm font-semibold',
           isDragging ? 'cursor-move' : 'cursor-pointer'
         )}
         onClick={header.column.getToggleSortingHandler()}
+        ref={dragRef}
+        {...listeners}
+        {...attributes}
       >
         <span className="truncate">
           {flexRender(header.column.columnDef.header, header.getContext())}
