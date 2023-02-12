@@ -21,7 +21,7 @@ import {
 } from './atoms'
 import HeaderColumn from './HeaderColumn'
 import HeaderDndContext from './HeaderDndContext'
-import { torrentsAtom } from '../Homepage/atoms'
+import { getTorrentsAtom } from '../Homepage/atoms'
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
@@ -33,11 +33,12 @@ const Torrents = () => {
   const [pagination, onPaginationChange] = useAtom(paginationAtom)
   const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
 
-  const [torrents] = useAtom(torrentsAtom)
+  const [torrents] = useAtom(getTorrentsAtom)
+
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
 
   const table = useReactTable({
-    data: Object.values(torrents),
+    data: torrents,
     columns,
     state: {
       columnOrder,

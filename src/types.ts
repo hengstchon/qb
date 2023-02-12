@@ -101,3 +101,42 @@ export interface SyncData extends Partial<Omit<MainData, 'server_state'>> {
   trackers_removed?: string[]
   server_state?: Partial<ServerState>
 }
+
+export type Propperties = {
+  addition_date: number
+  comment: string
+  completion_date: number
+  created_by: string
+  creation_date: number
+  dl_limit: number
+  dl_speed: number
+  dl_speed_avg: number
+  download_path?: string
+  eta: number
+  infohash_v1?: string
+  infohash_v2?: string
+  last_seen: number
+  nb_connections: number
+  nb_connections_limit: number
+  peers: number
+  peers_total: number
+  piece_size: number
+  pieces_have: number
+  pieces_num: number
+  reannounce: number
+  save_path: string
+  seeding_time: number
+  seeds: number
+  seeds_total: number
+  share_ratio: number
+  time_elapsed: number
+  total_downloaded: number
+  total_downloaded_session: number
+  total_size: number
+  total_uploaded: number
+  total_uploaded_session: number
+  total_wasted: number
+  up_limit: number
+  up_speed: number
+  up_speed_avg: number
+}

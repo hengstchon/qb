@@ -41,7 +41,7 @@ const Details = () => {
 
       {openDetails &&
         tabs.map(({ name, content }) => (
-          <TabsContent key={name} value={name} className="flex-1">
+          <TabsContent key={name} value={name} className="flex-1 overflow-auto">
             {content}
           </TabsContent>
         ))}

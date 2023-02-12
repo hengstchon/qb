@@ -106,3 +106,5 @@ export const rowSelectionAtom = atom(
     }))
   }
 )
+
+export const currentTorHashAtom = atom('')

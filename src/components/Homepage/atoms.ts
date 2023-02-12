@@ -73,6 +73,10 @@ export const refreshIntervalAtom = atom(
 )
 
 export const torrentsAtom = atom<TorrentState>({})
+export const getTorrentsAtom = atom((get) =>
+  Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash }))
+)
+
 export const trackersAtom = atom<TrackerState>({})
 export const categoriesAtom = atom<CategoryState>({})
 export const tagsAtom = atom<TagState>([])
