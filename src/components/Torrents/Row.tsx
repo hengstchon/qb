@@ -3,7 +3,7 @@ import { Torrent } from '@/types'
 
 const Row = ({ row }: { row: Row<Torrent> }) => {
   return (
-    <div className="tr flex">
+    <div className="flex">
       {row.getVisibleCells().map((cell) => {
         const isFirstCol = cell.column.id === 'select'
         return (

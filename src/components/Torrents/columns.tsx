@@ -46,35 +46,42 @@ export const columns = [
     ),
   }),
   ch.accessor('name', {
+    id: 'name',
     header: 'Name',
     size: 360,
   }),
   ch.accessor('size', {
+    id: 'size',
     header: 'Size',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('total_size', {
+    id: 'total_size',
     header: 'Total Size',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('progress', {
+    id: 'progress',
     header: 'Done',
     cell: (p) => formatPercentage(p.getValue()),
     size: 120,
   }),
   ch.accessor('downloaded', {
+    id: 'downloaded',
     header: 'Downloaded',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('uploaded', {
+    id: 'uploaded',
     header: 'Uploaded',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('state', {
+    id: 'state',
     header: 'Status',
     size: 120,
   }),
@@ -102,67 +109,81 @@ export const columns = [
     }
   ),
   ch.accessor('dlspeed', {
+    id: 'dlspeed',
     header: 'Down Speed',
     cell: (p) => formatSpeed(p.getValue(), 1),
     size: 120,
   }),
   ch.accessor('upspeed', {
+    id: 'upspeed',
     header: 'Up Speed',
     cell: (p) => formatSpeed(p.getValue(), 1),
     size: 120,
   }),
   ch.accessor('eta', {
+    id: 'eta',
     header: 'ETA',
     cell: (p) => formatDuration(p.getValue(), MAX_ETA),
     size: 120,
   }),
   ch.accessor('ratio', {
+    id: 'ratio',
     header: 'Ratio',
     cell: (p) => p.getValue().toFixed(2),
     size: 120,
   }),
   ch.accessor('category', {
+    id: 'category',
     header: 'Category',
     size: 120,
   }),
   ch.accessor('tags', {
+    id: 'tags',
     header: 'Tags',
     size: 120,
   }),
   ch.accessor('added_on', {
+    id: 'added_on',
     header: 'Added On',
     cell: (p) => formatTimestamp(p.getValue()),
     size: 160,
   }),
   ch.accessor('completion_on', {
+    id: 'completion_on',
     header: 'Completed On',
     cell: (p) => p.getValue() > 0 && formatTimestamp(p.getValue()),
     size: 160,
   }),
   ch.accessor('tracker', {
+    id: 'tracker',
     header: 'Tracker',
   }),
   ch.accessor('dl_limit', {
+    id: 'dl_limit',
     header: 'Down Limit',
     cell: (p) => (p.getValue() > 0 ? formatSpeed(p.getValue(), 1) : '∞'),
     size: 120,
   }),
   ch.accessor('up_limit', {
+    id: 'up_limit',
     header: 'Up limit',
     cell: (p) => (p.getValue() > 0 ? formatSpeed(p.getValue(), 1) : '∞'),
     size: 120,
   }),
   ch.accessor('downloaded_session', {
+    id: 'downloaded_session',
     header: 'Session Download',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('uploaded_session', {
+    id: 'uploaded_session',
     header: 'Session Upload',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('amount_left', {
+    id: 'amount_left',
     header: 'Remaining',
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
@@ -185,24 +206,29 @@ export const columns = [
     }
   ),
   ch.accessor('save_path', {
+    id: 'save_path',
     header: 'Save Path',
   }),
   ch.accessor('completed', {
+    id: 'completed',
     header: 'Completed',
     cell: (p) => formatBytes(p.getValue(), 1),
     size: 120,
   }),
   ch.accessor('ratio_limit', {
+    id: 'ratio_limit',
     header: 'Ratio Limit',
     cell: (p) => (p.getValue() >= 0 ? p.getValue() : '∞'),
     size: 100,
   }),
   ch.accessor('seen_complete', {
+    id: 'seen_complete',
     header: 'Last Seen Complete',
     cell: (p) => formatTimestamp(p.getValue()),
     size: 160,
   }),
   ch.accessor('last_activity', {
+    id: 'last_activity',
     header: 'Last Activity',
     cell: (p) => {
       const timestamp = p.getValue()
@@ -212,6 +238,7 @@ export const columns = [
     size: 120,
   }),
   ch.accessor('availability', {
+    id: 'availability',
     header: 'Availability',
     cell: (p) => p.getValue().toFixed(3),
     size: 120,

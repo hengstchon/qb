@@ -1,6 +1,5 @@
 import { useAtom } from 'jotai'
 import {
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -9,8 +8,7 @@ import {
 } from '@tanstack/react-table'
 import Pagination from './Pagination'
 import Row from './Row'
-import DraggableColumnHeader from './DraggableColumnHeader'
-import HeaderContextMenu from './ContextMenu'
+import HeaderContextMenu from './HeaderContextMenu'
 import { columns } from './columns'
 import { Torrent } from '@/types'
 import {
@@ -22,7 +20,8 @@ import {
   rowSelectionAtom,
   sortingAtom,
 } from './atoms'
-import { DndContext } from '@dnd-kit/core'
+import HeaderColumn from './HeaderColumn'
+import HeaderDndContext from './HeaderDndContext'
 
 const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
@@ -66,44 +65,24 @@ const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
     <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">
       <div className="flex-1 overflow-auto">
         <div className="table border border-dotted">
-          <div className="thead">
-            <DndContext>
-              <HeaderContextMenu table={table}>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <div key={headerGroup.id} className="tr flex">
-                    {headerGroup.headers.map((header) => {
-                      return header.id === 'select' ? (
-                        <div
-                          key={header.id}
-                          className="th group relative flex items-center justify-center border border-dotted px-1"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </div>
-                      ) : (
-                        <DraggableColumnHeader
-                          key={header.id}
-                          header={header}
-                          table={table}
-                        />
-                      )
-                    })}
-                  </div>
+          {/* header */}
+          <HeaderContextMenu table={table}>
+            <HeaderDndContext>
+              <div className="relative flex">
+                {table.getLeafHeaders().map((header) => (
+                  <HeaderColumn key={header.id} header={header} />
                 ))}
-              </HeaderContextMenu>
-            </DndContext>
-          </div>
-          <div className="tbody">
-            {table.getRowModel().rows.map((row) => (
-              <Row key={row.id} row={row} />
-            ))}
-          </div>
+              </div>
+            </HeaderDndContext>
+          </HeaderContextMenu>
+
+          {/* rows */}
+          {table.getRowModel().rows.map((row) => (
+            <Row key={row.id} row={row} />
+          ))}
         </div>
       </div>
       <Pagination table={table} />
-      {/* <Log tors={data} /> */}
     </div>
   )
 }

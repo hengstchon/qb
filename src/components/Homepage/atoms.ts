@@ -17,6 +17,7 @@ import {
 } from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+import { columns } from '../Torrents/columns'
 
 type StorageType = {
   app: {
@@ -50,7 +51,7 @@ export const storageAtom = atomWithStorage<StorageType>('App', {
     openTrackers: true,
   },
   table: {
-    columnOrder: [],
+    columnOrder: columns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
     columnFilters: [{ id: 'name', value: '' }],

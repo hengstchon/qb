@@ -13,7 +13,7 @@ const HeaderContextMenu = ({
   children,
 }: {
   table: Table<Torrent>
-  children: React.ReactElement[]
+  children: React.ReactElement
 }) => {
   return (
     <ContextMenu>
@@ -28,7 +28,7 @@ const HeaderContextMenu = ({
               checked={c.getIsVisible()}
               onClick={c.getToggleVisibilityHandler()}
             >
-              {typeof header == 'string' ? header : id}
+              {typeof header === 'string' ? header : id}
             </ContextMenuCheckboxItem>
           )
         })}
