@@ -23,6 +23,8 @@ export const formatSpeed = (bytes: number, dp?: number) =>
 export const formatPercentage = (data: number) =>
   `${Math.round(data * 10000) / 100}% `
 
+export const getRound = (n: number, d = 1) => parseFloat(n.toFixed(d))
+
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 export function formatTimestamp(timestamp: number | null) {
@@ -43,3 +45,5 @@ export const formatDuration = (seconds: number, maxCap = -1) => {
 }
 
 export const MAX_ETA = 8640000
+
+export const MIN_SIDEBAR_WIDTH = 150

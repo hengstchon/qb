@@ -6,14 +6,13 @@ import {
   ContextMenuTrigger,
 } from '@/ui/ContextMenu'
 import { Table } from '@tanstack/react-table'
-import React from 'react'
 
 const HeaderContextMenu = ({
   table,
   children,
 }: {
   table: Table<Torrent>
-  children: React.ReactElement
+  children: JSX.Element
 }) => {
   return (
     <ContextMenu>

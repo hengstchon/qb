@@ -3,7 +3,7 @@ import { ColumnOrderState } from '@tanstack/react-table'
 import { useAtom } from 'jotai'
 import { columnOrderAtom } from './atoms'
 
-const HeaderDndContext = ({ children }: { children: React.ReactElement }) => {
+const HeaderDndContext = ({ children }: { children: JSX.Element }) => {
   const [columnOrder, setColumnOrder] = useAtom(columnOrderAtom)
 
   const reorderColumn = (

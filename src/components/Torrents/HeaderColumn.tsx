@@ -35,14 +35,6 @@ const HeaderColumn: FC<{
   const activeIndex = columnOrder.indexOf(active?.id as string)
   const overIndex = over?.id ? columnOrder.indexOf(over?.id as string) : -1
 
-  console.log(
-    !isDragging &&
-      isOver &&
-      overIndex !== activeIndex &&
-      overIndex > activeIndex
-  )
-  console.log(activeIndex, overIndex)
-
   return isFirstCol ? (
     <div className="flex items-center border border-dotted px-1">
       {flexRender(header.column.columnDef.header, header.getContext())}

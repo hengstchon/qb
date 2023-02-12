@@ -1,3 +1,4 @@
+import { getRound } from '@/utils'
 import { atom } from 'jotai'
 import { SetStateAction } from 'react'
 import { storageAtom } from '../Homepage/atoms'
@@ -72,12 +73,15 @@ export const openSidebarAtom = atom(
 
 export const sidebarWidthAtom = atom(
   (get) => get(storageAtom).app.sidebarWidth,
-  (_, set, arg: number) => {
+  (get, set, arg: SetStateAction<number>) => {
     set(storageAtom, (prev) => ({
       ...prev,
       app: {
         ...prev.app,
-        sidebarWidth: arg,
+        sidebarWidth:
+          typeof arg === 'function'
+            ? arg(getRound(get(sidebarWidthAtom)))
+            : getRound(arg),
       },
     }))
   }

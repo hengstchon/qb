@@ -4,9 +4,8 @@ import {
   CollapsibleTrigger,
 } from '@/ui/Collapsible'
 import { ChevronDownIcon } from 'lucide-react'
-import React from 'react'
 
-const Item = ({ children }: { children: React.ReactElement[] }) => {
+const Item = ({ children }: { children: JSX.Element[] }) => {
   return (
     <li>
       <button className="flex w-full justify-between rounded px-2 py-[2px] hover:bg-green-100">
