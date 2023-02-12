@@ -21,6 +21,7 @@ import { columns } from '../Torrents/columns'
 
 type StorageType = {
   app: {
+    openDetails: boolean
     refreshInterval: number
     sidebarWidth: number
     openSidebar: boolean
@@ -42,6 +43,7 @@ type StorageType = {
 
 export const storageAtom = atomWithStorage<StorageType>('App', {
   app: {
+    openDetails: false,
     refreshInterval: 5000,
     sidebarWidth: 300,
     openSidebar: true,

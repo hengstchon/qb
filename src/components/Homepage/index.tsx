@@ -5,20 +5,15 @@ import { useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/utils/api'
 import { useEffect } from 'react'
-import {
-  refreshIntervalAtom,
-  ridAtom,
-  torrentsAtom,
-  updateDataAtom,
-} from './atoms'
+import { refreshIntervalAtom, ridAtom, updateDataAtom } from './atoms'
 import StatusBar from '../StatusBar'
 import { openSidebarAtom } from '../Sidebar/atoms'
+import Details from '../Details'
 import SidebarDndContext from '../Sidebar/SidebarDndContext'
 
 const HomePage = () => {
   const [rid, setRid] = useAtom(ridAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
-  const [torrents] = useAtom(torrentsAtom)
   const setUpdateDataAtom = useSetAtom(updateDataAtom)
 
   const { data } = useSWRImmutable(API.syncMain(rid), {
@@ -36,8 +31,6 @@ const HomePage = () => {
     return () => clearTimeout(id)
   }, [data, refreshInterval])
 
-  // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
-
   const [isOpened] = useAtom(openSidebarAtom)
 
   return (
@@ -46,9 +39,10 @@ const HomePage = () => {
       <div className="relative flex flex-1 overflow-hidden">
         <SidebarDndContext>{isOpened && <Sidebar />}</SidebarDndContext>
 
-        {Object.values(torrents).length && (
-          <Torrents torrents={Object.values(torrents)} />
-        )}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Torrents />
+          <Details />
+        </div>
       </div>
       <StatusBar />
     </div>

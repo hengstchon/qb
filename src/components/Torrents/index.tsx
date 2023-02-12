@@ -10,7 +10,6 @@ import Pagination from './Pagination'
 import Row from './Row'
 import HeaderContextMenu from './HeaderContextMenu'
 import { columns } from './columns'
-import { Torrent } from '@/types'
 import {
   columnFiltersAtom,
   columnOrderAtom,
@@ -22,8 +21,9 @@ import {
 } from './atoms'
 import HeaderColumn from './HeaderColumn'
 import HeaderDndContext from './HeaderDndContext'
+import { torrentsAtom } from '../Homepage/atoms'
 
-const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
+const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(columnSizingAtom)
   const [columnVisibility, onColumnVisibilityChange] =
@@ -33,8 +33,11 @@ const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   const [pagination, onPaginationChange] = useAtom(paginationAtom)
   const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
 
+  const [torrents] = useAtom(torrentsAtom)
+  // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
+
   const table = useReactTable({
-    data: torrents,
+    data: Object.values(torrents),
     columns,
     state: {
       columnOrder,
@@ -62,7 +65,7 @@ const Torrents = ({ torrents }: { torrents: Torrent[] }) => {
   })
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col bg-yellow-50">
+    <div className="flex flex-1 flex-col bg-yellow-50">
       <div className="flex-1 overflow-auto">
         <div className="table border border-dotted">
           {/* header */}
