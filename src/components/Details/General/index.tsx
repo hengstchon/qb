@@ -1,29 +1,36 @@
 import { currentTorHashAtom } from '@/components/Torrents/atoms'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
-import { formatBytes, formatDuration, formatTimestamp, MAX_ETA } from '@/utils'
+import {
+  formatBytes,
+  formatDuration,
+  formatSpeed,
+  formatTimestamp,
+  MAX_ETA,
+} from '@/utils'
 import { API } from '@/utils/api'
 import { Propperties } from '@/types'
 
 const General = () => {
   const [currTorHash] = useAtom(currentTorHashAtom)
   const { data } = useSWR<Propperties>(
-    currTorHash ? API.torrents.preperties(currTorHash) : null
+    currTorHash ? API.torrents.preperties(currTorHash) : null,
+    { keepPreviousData: true }
   )
-  console.log(data)
+
   const {
     addition_date = null,
     comment,
     completion_date = null,
     created_by,
     creation_date = null,
-    dl_limit,
-    dl_speed,
-    dl_speed_avg,
-    download_path,
-    eta,
-    infohash_v1,
-    infohash_v2,
+    dl_limit = -1,
+    dl_speed = 0,
+    dl_speed_avg = 0,
+    // download_path,
+    eta = 0,
+    // infohash_v1,
+    // infohash_v2,
     last_seen = null,
     nb_connections = 0,
     nb_connections_limit = 100,
@@ -45,13 +52,11 @@ const General = () => {
     total_uploaded = 0,
     total_uploaded_session = 0,
     total_wasted = 0,
-    up_limit = 0,
+    up_limit = -1,
     up_speed = 0,
     up_speed_avg = 0,
   } = data || {}
 
-  // const fmActive = formatDuration(time_active)
-  // const fmSeeding = formatDuration(seeding_time)
   const timeActive =
     seeding_time! > 0
       ? `${formatDuration(time_elapsed!)} (seeded for ${formatDuration(
@@ -70,18 +75,41 @@ const General = () => {
             Connections: {nb_connections} (
             {nb_connections_limit < 0 ? '∞' : nb_connections_limit} max)
           </span>
-          <span>Downloaded:</span>
-          <span>Uploaded:</span>
-          <span>Seeds:</span>
-          <span>Download Speed:</span>
-          <span>Upload Speed:</span>
-          <span>Peers:</span>
-          <span>Download Limit:</span>
-          <span>Upload Limit:</span>
+          <span>
+            Downloaded: {formatBytes(total_downloaded)} (
+            {formatBytes(total_downloaded_session)} this session)
+          </span>
+          <span>
+            Uploaded: {formatBytes(total_uploaded)} (
+            {formatBytes(total_uploaded_session)} this session)
+          </span>
+          <span>
+            Seeds: {seeds} ({seeds_total} total)
+          </span>
+          <span>
+            Download Speed: {formatSpeed(dl_speed)} ({formatSpeed(dl_speed_avg)}{' '}
+            avg.)
+          </span>
+          <span>
+            Upload Speed: {formatSpeed(up_speed)} ({formatSpeed(up_speed_avg)}{' '}
+            avg.)
+          </span>
+          <span>
+            Peers: {peers} ({peers_total} total)
+          </span>
+          <span>
+            Download Limit: {dl_limit === -1 ? '∞' : formatSpeed(dl_limit)}
+          </span>
+          <span>
+            Upload Limit: {up_limit === -1 ? '∞' : formatSpeed(up_limit)}
+          </span>
           <span>Wasted: {formatBytes(total_wasted)}</span>
           <span>Share Ratio: {share_ratio.toFixed(2)}</span>
           <span>Reannounce In: {formatDuration(reannounce)}</span>
-          <span>Last Seen Complete: {formatTimestamp(last_seen)}</span>
+          <span>
+            Last Seen Complete:{' '}
+            {last_seen === -1 ? 'Never' : formatTimestamp(last_seen)}
+          </span>
         </div>
       </div>
 
@@ -97,7 +125,7 @@ const General = () => {
           <span>Added On: {formatTimestamp(addition_date)}</span>
           <span>Completed On: {formatTimestamp(completion_date)}</span>
           <span>Created On: {formatTimestamp(creation_date)}</span>
-          <span>Torrent Hash:</span>
+          <span>Torrent Hash: {currTorHash}</span>
           <span>Save Path: {save_path}</span>
           <span>Comment: {comment}</span>
         </div>

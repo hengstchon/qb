@@ -33,8 +33,7 @@ export function formatTimestamp(timestamp: number | null) {
     : dayjs.unix(timestamp).format('YYYY-MM-DD HH:mm:ss')
 }
 
-export const formatDuration = (seconds: number | undefined, maxCap = -1) => {
-  if (!seconds) return ''
+export const formatDuration = (seconds: number, maxCap = -1) => {
   if (seconds < 0 || (seconds >= maxCap && maxCap >= 0)) return '∞'
   if (seconds == 0) return '0'
   const d = dayjs.duration(seconds, 's')
