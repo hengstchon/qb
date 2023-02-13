@@ -10,18 +10,32 @@ import {
 } from '@tanstack/react-table'
 import { SetStateAction } from 'react'
 import { storageAtom } from '@/components/Homepage/atoms'
+import { Storage } from '@/types'
+
+export const mergeToStorage = (
+  prev: Storage,
+  keys: [keyof Storage, keyof Storage[Key in keyof Storage]],
+  newValue: unknown
+): Storage => {
+  return {
+    ...prev,
+    [keys[0]]: {
+      ...prev[keys[0]],
+      [keys[1]]: newValue,
+    },
+  }
+}
 
 export const columnOrderAtom = atom(
   (get) => get(storageAtom).table.columnOrder,
   (get, set, arg: SetStateAction<ColumnOrderState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        columnOrder:
-          typeof arg === 'function' ? arg(get(columnOrderAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        ['table', 'columnOrder'],
+        typeof arg === 'function' ? arg(get(columnOrderAtom)) : arg
+      )
+    )
   }
 )
 

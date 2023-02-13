@@ -64,6 +64,7 @@ const Torrents = () => {
     onRowSelectionChange,
     // debugAll: true,
   })
+  console.log(rowSelection)
 
   return (
     <div className="flex flex-1 flex-col bg-yellow-50">

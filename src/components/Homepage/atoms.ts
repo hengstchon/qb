@@ -5,43 +5,13 @@ import {
   TrackerState,
   CategoryState,
   TagState,
+  Storage,
 } from '@/types'
-import {
-  ColumnFiltersState,
-  ColumnOrderState,
-  ColumnSizingState,
-  PaginationState,
-  RowSelectionState,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { columns } from '../Torrents/columns'
 
-type StorageType = {
-  app: {
-    openDetails: boolean
-    refreshInterval: number
-    sidebarWidth: number
-    openSidebar: boolean
-    openStatus: boolean
-    openCategories: boolean
-    openTags: boolean
-    openTrackers: boolean
-  }
-  table: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    columnFilters: ColumnFiltersState
-    sorting: SortingState
-    pagination: PaginationState
-    rowSelection: RowSelectionState
-  }
-}
-
-export const storageAtom = atomWithStorage<StorageType>('App', {
+export const storageAtom = atomWithStorage<Storage>('App', {
   app: {
     openDetails: false,
     refreshInterval: 5000,

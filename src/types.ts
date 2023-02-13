@@ -1,3 +1,35 @@
+import {
+  ColumnFiltersState,
+  ColumnOrderState,
+  ColumnSizingState,
+  PaginationState,
+  RowSelectionState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table'
+
+export type Storage = {
+  app: {
+    openDetails: boolean
+    refreshInterval: number
+    sidebarWidth: number
+    openSidebar: boolean
+    openStatus: boolean
+    openCategories: boolean
+    openTags: boolean
+    openTrackers: boolean
+  }
+  table: {
+    columnOrder: ColumnOrderState
+    columnSizing: ColumnSizingState
+    columnVisibility: VisibilityState
+    columnFilters: ColumnFiltersState
+    sorting: SortingState
+    pagination: PaginationState
+    rowSelection: RowSelectionState
+  }
+}
+
 export type Torrent = {
   added_on: number
   amount_left: number
@@ -139,4 +171,15 @@ export type Propperties = {
   up_limit: number
   up_speed: number
   up_speed_avg: number
+}
+
+export type Tracker = {
+  msg: string
+  num_downloaded: number
+  num_leeches: number
+  num_peers: number
+  num_seeds: number
+  status: number
+  tier: string
+  url: string
 }
