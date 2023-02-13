@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { Storage, NestedKeyOf } from '@/types'
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -47,3 +48,18 @@ export const formatDuration = (seconds: number, maxCap = -1) => {
 export const MAX_ETA = 8640000
 
 export const MIN_SIDEBAR_WIDTH = 150
+
+export const mergeToStorage = (
+  prev: Storage,
+  key: NestedKeyOf<Storage>,
+  newValue: unknown
+): Storage => {
+  const keys = key.split('.')
+  return {
+    ...prev,
+    [keys[0]]: {
+      ...prev[keys[0]],
+      [keys[1]]: newValue,
+    },
+  }
+}
