@@ -14,7 +14,6 @@ import {
   trksColOrderAtom,
   trksColSizingAtom,
   trksColVisiAtom,
-  trksRowSeleAtom,
   trksSortAtom,
 } from './atoms'
 import BaseTable from '@/components/BaseTable'
@@ -33,7 +32,6 @@ const Trackers = () => {
   const [columnSizing, onColumnSizingChange] = useAtom(trksColSizingAtom)
   const [columnVisibility, onColumnVisibilityChange] = useAtom(trksColVisiAtom)
   const [sorting, onSortingChange] = useAtom(trksSortAtom)
-  const [rowSelection, onRowSelectionChange] = useAtom(trksRowSeleAtom)
 
   const table = useReactTable({
     data: data!,
@@ -43,13 +41,11 @@ const Trackers = () => {
       columnSizing,
       columnVisibility,
       sorting,
-      rowSelection,
     },
     onColumnOrderChange,
     onColumnSizingChange,
     onColumnVisibilityChange,
     onSortingChange,
-    onRowSelectionChange,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

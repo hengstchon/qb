@@ -38,7 +38,6 @@ export const storageAtom = atomWithStorage<Storage>('App', {
     columnSizing: {},
     columnVisibility: {},
     sorting: [],
-    rowSelection: {},
   },
 })
 

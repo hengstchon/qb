@@ -39,7 +39,6 @@ export type Storage = {
     columnSizing: ColumnSizingState
     columnVisibility: VisibilityState
     sorting: SortingState
-    rowSelection: RowSelectionState
   }
 }
 

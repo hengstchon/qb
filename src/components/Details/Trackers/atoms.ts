@@ -2,7 +2,6 @@ import { atom } from 'jotai'
 import {
   ColumnOrderState,
   ColumnSizingState,
-  RowSelectionState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table'
@@ -57,19 +56,6 @@ export const trksSortAtom = atom(
         prev,
         'trackersTable.sorting',
         typeof arg === 'function' ? arg(get(trksSortAtom)) : arg
-      )
-    )
-  }
-)
-
-export const trksRowSeleAtom = atom(
-  (get) => get(storageAtom).trackersTable.rowSelection,
-  (get, set, arg: SetStateAction<RowSelectionState>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'trackersTable.rowSelection',
-        typeof arg === 'function' ? arg(get(trksRowSeleAtom)) : arg
       )
     )
   }
