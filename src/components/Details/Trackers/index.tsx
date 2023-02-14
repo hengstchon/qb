@@ -26,7 +26,7 @@ const Trackers = () => {
 
   const { data } = useSWR<Tracker[]>(
     currHash ? API.torrents.trackers(currHash) : null,
-    { keepPreviousData: true }
+    { keepPreviousData: true, fallbackData: [] }
   )
 
   const [columnOrder, onColumnOrderChange] = useAtom(trksColOrderAtom)
@@ -36,7 +36,7 @@ const Trackers = () => {
   const [rowSelection, onRowSelectionChange] = useAtom(trksRowSeleAtom)
 
   const table = useReactTable({
-    data: data ?? [],
+    data: data!,
     columns: trkscolumns,
     state: {
       columnOrder,
