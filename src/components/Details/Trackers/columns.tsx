@@ -1,9 +1,11 @@
 import { Tracker } from '@/types'
-import { createColumnHelper } from '@tanstack/react-table'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { selectColumnDef } from '@/components/BaseTable'
 
 const ch = createColumnHelper<Tracker>()
 
 export const trkscolumns = [
+  selectColumnDef as ColumnDef<Tracker>,
   ch.accessor('tier', {
     id: 'tier',
     header: 'Tier',

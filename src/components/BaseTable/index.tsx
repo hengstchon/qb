@@ -5,6 +5,7 @@ import HeaderColumn from './HeaderColumn'
 import HeaderContextMenu from './HeaderContextMenu'
 import HeaderDndContext from './HeaderDndContext'
 import Row from './Row'
+import { selectColumnDef } from './selectColumn'
 
 const BaseTable = <T,>({
   table,
@@ -45,3 +46,4 @@ const BaseTable = <T,>({
 }
 
 export default BaseTable
+export { selectColumnDef }

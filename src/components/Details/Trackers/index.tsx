@@ -56,13 +56,15 @@ const Trackers = () => {
   })
 
   return (
-    <div>
+    <div className="grid gap-2">
       <Actions />
-      <BaseTable<Tracker>
-        table={table}
-        colOrderAtom={trksColOrderAtom}
-        currRowAtom={currTrkAtom}
-      />
+      <div className="overflow-auto">
+        <BaseTable<Tracker>
+          table={table}
+          colOrderAtom={trksColOrderAtom}
+          currRowAtom={currTrkAtom}
+        />
+      </div>
     </div>
   )
 }

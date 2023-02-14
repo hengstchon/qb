@@ -8,7 +8,8 @@ import {
   formatTimestamp,
   MAX_ETA,
 } from '@/utils'
-import { createColumnHelper, SortingFn } from '@tanstack/react-table'
+import { ColumnDef, createColumnHelper, SortingFn } from '@tanstack/react-table'
+import { selectColumnDef } from '../BaseTable'
 
 const sortingFnWithField =
   <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
@@ -21,30 +22,7 @@ const sortingFnWithField =
 const ch = createColumnHelper<Torrent>()
 
 export const torsColumns = [
-  ch.display({
-    id: 'select',
-    enableSorting: false,
-    enableResizing: false,
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsSomeRowsSelected()
-            ? 'indeterminate'
-            : table.getIsAllRowsSelected()
-        }
-        onCheckedChange={(e) => {
-          table.toggleAllRowsSelected(e as boolean)
-        }}
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={row.getToggleSelectedHandler()}
-        disabled={!row.getCanSelect()}
-      />
-    ),
-  }),
+  selectColumnDef as ColumnDef<Torrent>,
   ch.accessor('name', {
     id: 'name',
     header: 'Name',
