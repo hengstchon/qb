@@ -10,6 +10,7 @@ export const trkscolumns = [
     id: 'tier',
     header: 'Tier',
     size: 50,
+    cell: (p) => (parseInt(p.getValue()) < 0 ? null : p.getValue()),
   }),
   ch.accessor('url', {
     id: 'url',
