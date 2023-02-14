@@ -25,7 +25,7 @@ const HeaderColumn = <T,>({
     transform,
     isDragging,
   } = useDraggable({
-    id: header.id + Math.random(),
+    id: header.id,
   })
 
   const {
@@ -34,7 +34,7 @@ const HeaderColumn = <T,>({
     active,
     over,
   } = useDroppable({
-    id: header.id + Math.random(),
+    id: header.id,
   })
 
   const [columnOrder] = useAtom(colOrderAtom)
