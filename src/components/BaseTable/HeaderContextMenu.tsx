@@ -1,4 +1,3 @@
-import { Torrent } from '@/types'
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -7,11 +6,11 @@ import {
 } from '@/ui/ContextMenu'
 import { Table } from '@tanstack/react-table'
 
-const HeaderContextMenu = ({
+const HeaderContextMenu = <T,>({
   table,
   children,
 }: {
-  table: Table<Torrent>
+  table: Table<T>
   children: JSX.Element
 }) => {
   return (

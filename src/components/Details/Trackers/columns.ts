@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 const ch = createColumnHelper<Tracker>()
 
-export const columns = [
+export const trkscolumns = [
   ch.accessor('tier', {
     id: 'tier',
     header: 'Tier',

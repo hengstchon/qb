@@ -1,20 +1,23 @@
 import { flexRender, Row } from '@tanstack/react-table'
-import { Torrent } from '@/types'
-import { useAtom } from 'jotai'
-import { currentTorHashAtom } from './atoms'
+import { PrimitiveAtom, useAtom } from 'jotai'
 import { cn } from '@/utils'
 
-const Row = ({ row }: { row: Row<Torrent> }) => {
-  const hash = row.original.hash
-  const [currTorHash, setCurrTorHash] = useAtom(currentTorHashAtom)
+const Row = <T,>({
+  row,
+  currRowAtom,
+}: {
+  row: Row<T>
+  currRowAtom: PrimitiveAtom<number>
+}) => {
+  const [currRow, setCurrRow] = useAtom(currRowAtom)
 
   return (
     <div
       className={cn(
         'flex hover:bg-yellow-100',
-        currTorHash && currTorHash === hash && 'bg-yellow-200'
+        currRow === row.index && 'bg-yellow-200'
       )}
-      onClick={() => setCurrTorHash(hash)}
+      onClick={() => setCurrRow(row.index)}
     >
       {row.getVisibleCells().map((cell) => {
         const isFirstCol = cell.column.id === 'select'

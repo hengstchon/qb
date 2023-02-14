@@ -7,9 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import Pagination from './Pagination'
-import Row from './Row'
-import HeaderContextMenu from './HeaderContextMenu'
-import { columns } from './columns'
+import { torsColumns } from './columns'
 import {
   torsColFiltersAtom,
   torsColSizingAtom,
@@ -18,10 +16,11 @@ import {
   torsColOrderAtom,
   torsRowSeleAtom,
   torsSortAtom,
+  currTorAtom,
 } from './atoms'
-import HeaderColumn from './HeaderColumn'
-import HeaderDndContext from './HeaderDndContext'
 import { getTorrentsAtom } from '../Homepage/atoms'
+import BaseTable from '../BaseTable'
+import { Torrent } from '@/types'
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -38,7 +37,7 @@ const Torrents = () => {
 
   const table = useReactTable({
     data: torrents,
-    columns,
+    columns: torsColumns,
     state: {
       columnOrder,
       columnSizing,
@@ -48,12 +47,6 @@ const Torrents = () => {
       pagination,
       rowSelection,
     },
-    autoResetPageIndex: false,
-    columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnOrderChange,
     onColumnSizingChange,
     onColumnVisibilityChange,
@@ -61,30 +54,23 @@ const Torrents = () => {
     onSortingChange,
     onPaginationChange,
     onRowSelectionChange,
+    autoResetPageIndex: false,
+    columnResizeMode: 'onChange',
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     // debugAll: true,
   })
-  console.log(rowSelection)
 
   return (
     <div className="flex flex-1 flex-col bg-yellow-50">
       <div className="flex-1 overflow-auto">
-        <div className="table border border-dotted">
-          {/* header */}
-          <HeaderContextMenu table={table}>
-            <HeaderDndContext>
-              <div className="relative flex">
-                {table.getLeafHeaders().map((header) => (
-                  <HeaderColumn key={header.id} header={header} />
-                ))}
-              </div>
-            </HeaderDndContext>
-          </HeaderContextMenu>
-
-          {/* rows */}
-          {table.getRowModel().rows.map((row) => (
-            <Row key={row.id} row={row} />
-          ))}
-        </div>
+        <BaseTable<Torrent>
+          table={table}
+          colOrderAtom={torsColOrderAtom}
+          currRowAtom={currTorAtom}
+        />
       </div>
       <Pagination table={table} />
     </div>

@@ -10,7 +10,8 @@ import {
 import { mergeToStorage } from '@/utils'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { columns } from '../Torrents/columns'
+import { trkscolumns } from '../Details/Trackers/columns'
+import { torsColumns } from '../Torrents/columns'
 
 export const storageAtom = atomWithStorage<Storage>('App', {
   settings: {
@@ -24,12 +25,19 @@ export const storageAtom = atomWithStorage<Storage>('App', {
     openSidebarTrackers: true,
   },
   torrentsTable: {
-    columnOrder: columns.map((c) => c.id!),
+    columnOrder: torsColumns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
     columnFilters: [{ id: 'name', value: '' }],
     sorting: [],
     pagination: { pageIndex: 0, pageSize: 20 },
+    rowSelection: {},
+  },
+  trackersTable: {
+    columnOrder: trkscolumns.map((c) => c.id!),
+    columnSizing: {},
+    columnVisibility: {},
+    sorting: [],
     rowSelection: {},
   },
 })

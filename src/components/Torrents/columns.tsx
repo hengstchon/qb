@@ -20,7 +20,7 @@ const sortingFnWithField =
 
 const ch = createColumnHelper<Torrent>()
 
-export const columns = [
+export const torsColumns = [
   ch.display({
     id: 'select',
     enableSorting: false,

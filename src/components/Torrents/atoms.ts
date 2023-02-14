@@ -103,4 +103,4 @@ export const torsRowSeleAtom = atom(
   }
 )
 
-export const currentTorHashAtom = atom('')
+export const currTorAtom = atom(-1)

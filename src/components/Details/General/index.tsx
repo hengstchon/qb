@@ -1,4 +1,3 @@
-import { currentTorHashAtom } from '@/components/Torrents/atoms'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
 import {
@@ -10,11 +9,13 @@ import {
 } from '@/utils'
 import { API } from '@/utils/api'
 import { Propperties } from '@/types'
+import { getCurrHashAtom } from '../atoms'
 
 const General = () => {
-  const [currTorHash] = useAtom(currentTorHashAtom)
+  const [currHash] = useAtom(getCurrHashAtom)
+
   const { data } = useSWR<Propperties>(
-    currTorHash ? API.torrents.preperties(currTorHash) : null,
+    currHash ? API.torrents.preperties(currHash) : null,
     { keepPreviousData: true }
   )
 
@@ -125,7 +126,7 @@ const General = () => {
           <span>Added On: {formatTimestamp(addition_date)}</span>
           <span>Completed On: {formatTimestamp(completion_date)}</span>
           <span>Created On: {formatTimestamp(creation_date)}</span>
-          <span>Torrent Hash: {currTorHash}</span>
+          <span>Torrent Hash: {currHash}</span>
           <span>Save Path: {save_path}</span>
           <span>Comment: {comment}</span>
         </div>

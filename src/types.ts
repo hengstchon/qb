@@ -34,6 +34,13 @@ export type Storage = {
     pagination: PaginationState
     rowSelection: RowSelectionState
   }
+  trackersTable: {
+    columnOrder: ColumnOrderState
+    columnSizing: ColumnSizingState
+    columnVisibility: VisibilityState
+    sorting: SortingState
+    rowSelection: RowSelectionState
+  }
 }
 
 export type Torrent = {
