@@ -1,7 +1,7 @@
 import { Torrent } from '@/types'
 import { useAtom } from 'jotai'
 import { torrentsAtom } from '../Homepage/atoms'
-import { openStatusAtom } from './atoms'
+import { openSideStatusAtom } from './atoms'
 import { BaseCollapsible } from './Base'
 
 const filterStatusMap: Record<string, (t: Torrent) => boolean> = {
@@ -64,7 +64,7 @@ const statusList = [
 ]
 
 const Status = () => {
-  const [openStatus, setOpenStatus] = useAtom(openStatusAtom)
+  const [openStatus, setOpenStatus] = useAtom(openSideStatusAtom)
   const [torrents] = useAtom(torrentsAtom)
 
   const getNumByStatus = (status: string) =>

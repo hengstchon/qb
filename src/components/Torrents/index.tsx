@@ -11,27 +11,26 @@ import Row from './Row'
 import HeaderContextMenu from './HeaderContextMenu'
 import { columns } from './columns'
 import {
-  columnFiltersAtom,
-  columnOrderAtom,
-  columnSizingAtom,
-  columnVisibilityAtom,
-  paginationAtom,
-  rowSelectionAtom,
-  sortingAtom,
+  torsColFiltersAtom,
+  torsColSizingAtom,
+  torsColVisiAtom,
+  torsPagiAtom,
+  torsColOrderAtom,
+  torsRowSeleAtom,
+  torsSortAtom,
 } from './atoms'
 import HeaderColumn from './HeaderColumn'
 import HeaderDndContext from './HeaderDndContext'
 import { getTorrentsAtom } from '../Homepage/atoms'
 
 const Torrents = () => {
-  const [columnOrder, onColumnOrderChange] = useAtom(columnOrderAtom)
-  const [columnSizing, onColumnSizingChange] = useAtom(columnSizingAtom)
-  const [columnVisibility, onColumnVisibilityChange] =
-    useAtom(columnVisibilityAtom)
-  const [columnFilters, onColumnFiltersChange] = useAtom(columnFiltersAtom)
-  const [sorting, onSortingChange] = useAtom(sortingAtom)
-  const [pagination, onPaginationChange] = useAtom(paginationAtom)
-  const [rowSelection, onRowSelectionChange] = useAtom(rowSelectionAtom)
+  const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
+  const [columnSizing, onColumnSizingChange] = useAtom(torsColSizingAtom)
+  const [columnVisibility, onColumnVisibilityChange] = useAtom(torsColVisiAtom)
+  const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
+  const [sorting, onSortingChange] = useAtom(torsSortAtom)
+  const [pagination, onPaginationChange] = useAtom(torsPagiAtom)
+  const [rowSelection, onRowSelectionChange] = useAtom(torsRowSeleAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
 

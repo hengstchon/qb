@@ -1,10 +1,10 @@
 import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core'
 import { ColumnOrderState } from '@tanstack/react-table'
 import { useAtom } from 'jotai'
-import { columnOrderAtom } from './atoms'
+import { torsColOrderAtom } from './atoms'
 
 const HeaderDndContext = ({ children }: { children: JSX.Element }) => {
-  const [columnOrder, setColumnOrder] = useAtom(columnOrderAtom)
+  const [columnOrder, setColumnOrder] = useAtom(torsColOrderAtom)
 
   const reorderColumn = (
     draggedColumnId: string,

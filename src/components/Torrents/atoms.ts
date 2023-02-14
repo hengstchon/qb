@@ -12,98 +12,94 @@ import { SetStateAction } from 'react'
 import { storageAtom } from '@/components/Homepage/atoms'
 import { mergeToStorage } from '@/utils'
 
-export const columnOrderAtom = atom(
-  (get) => get(storageAtom).table.columnOrder,
+export const torsColOrderAtom = atom(
+  (get) => get(storageAtom).torrentsTable.columnOrder,
   (get, set, arg: SetStateAction<ColumnOrderState>) => {
     set(storageAtom, (prev) =>
       mergeToStorage(
         prev,
-        ['table', 'columnOrder'],
-        typeof arg === 'function' ? arg(get(columnOrderAtom)) : arg
+        'torrentsTable.columnOrder',
+        typeof arg === 'function' ? arg(get(torsColOrderAtom)) : arg
       )
     )
   }
 )
 
-export const columnSizingAtom = atom(
-  (get) => get(storageAtom).table.columnSizing,
+export const torsColSizingAtom = atom(
+  (get) => get(storageAtom).torrentsTable.columnSizing,
   (get, set, arg: SetStateAction<ColumnSizingState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        columnSizing:
-          typeof arg === 'function' ? arg(get(columnSizingAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.columnSizing',
+        typeof arg === 'function' ? arg(get(torsColSizingAtom)) : arg
+      )
+    )
   }
 )
 
-export const columnVisibilityAtom = atom(
-  (get) => get(storageAtom).table.columnVisibility,
+export const torsColVisiAtom = atom(
+  (get) => get(storageAtom).torrentsTable.columnVisibility,
   (get, set, arg: SetStateAction<VisibilityState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        columnVisibility:
-          typeof arg === 'function' ? arg(get(columnVisibilityAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.columnVisibility',
+        typeof arg === 'function' ? arg(get(torsColVisiAtom)) : arg
+      )
+    )
   }
 )
 
-export const columnFiltersAtom = atom(
-  (get) => get(storageAtom).table.columnFilters,
+export const torsColFiltersAtom = atom(
+  (get) => get(storageAtom).torrentsTable.columnFilters,
   (get, set, arg: SetStateAction<ColumnFiltersState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        columnFilters:
-          typeof arg === 'function' ? arg(get(columnFiltersAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.columnFilters',
+        typeof arg === 'function' ? arg(get(torsColFiltersAtom)) : arg
+      )
+    )
   }
 )
 
-export const sortingAtom = atom(
-  (get) => get(storageAtom).table.sorting,
+export const torsSortAtom = atom(
+  (get) => get(storageAtom).torrentsTable.sorting,
   (get, set, arg: SetStateAction<SortingState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        sorting: typeof arg === 'function' ? arg(get(sortingAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.sorting',
+        typeof arg === 'function' ? arg(get(torsSortAtom)) : arg
+      )
+    )
   }
 )
 
-export const paginationAtom = atom(
-  (get) => get(storageAtom).table.pagination,
+export const torsPagiAtom = atom(
+  (get) => get(storageAtom).torrentsTable.pagination,
   (get, set, arg: SetStateAction<PaginationState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        pagination: typeof arg === 'function' ? arg(get(paginationAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.pagination',
+        typeof arg === 'function' ? arg(get(torsPagiAtom)) : arg
+      )
+    )
   }
 )
 
-export const rowSelectionAtom = atom(
-  (get) => get(storageAtom).table.rowSelection,
+export const torsRowSeleAtom = atom(
+  (get) => get(storageAtom).torrentsTable.rowSelection,
   (get, set, arg: SetStateAction<RowSelectionState>) => {
-    set(storageAtom, (prev) => ({
-      ...prev,
-      table: {
-        ...prev.table,
-        rowSelection:
-          typeof arg === 'function' ? arg(get(rowSelectionAtom)) : arg,
-      },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(
+        prev,
+        'torrentsTable.rowSelection',
+        typeof arg === 'function' ? arg(get(torsRowSeleAtom)) : arg
+      )
+    )
   }
 )
 

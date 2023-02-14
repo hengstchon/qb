@@ -1,10 +1,10 @@
 import { useAtom } from 'jotai'
 import { tagsAtom, torrentsAtom } from '@/components/Homepage/atoms'
-import { openTagsAtom } from './atoms'
+import { openSideTagsAtom } from './atoms'
 import { BaseCollapsible } from './Base'
 
 const Tags = () => {
-  const [openTags, setOpenTags] = useAtom(openTagsAtom)
+  const [openTags, setOpenTags] = useAtom(openSideTagsAtom)
   const [tags] = useAtom(tagsAtom)
   const [torrents] = useAtom(torrentsAtom)
 

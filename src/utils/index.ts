@@ -51,15 +51,16 @@ export const MIN_SIDEBAR_WIDTH = 150
 
 export const mergeToStorage = (
   prev: Storage,
-  key: NestedKeyOf<Storage>,
+  keyPath: NestedKeyOf<Storage>,
   newValue: unknown
 ): Storage => {
-  const keys = key.split('.')
-  return {
+  const keys = keyPath.split('.')
+  const merge = <T>(prev: T, i: number): T => ({
     ...prev,
-    [keys[0]]: {
-      ...prev[keys[0]],
-      [keys[1]]: newValue,
-    },
-  }
+    [keys[i]]:
+      i === keys.length - 1
+        ? newValue
+        : merge(prev[keys[i] as keyof typeof prev], i + 1),
+  })
+  return merge(prev, 0)
 }

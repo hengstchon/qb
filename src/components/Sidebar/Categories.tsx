@@ -1,10 +1,10 @@
 import { useAtom } from 'jotai'
 import { categoriesAtom, torrentsAtom } from '../Homepage/atoms'
-import { openCategoriesAtom } from './atoms'
+import { openSideCatAtom } from './atoms'
 import { BaseCollapsible } from './Base'
 
 const Categories = () => {
-  const [openCategories, setOpenCategories] = useAtom(openCategoriesAtom)
+  const [openCategories, setOpenCategories] = useAtom(openSideCatAtom)
   const [categories] = useAtom(categoriesAtom)
   const [torrents] = useAtom(torrentsAtom)
 

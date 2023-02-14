@@ -5,7 +5,7 @@ import { Torrent } from '@/types'
 import { cn } from '@/utils'
 import { useDraggable, useDroppable } from '@dnd-kit/core'
 import { useAtom } from 'jotai'
-import { columnOrderAtom } from './atoms'
+import { torsColOrderAtom } from './atoms'
 
 const HeaderColumn: FC<{
   header: Header<Torrent, unknown>
@@ -31,7 +31,7 @@ const HeaderColumn: FC<{
     id: header.id,
   })
 
-  const [columnOrder] = useAtom(columnOrderAtom)
+  const [columnOrder] = useAtom(torsColOrderAtom)
   const activeIndex = columnOrder.indexOf(active?.id as string)
   const overIndex = over?.id ? columnOrder.indexOf(over?.id as string) : -1
 

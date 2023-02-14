@@ -1,10 +1,10 @@
 import { useAtom } from 'jotai'
 import { torrentsAtom, trackersAtom } from '@/components/Homepage/atoms'
-import { openTrackersAtom } from './atoms'
+import { openSideTrackersAtom } from './atoms'
 import { BaseCollapsible } from './Base'
 
 const Trackers = () => {
-  const [openTrackers, setOpenTrackers] = useAtom(openTrackersAtom)
+  const [openTrackers, setOpenTrackers] = useAtom(openSideTrackersAtom)
   const [trackers] = useAtom(trackersAtom)
   const [torrents] = useAtom(torrentsAtom)
 

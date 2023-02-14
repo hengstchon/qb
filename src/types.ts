@@ -15,17 +15,17 @@ export type NestedKeyOf<ObjectType extends object> = {
 }[keyof ObjectType & (string | number)]
 
 export type Storage = {
-  app: {
+  settings: {
     openDetails: boolean
     refreshInterval: number
     sidebarWidth: number
     openSidebar: boolean
-    openStatus: boolean
-    openCategories: boolean
-    openTags: boolean
-    openTrackers: boolean
+    openSidebarStatus: boolean
+    openSidebarCategories: boolean
+    openSidebarTags: boolean
+    openSidebarTrackers: boolean
   }
-  table: {
+  torrentsTable: {
     columnOrder: ColumnOrderState
     columnSizing: ColumnSizingState
     columnVisibility: VisibilityState

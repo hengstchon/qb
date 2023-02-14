@@ -7,22 +7,23 @@ import {
   TagState,
   Storage,
 } from '@/types'
+import { mergeToStorage } from '@/utils'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { columns } from '../Torrents/columns'
 
 export const storageAtom = atomWithStorage<Storage>('App', {
-  app: {
+  settings: {
     openDetails: false,
     refreshInterval: 5000,
     sidebarWidth: 300,
     openSidebar: true,
-    openStatus: true,
-    openCategories: true,
-    openTags: true,
-    openTrackers: true,
+    openSidebarStatus: true,
+    openSidebarCategories: true,
+    openSidebarTags: true,
+    openSidebarTrackers: true,
   },
-  table: {
+  torrentsTable: {
     columnOrder: columns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
@@ -34,12 +35,11 @@ export const storageAtom = atomWithStorage<Storage>('App', {
 })
 
 export const refreshIntervalAtom = atom(
-  (get) => get(storageAtom).app.refreshInterval,
+  (get) => get(storageAtom).settings.refreshInterval,
   (_, set, val: number) =>
-    set(storageAtom, (prev) => ({
-      ...prev,
-      app: { ...prev.app, refreshInterval: val },
-    }))
+    set(storageAtom, (prev) =>
+      mergeToStorage(prev, 'settings.refreshInterval', val)
+    )
 )
 
 export const torrentsAtom = atom<TorrentState>({})

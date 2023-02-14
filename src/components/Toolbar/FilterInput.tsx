@@ -1,12 +1,12 @@
 import { Input } from '@/ui/Input'
 import { atom, useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { columnFiltersAtom } from '../Torrents/atoms'
+import { torsColFiltersAtom } from '../Torrents/atoms'
 
 const nameFilterAtom = atom(
-  (get) => get(columnFiltersAtom)[0].value,
+  (get) => get(torsColFiltersAtom)[0].value,
   (_, set, newValue) =>
-    set(columnFiltersAtom, () => [{ id: 'name', value: newValue }])
+    set(torsColFiltersAtom, () => [{ id: 'name', value: newValue }])
 )
 
 const FilterInput = () => {
