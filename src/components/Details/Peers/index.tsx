@@ -19,7 +19,6 @@ import { peersColumns } from './columns'
 
 const Peers = () => {
   const peers = useTorPeers()
-  console.log('peers:', peers)
   const peersArr = useMemo(() => Object.values(peers), [peers])
 
   const [columnOrder, onColumnOrderChange] = useAtom(peersColOrderAtom)
