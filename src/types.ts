@@ -40,6 +40,12 @@ export type Storage = {
     columnVisibility: VisibilityState
     sorting: SortingState
   }
+  peersTable: {
+    columnOrder: ColumnOrderState
+    columnSizing: ColumnSizingState
+    columnVisibility: VisibilityState
+    sorting: SortingState
+  }
 }
 
 export type Torrent = {
@@ -123,16 +129,16 @@ export type ServerState = {
   write_cache_overload: string
 }
 
-export type TorrentState = Record<string, Torrent>
-export type TrackerState = Record<string, string[]>
-export type CategoryState = Record<string, Category>
-export type TagState = string[]
+export type Torrents = Record<string, Torrent>
+export type Trackers = Record<string, string[]>
+export type Categories = Record<string, Category>
+export type Tags = string[]
 
 export interface MainData {
-  torrents: Record<string, Torrent>
-  categories: Record<string, Category>
-  tags: string[]
-  trackers: Record<string, string[]>
+  torrents: Torrents
+  categories: Categories
+  tags: Tags
+  trackers: Trackers
   server_state: ServerState
 }
 
@@ -194,4 +200,32 @@ export type Tracker = {
   status: number
   tier: string
   url: string
+}
+
+export type Peer = {
+  client: string
+  connection: string
+  country: string
+  country_code: string
+  dl_speed: number
+  downloaded: number
+  files: string
+  flags: string
+  flags_desc: string
+  ip: string
+  port: number
+  progress: number
+  relevance: number
+  up_speed: number
+  uploaded: number
+}
+
+export type Peers = Record<string, Peer>
+
+export type PeersData = {
+  rid: number
+  peers?: Peers
+  peers_removed?: string[]
+  show_flags?: boolean
+  full_update?: boolean
 }

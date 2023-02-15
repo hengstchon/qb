@@ -8,7 +8,7 @@ import {
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
 import Actions from './Actions'
-import { trkscolumns } from './columns'
+import { trksColumns } from './columns'
 import {
   currTrkAtom,
   trksColOrderAtom,
@@ -35,7 +35,7 @@ const Trackers = () => {
 
   const table = useReactTable({
     data: data!,
-    columns: trkscolumns,
+    columns: trksColumns,
     state: {
       columnOrder,
       columnSizing,

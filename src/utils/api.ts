@@ -1,7 +1,11 @@
 export const API = {
   login: '/auth/login',
   logout: '/auth/logout',
-  syncMain: (rid = 0) => `/sync/maindata?rid=${rid}`,
+  sync: {
+    maindata: (rid = 0) => `/sync/maindata?rid=${rid}`,
+    torrentPeers: (hash: string, rid = 0) =>
+      `/sync/torrentPeers?rid=${rid}&hash=${hash}`,
+  },
   torrents: {
     info: () => `/torrents/info`,
     preperties: (hash: string) => `/torrents/properties?hash=${hash}`,

@@ -4,7 +4,7 @@ import { selectColumnDef } from '@/components/BaseTable'
 
 const ch = createColumnHelper<Tracker>()
 
-export const trkscolumns = [
+export const trksColumns = [
   selectColumnDef as ColumnDef<Tracker>,
   ch.accessor('tier', {
     id: 'tier',

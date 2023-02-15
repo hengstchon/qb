@@ -1,17 +1,18 @@
 import {
   SyncData,
   ServerState,
-  TorrentState,
-  TrackerState,
-  CategoryState,
-  TagState,
+  Torrents,
+  Trackers,
+  Categories,
+  Tags,
   Storage,
 } from '@/types'
 import { mergeToStorage } from '@/utils'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { trkscolumns } from '../Details/Trackers/columns'
-import { torsColumns } from '../Torrents/columns'
+import { torsColumns } from '@/components/Torrents/columns'
+import { trksColumns } from '@/components/Details/Trackers/columns'
+import { peersColumns } from '@/components/Details/Peers/columns'
 
 export const storageAtom = atomWithStorage<Storage>('App', {
   settings: {
@@ -34,7 +35,13 @@ export const storageAtom = atomWithStorage<Storage>('App', {
     rowSelection: {},
   },
   trackersTable: {
-    columnOrder: trkscolumns.map((c) => c.id!),
+    columnOrder: trksColumns.map((c) => c.id!),
+    columnSizing: {},
+    columnVisibility: {},
+    sorting: [],
+  },
+  peersTable: {
+    columnOrder: peersColumns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
     sorting: [],
@@ -49,14 +56,14 @@ export const refreshIntervalAtom = atom(
     )
 )
 
-export const torrentsAtom = atom<TorrentState>({})
+export const torrentsAtom = atom<Torrents>({})
 export const getTorrentsAtom = atom((get) =>
   Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash }))
 )
 
-export const trackersAtom = atom<TrackerState>({})
-export const categoriesAtom = atom<CategoryState>({})
-export const tagsAtom = atom<TagState>([])
+export const trackersAtom = atom<Trackers>({})
+export const categoriesAtom = atom<Categories>({})
+export const tagsAtom = atom<Tags>([])
 export const serverStateAtom = atom<ServerState>({
   alltime_dl: 0,
   alltime_ul: 0,
@@ -84,14 +91,14 @@ export const serverStateAtom = atom<ServerState>({
   write_cache_overload: '',
 })
 
-export const ridAtom = atom(0)
+export const mainRidAtom = atom(0)
 
-export const updateDataAtom = atom(null, (_, set, val: SyncData) => {
+export const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
   if (val.full_update) {
-    set(torrentsAtom, val.torrents as TorrentState)
-    set(trackersAtom, val.trackers as TrackerState)
-    set(categoriesAtom, val.categories as CategoryState)
-    set(tagsAtom, val.tags as TagState)
+    set(torrentsAtom, val.torrents as Torrents)
+    set(trackersAtom, val.trackers as Trackers)
+    set(categoriesAtom, val.categories as Categories)
+    set(tagsAtom, val.tags as Tags)
     set(serverStateAtom, val.server_state as ServerState)
   } else {
     for (const key in val) {
@@ -128,11 +135,11 @@ export const updateDataAtom = atom(null, (_, set, val: SyncData) => {
           break
         case 'torrents': {
           set(torrentsAtom, (prev) => {
-            for (const [hash, prop] of Object.entries(val.torrents!)) {
+            for (const [hash, props] of Object.entries(val.torrents!)) {
               if (Object.keys(prev).includes(hash)) {
-                prev[hash] = { ...prev[hash], ...prop }
+                prev[hash] = { ...prev[hash], ...props }
               } else {
-                prev[hash] = prop
+                prev[hash] = props
               }
             }
             return prev
