@@ -19,7 +19,7 @@ export const useTorPeers = () => {
   const [peers] = useAtom(peersAtom)
   const [currHash] = useAtom(getCurrHashAtom)
 
-  const { data } = useSWRImmutable(
+  const { data, mutate } = useSWRImmutable(
     currHash ? API.sync.torrentPeers(currHash, rid) : null,
     {
       onSuccess: (data) => {
@@ -27,6 +27,12 @@ export const useTorPeers = () => {
       },
     }
   )
+
+  useEffect(() => {
+    if (currHash) {
+      mutate(API.sync.torrentPeers(currHash, rid), { revalidate: false })
+    }
+  }, [currHash])
 
   useEffect(() => {
     if (!data?.rid) return
@@ -37,5 +43,6 @@ export const useTorPeers = () => {
     return () => clearTimeout(id)
   }, [data, refreshInterval])
 
+  console.log('peers: ', Object.values(peers))
   return peers
 }
