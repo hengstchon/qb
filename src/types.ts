@@ -46,6 +46,12 @@ export type Storage = {
     columnVisibility: VisibilityState
     sorting: SortingState
   }
+  filesTable: {
+    columnOrder: ColumnOrderState
+    columnSizing: ColumnSizingState
+    columnVisibility: VisibilityState
+    sorting: SortingState
+  }
 }
 
 export type Torrent = {
@@ -229,3 +235,16 @@ export type PeersData = {
   show_flags?: boolean
   full_update?: boolean
 }
+
+export type File = {
+  availability: number
+  index: number
+  is_seed: boolean
+  name: string
+  piece_range: [number, number]
+  priority: number
+  progress: number
+  size: number
+}
+
+export type Files = File[]

@@ -13,6 +13,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { torsColumns } from '@/components/Torrents/columns'
 import { trksColumns } from '@/components/Details/Trackers/columns'
 import { peersColumns } from '@/components/Details/Peers/columns'
+import { filesColumns } from '../Details/Content/columns'
 
 export const storageAtom = atomWithStorage<Storage>('App', {
   settings: {
@@ -42,6 +43,12 @@ export const storageAtom = atomWithStorage<Storage>('App', {
   },
   peersTable: {
     columnOrder: peersColumns.map((c) => c.id!),
+    columnSizing: {},
+    columnVisibility: {},
+    sorting: [],
+  },
+  filesTable: {
+    columnOrder: filesColumns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
     sorting: [],
