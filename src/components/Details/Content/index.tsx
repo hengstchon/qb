@@ -12,18 +12,26 @@ import {
   filesSortAtom,
 } from './atoms'
 import { filesColumns } from './columns'
-import { File, Files } from '@/types'
+import { File } from '@/types'
 import BaseTable from '@/components/BaseTable'
-import { getCurrHashAtom } from '../atoms'
-import useSWR from 'swr'
-import { API } from '@/utils/api'
+import { useFiles } from '@/hooks/useFiles'
+
+const FilePriority = {
+  Ignored: 0,
+  Normal: 1,
+  High: 6,
+  Maximum: 7,
+  Mixed: -1,
+}
+
+const TriState = {
+  Unchecked: 0,
+  Checked: 1,
+  Partial: 2,
+}
 
 const Content = () => {
-  const [currHash] = useAtom(getCurrHashAtom)
-  const { data } = useSWR<Files>(
-    currHash ? API.torrents.files(currHash) : null,
-    { keepPreviousData: true, fallbackData: [] }
-  )
+  const data = useFiles()
 
   const [columnOrder, onColumnOrderChange] = useAtom(filesColOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(filesColSizingAtom)
@@ -31,7 +39,7 @@ const Content = () => {
   const [sorting, onSortingChange] = useAtom(filesSortAtom)
 
   const table = useReactTable({
-    data: data!,
+    data,
     columns: filesColumns,
     state: {
       columnOrder,
