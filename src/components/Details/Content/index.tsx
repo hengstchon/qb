@@ -1,5 +1,6 @@
 import {
   getCoreRowModel,
+  getExpandedRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
@@ -52,8 +53,10 @@ const Content = () => {
     onColumnVisibilityChange,
     onSortingChange,
     columnResizeMode: 'onChange',
+    getSubRows: (row) => row.subRows,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
   })
 
   return (

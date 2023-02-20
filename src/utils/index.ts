@@ -12,7 +12,7 @@ export const cn = (...inputs: ClassValue[]) => {
 export const formatBytes = (bytes: number, dp?: number) => {
   if (bytes == 0) return '0 B'
   const k = 1024,
-    units = ['iB', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'],
+    units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'],
     dps = [0, 1, 1, 2, 3, 3, 3, 3, 3],
     i = Math.floor(Math.log(bytes) / Math.log(k))
   return (bytes / Math.pow(k, i)).toFixed(dp || dps[i]) + ' ' + units[i]

@@ -9,7 +9,26 @@ export const filesColumns = [
   selectColumnDef as ColumnDef<File>,
   ch.accessor('name', {
     id: 'name',
-    header: 'Name',
+    header: ({ table }) => (
+      <>
+        <button onClick={table.getToggleAllRowsExpandedHandler()}>
+          {table.getIsAllRowsExpanded() ? '👇' : '👉'}
+        </button>{' '}
+        Name
+      </>
+    ),
+    cell: ({ row, getValue }) => (
+      <div style={{ paddingLeft: `${row.depth * 2}rem` }}>
+        {row.getCanExpand() ? (
+          <button onClick={row.getToggleExpandedHandler()}>
+            {row.getIsExpanded() ? '👇' : '👉'}
+          </button>
+        ) : (
+          '🔵'
+        )}{' '}
+        {getValue()}
+      </div>
+    ),
     size: 200,
   }),
   ch.accessor('size', {
