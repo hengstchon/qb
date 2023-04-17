@@ -5,10 +5,10 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import axi from '@/utils/axi'
 import { store } from '@/App'
 import { isAuthedAtom } from './Auth'
 import { API } from '@/utils/api'
+import apiClient from '@/utils/apiClient'
 
 export const Login = () => {
   const isAuthed = useAtomValue(isAuthedAtom)
@@ -32,7 +32,7 @@ export const Login = () => {
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex w-full max-w-md flex-col">
           <h1 className="text-center text-3xl font-semibold">Welcome</h1>
-          <div className="mt-6 mb-16 grid gap-6 rounded-md border px-16 py-8">
+          <div className="mb-16 mt-6 grid gap-6 rounded-md border px-16 py-8">
             <div className="grid gap-2">
               <Label className="text-base leading-none" htmlFor="username">
                 Username
@@ -66,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
-  const res = await axi.post(API.login, data, {
+  const res = await apiClient.post(API.login, data, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },

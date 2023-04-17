@@ -2,12 +2,12 @@ import { store } from '@/App'
 import { isAuthedAtom } from '@/routes/Auth'
 import axios, { AxiosResponse } from 'axios'
 
-const axi = axios.create({
+const apiClient = axios.create({
   baseURL: '/api/v2',
   timeout: 6000,
 })
 
-axi.interceptors.response.use(
+apiClient.interceptors.response.use(
   (res: AxiosResponse) => {
     return res
   },
@@ -26,4 +26,4 @@ axi.interceptors.response.use(
   }
 )
 
-export default axi
+export default apiClient

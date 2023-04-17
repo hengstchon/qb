@@ -3,10 +3,10 @@ import { SWRConfig, SWRConfiguration } from 'swr'
 import { createStore, Provider } from 'jotai'
 import { router } from './routes'
 import './index.css'
-import axi from '@/utils/axi'
+import apiClient from './utils/apiClient'
 
 const swrConfig: SWRConfiguration = {
-  fetcher: (url) => axi.get(url).then((res) => res.data),
+  fetcher: (url) => apiClient.get(url).then((res) => res.data),
 }
 
 export const store = createStore()
