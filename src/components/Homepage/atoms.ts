@@ -15,7 +15,7 @@ import { trksColumns } from '@/components/Details/Trackers/columns'
 import { peersColumns } from '@/components/Details/Peers/columns'
 import { filesColumns } from '../Details/Content/columns'
 
-export const storageAtom = atomWithStorage<Storage>('App', {
+const defaultStorage = {
   settings: {
     openDetails: false,
     refreshInterval: 5000,
@@ -53,7 +53,13 @@ export const storageAtom = atomWithStorage<Storage>('App', {
     columnVisibility: {},
     sorting: [],
   },
-})
+}
+
+const storageInLocal = localStorage.getItem('App')
+export const storageAtom = atomWithStorage<Storage>(
+  'App',
+  storageInLocal ? JSON.parse(storageInLocal) : defaultStorage
+)
 
 export const refreshIntervalAtom = atom(
   (get) => get(storageAtom).settings.refreshInterval,
