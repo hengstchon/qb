@@ -54,7 +54,7 @@ const HeaderColumn = <T,>({
         !isDragging &&
           isOver &&
           (overIndex > activeIndex
-            ? 'after:absolute after:top-0 after:right-0 after:z-10 after:-mr-[3px] after:block after:h-full after:w-1 after:bg-red-500'
+            ? 'after:absolute after:right-0 after:top-0 after:z-10 after:-mr-[3px] after:block after:h-full after:w-1 after:bg-red-500'
             : 'before:absolute before:-ml-[3px] before:block before:h-full before:w-1 before:bg-red-500')
       )}
       style={{
