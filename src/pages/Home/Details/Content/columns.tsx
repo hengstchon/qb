@@ -2,7 +2,13 @@ import { File } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage } from '@/lib/utils'
-import { ChevronDown, ChevronRight, FileIcon, FolderIcon } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  FileIcon,
+  FolderClosedIcon,
+  FolderOpenIcon,
+} from 'lucide-react'
 
 const ch = createColumnHelper<File>()
 
@@ -31,7 +37,11 @@ export const filesColumns = [
             >
               {row.getIsExpanded() ? expandedIcon : collapsedIcon}
             </button>
-            <FolderIcon className="mr-1 h-4 w-4 flex-none" />
+            {row.getIsExpanded() ? (
+              <FolderOpenIcon className="mr-1 h-4 w-4 flex-none" />
+            ) : (
+              <FolderClosedIcon className="mr-1 h-4 w-4 flex-none" />
+            )}
           </>
         ) : (
           <FileIcon

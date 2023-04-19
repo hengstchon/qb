@@ -60,7 +60,6 @@ const Content = () => {
     getExpandedRowModel: getExpandedRowModel(),
   })
   const virtualize = table.getRowModel().flatRows.length > 100
-  console.log({ virtualize })
 
   return (
     <div className="grid gap-2">
