@@ -14,7 +14,7 @@ const Row = <T,>({
   return (
     <div
       className={cn(
-        'flex hover:bg-yellow-100',
+        'flex h-6 hover:bg-yellow-100',
         currRow === row.index && 'bg-yellow-200'
       )}
       onClick={() => setCurrRow(row.index)}
@@ -30,9 +30,9 @@ const Row = <T,>({
             {isFirstCol ? (
               flexRender(cell.column.columnDef.cell, cell.getContext())
             ) : (
-              <span className="truncate text-sm">
+              <div className="flex items-center truncate text-sm">
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </span>
+              </div>
             )}
           </div>
         )

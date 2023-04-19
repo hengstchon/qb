@@ -59,6 +59,8 @@ const Content = () => {
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
   })
+  const virtualize = table.getRowModel().flatRows.length > 100
+  console.log({ virtualize })
 
   return (
     <div className="grid gap-2">
@@ -67,7 +69,7 @@ const Content = () => {
           table={table}
           colOrderAtom={filesColOrderAtom}
           currRowAtom={currRowAtom}
-          virtualize={true}
+          virtualize={virtualize}
         />
       </div>
     </div>

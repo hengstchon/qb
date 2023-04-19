@@ -29,11 +29,10 @@ const BaseTable = <T,>({
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 30,
-    overscan: 5,
-    debug: true,
+    estimateSize: () => 24,
+    overscan: 10,
+    // debug: true,
   })
-  console.log('size:', rowVirtualizer.getVirtualItems())
 
   return (
     <div className="table border border-dotted">
@@ -53,35 +52,23 @@ const BaseTable = <T,>({
       </HeaderContextMenu>
 
       {virtualize ? (
-        <div
-          ref={parentRef}
-          style={{
-            height: `200px`,
-            width: `700px`,
-            overflow: 'auto', // Make it scroll!
-          }}
-        >
+        <div ref={parentRef} className="h-64 overflow-auto">
           <div
+            className="relative w-full"
             style={{
               height: `${rowVirtualizer.getTotalSize()}px`,
-              width: '100%',
-              position: 'relative',
             }}
           >
             {rowVirtualizer.getVirtualItems().map((virtualItem) => {
               return (
                 <div
                   key={virtualItem.key}
+                  className="absolute left-0 top-0 w-full"
                   style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
                     height: `${virtualItem.size}px`,
                     transform: `translateY(${virtualItem.start}px)`,
                   }}
                 >
-                  {/* xxx {virtualItem.index} */}
                   <Row<T>
                     key={virtualItem.index}
                     row={rows[virtualItem.index]}

@@ -71,9 +71,9 @@ const HeaderColumn = <T,>({
         )}
         onClick={header.column.getToggleSortingHandler()}
       >
-        <span className="truncate">
+        <div className="flex items-center truncate">
           {flexRender(header.column.columnDef.header, header.getContext())}
-        </span>
+        </div>
         {{
           asc: <ArrowUpIcon className="h-4 w-4 flex-none" />,
           desc: <ArrowDownIcon className="h-4 w-4 flex-none" />,

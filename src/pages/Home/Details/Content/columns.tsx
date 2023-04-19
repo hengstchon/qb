@@ -2,12 +2,12 @@ import { File } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage } from '@/lib/utils'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, FileIcon, FolderIcon } from 'lucide-react'
 
 const ch = createColumnHelper<File>()
 
-const collapsedIcon = <ChevronRight />
-const expandedIcon = <ChevronDown />
+const collapsedIcon = <ChevronRight className="mr-1 h-4 w-4 flex-none" />
+const expandedIcon = <ChevronDown className="mr-1 h-4 w-4 flex-none" />
 
 export const filesColumns = [
   selectColumnDef as ColumnDef<File>,
@@ -22,16 +22,25 @@ export const filesColumns = [
       </>
     ),
     cell: ({ row, getValue }) => (
-      <div style={{ paddingLeft: `${row.depth * 2}rem` }}>
+      <>
         {row.getCanExpand() ? (
-          <button onClick={row.getToggleExpandedHandler()}>
-            {row.getIsExpanded() ? expandedIcon : collapsedIcon}
-          </button>
+          <>
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              style={{ marginLeft: `${row.depth * 2}rem` }}
+            >
+              {row.getIsExpanded() ? expandedIcon : collapsedIcon}
+            </button>
+            <FolderIcon className="mr-1 h-4 w-4 flex-none" />
+          </>
         ) : (
-          '🔵'
+          <FileIcon
+            className="mr-1 h-4 w-4 flex-none"
+            style={{ marginLeft: `${row.depth * 2}rem` }}
+          />
         )}{' '}
         {getValue()}
-      </div>
+      </>
     ),
     size: 200,
   }),
