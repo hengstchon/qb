@@ -16,7 +16,6 @@ import { filesColumns } from './columns'
 import { File } from '@/types'
 import BaseTable from '@/components/Table'
 import { useFiles } from '@/hooks/useFiles'
-import { useVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
 
 const FilePriority = {
@@ -60,36 +59,16 @@ const Content = () => {
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
   })
-  const tableContainerRef = React.useRef<HTMLDivElement>(null)
 
-  const { rows } = table.getRowModel()
-
-  const rowVirtualizer = useVirtualizer({
-    // parentRef: tableContainerRef,
-    // size: rows.length,
-    // overscan: 10,
-    count: rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 35,
-    debug: true,
-  })
-  console.log('size:', rowVirtualizer.getTotalSize())
   return (
     <div className="grid gap-2">
-      <div ref={tableContainerRef} className="overflow-auto">
-        <div
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: '100%',
-            position: 'relative',
-          }}
-        >
-          <BaseTable<File>
-            table={table}
-            colOrderAtom={filesColOrderAtom}
-            currRowAtom={currRowAtom}
-          />
-        </div>
+      <div className="overflow-auto">
+        <BaseTable<File>
+          table={table}
+          colOrderAtom={filesColOrderAtom}
+          currRowAtom={currRowAtom}
+          virtualize={true}
+        />
       </div>
     </div>
   )
