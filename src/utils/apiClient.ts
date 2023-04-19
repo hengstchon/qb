@@ -13,13 +13,15 @@ apiClient.interceptors.response.use(
   },
   (err) => {
     let msg = ''
-    switch (err.response.status) {
-      case 403:
-        msg = '未登录(403)'
-        store.set(isAuthedAtom, false)
-        break
-      default:
-        msg = `连接出错(${err.response.status})`
+    if (err.response) {
+      switch (err.response.status) {
+        case 403:
+          msg = '未登录(403)'
+          store.set(isAuthedAtom, false)
+          break
+        default:
+          msg = `连接出错(${err.response.status})`
+      }
     }
     // console.log(msg)
     return Promise.reject(err.response)
