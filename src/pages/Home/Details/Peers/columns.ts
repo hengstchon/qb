@@ -1,0 +1,75 @@
+import { Peer } from '@/types'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { selectColumnDef } from '@/components/Table'
+
+const ch = createColumnHelper<Peer>()
+
+export const peersColumns = [
+  selectColumnDef as ColumnDef<Peer>,
+  ch.accessor(({ country_code, country }) => ({ country_code, country }), {
+    id: 'countryRegion',
+    header: 'Country/Region',
+    size: 50,
+    cell: (p) => p.getValue().country_code,
+  }),
+  ch.accessor('ip', {
+    id: 'ip',
+    header: 'IP',
+    size: 200,
+  }),
+  ch.accessor('port', {
+    id: 'port',
+    header: 'Port',
+    size: 100,
+  }),
+  ch.accessor('connection', {
+    id: 'connection',
+    header: 'Connection',
+    size: 100,
+  }),
+  ch.accessor('flags', {
+    id: 'flags',
+    header: 'Flags',
+    size: 100,
+  }),
+  ch.accessor('client', {
+    id: 'client',
+    header: 'Client',
+    size: 100,
+  }),
+  ch.accessor('progress', {
+    id: 'progress',
+    header: 'Progress',
+    size: 100,
+  }),
+  ch.accessor('dl_speed', {
+    id: 'dl_speed',
+    header: 'Down Speed',
+    size: 100,
+  }),
+  ch.accessor('up_speed', {
+    id: 'up_speed',
+    header: 'Up Speed',
+    size: 100,
+  }),
+  ch.accessor('downloaded', {
+    id: 'downloaded',
+    header: 'Downloaded',
+    size: 100,
+  }),
+  ch.accessor('uploaded', {
+    id: 'uploaded',
+    header: 'Uploaded',
+    size: 100,
+  }),
+  ch.accessor('relevance', {
+    id: 'relevance',
+    header: 'Relevance',
+    size: 100,
+  }),
+  ch.accessor('files', {
+    id: 'files',
+    header: 'Files',
+    size: 100,
+  }),
+]

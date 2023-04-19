@@ -1,7 +1,7 @@
 import React from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { CheckIcon, MinusIcon } from 'lucide-react'
-import { cn } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface CheckboxProps extends CheckboxPrimitive.CheckboxProps {}
 

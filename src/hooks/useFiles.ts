@@ -1,8 +1,8 @@
-import { getCurrHashAtom } from '@/components/Details/atoms'
+import { getCurrHashAtom } from '@/pages/Home/Details/atoms'
 import { Files } from '@/types'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
-import { API } from '@/utils/api'
+import { API } from '@/api/endpoints'
 import { useEffect, useMemo } from 'react'
 
 const PathSeparator = '/'

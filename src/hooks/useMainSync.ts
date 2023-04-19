@@ -1,17 +1,19 @@
 import { useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
-import { API } from '@/utils/api'
+import { API } from '@/api/endpoints'
 import { useEffect } from 'react'
 import {
   refreshIntervalAtom,
   mainRidAtom,
   updateMainDataAtom,
-} from '@/components/Homepage/atoms'
+} from '@/pages/Home/atoms'
+import { useSWRConfig } from 'swr'
 
 export const useUpdateMainSync = () => {
   const [rid, setRid] = useAtom(mainRidAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
   const setUpdateMainData = useSetAtom(updateMainDataAtom)
+  const { onErrorRetry } = useSWRConfig()
 
   const { data, mutate } = useSWRImmutable(API.sync.maindata(rid), {
     onSuccess: (data, key, config) => {
@@ -26,22 +28,15 @@ export const useUpdateMainSync = () => {
       }
     },
     // onError: (err, key, config) => {
-    //   console.log('err:', err)
+    //   console.log('onError err:', err, key)
     // },
-    // onErrorRetry: (error, key, config, revalidate, ops) => {
-    //   // Never retry on 404.
-    //   if (error.status === 404) return
-    //
-    //   // Never retry for a specific key.
-    //   if (key === '/api/user') return
-    //
-    //   // Only retry up to 10 times.
-    //   // if (retryCount >= 10) return
-    //
-    //   // Retry after 5 seconds.
-    //   // setTimeout(() => revalidate({ retryCount }), 5000)
-    //   console.log('ops:', ops)
-    // },
+    onErrorRetry: (error, key, config, revalidate, opts) => {
+      console.log('onErryrRetry:', error, key, opts)
+      setTimeout(() => {
+        console.log('revalidate: ', opts)
+        revalidate(opts)
+      }, refreshInterval)
+    },
   })
 
   // useEffect(() => {
