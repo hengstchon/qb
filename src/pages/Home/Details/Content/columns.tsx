@@ -2,8 +2,12 @@ import { File } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage } from '@/lib/utils'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 const ch = createColumnHelper<File>()
+
+const collapsedIcon = <ChevronRight />
+const expandedIcon = <ChevronDown />
 
 export const filesColumns = [
   selectColumnDef as ColumnDef<File>,
@@ -12,7 +16,7 @@ export const filesColumns = [
     header: ({ table }) => (
       <>
         <button onClick={table.getToggleAllRowsExpandedHandler()}>
-          {table.getIsAllRowsExpanded() ? '👇' : '👉'}
+          {table.getIsAllRowsExpanded() ? expandedIcon : collapsedIcon}
         </button>{' '}
         Name
       </>
@@ -21,7 +25,7 @@ export const filesColumns = [
       <div style={{ paddingLeft: `${row.depth * 2}rem` }}>
         {row.getCanExpand() ? (
           <button onClick={row.getToggleExpandedHandler()}>
-            {row.getIsExpanded() ? '👇' : '👉'}
+            {row.getIsExpanded() ? expandedIcon : collapsedIcon}
           </button>
         ) : (
           '🔵'
