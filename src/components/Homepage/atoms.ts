@@ -148,10 +148,10 @@ export const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
           break
         case 'torrents': {
           set(torrentsAtom, (prev) => {
-            const newTors = {} as Torrents
+            const newTors = { ...prev }
             for (const [hash, props] of Object.entries(val.torrents!)) {
-              if (Object.keys(prev).includes(hash)) {
-                newTors[hash] = { ...prev[hash], ...props }
+              if (Object.keys(newTors).includes(hash)) {
+                newTors[hash] = { ...newTors[hash], ...props }
               } else {
                 newTors[hash] = props
               }
