@@ -236,10 +236,10 @@ export type PeersData = {
   full_update?: boolean
 }
 
-export type File = {
+export type FileType = {
   availability: number
   index: number
-  is_seed: boolean
+  is_seed?: boolean
   name: string
   piece_range: [number, number]
   priority: number
@@ -247,4 +247,4 @@ export type File = {
   size: number
 }
 
-export type Files = File[]
+export type Files = FileType[]

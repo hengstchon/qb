@@ -13,7 +13,7 @@ import {
   filesSortAtom,
 } from './atoms'
 import { filesColumns } from './columns'
-import { File } from '@/types'
+import { FileType } from '@/types'
 import BaseTable from '@/components/Table'
 import { useFiles } from '@/hooks/useFiles'
 import React from 'react'
@@ -64,7 +64,7 @@ const Content = () => {
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
-        <BaseTable<File>
+        <BaseTable<FileType>
           table={table}
           colOrderAtom={filesColOrderAtom}
           currRowAtom={currRowAtom}

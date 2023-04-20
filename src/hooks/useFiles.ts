@@ -1,91 +1,74 @@
-import { getCurrHashAtom } from '@/pages/Home/Details/atoms'
-import { Files } from '@/types'
+import { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
+import { getCurrHashAtom } from '@/pages/Home/Details/atoms'
+import { FileType, Files } from '@/types'
 import { API } from '@/api/endpoints'
-import { useEffect, useMemo } from 'react'
 
 const PathSeparator = '/'
 
-const getFileExtension = function (filename: string) {
-  const pointIndex = filename.lastIndexOf('.')
-  if (pointIndex === -1) return ''
-  return filename.substring(pointIndex + 1)
+type TreeNode = {
+  availability: number
+  is_seed?: boolean
+  name: string
+  priority: number
+  progress: number
+  size: number
+  subRows: TreeNode[]
 }
 
-const getFileName = function (filepath: string) {
-  const slashIndex = filepath.lastIndexOf(PathSeparator)
-  if (slashIndex === -1) return filepath
-  return filepath.substring(slashIndex + 1)
-}
-
-const getFolderName = function (filepath: string) {
-  const slashIndex = filepath.lastIndexOf(PathSeparator)
-  if (slashIndex === -1) return ''
-  return filepath.substring(0, slashIndex)
-}
-
-const initNode = () => ({
-  name: '',
-  size: 0,
+const initNode = (name: string, file: FileType): TreeNode => ({
+  availability: 0,
+  is_seed: file.is_seed,
+  name,
+  priority: file.priority,
+  progress: file.progress,
+  size: file.size,
+  subRows: [],
 })
+
+function recalcNode(node: TreeNode, file: FileType): void {
+  const { priority, progress, size } = file
+  node.progress =
+    (node.progress * node.size + progress * size) / (node.size + size)
+  node.size += size
+}
+
+function buildTree(fileArray: Files): TreeNode[] {
+  const tree: TreeNode[] = []
+
+  for (const file of fileArray) {
+    const pathComponents = file.name.split(PathSeparator)
+    let currentTree = tree
+
+    for (const name of pathComponents) {
+      const existingNode = currentTree.find((node) => node.name === name)
+
+      if (existingNode) {
+        currentTree = existingNode.subRows
+        recalcNode(existingNode, file)
+      } else {
+        const newNode: TreeNode = initNode(name, file)
+        currentTree.push(newNode)
+        currentTree = newNode.subRows
+      }
+    }
+  }
+
+  return tree
+}
 
 export const useFiles = () => {
   const [currHash] = useAtom(getCurrHashAtom)
   const { data } = useSWR<Files>(
     currHash ? API.torrents.files(currHash) : null,
-    { keepPreviousData: true, fallbackData: [] }
+    { refreshInterval: 5000, keepPreviousData: true, fallbackData: [] }
   )
 
   if (!data) return []
+  // console.log(new Date().toLocaleTimeString(), { data })
 
-  const treeFiles = []
-
-  const rootNode = initNode()
-
-  // A/B/C.mkv
-  // A/C.mkv
-  // B/C.mkv
-  // C.mkv
-  for (const file of data) {
-    const wholeName = file.name
-    let parentNode = rootNode
-
-    const pathItems = wholeName.split(PathSeparator)
-    // the last one must be the file node
-    const fileName = pathItems.pop()
-
-    // folder nodes (might be empty)
-    for (const path of pathItems) {
-      if (!parentNode.subRows) {
-        const newNode = initNode()
-        newNode.name = path
-        newNode.size += file.size
-        parentNode.subRows = [newNode]
-        parentNode = newNode
-      } else {
-        const p = parentNode.subRows.find((node) => node.name === path)
-        if (p) {
-          p.size += file.size
-          parentNode = p
-        } else {
-          const newNode = initNode()
-          newNode.name = path
-          newNode.size += file.size
-          parentNode.subRows.push(newNode)
-          parentNode = newNode
-        }
-      }
-    }
-    // file node
-    parentNode.subRows = parentNode.subRows
-      ? [...parentNode.subRows, { ...file, name: fileName }]
-      : [{ ...file, name: fileName }]
-  }
-  // window.o = rootNode
-  const rows = useMemo(() => rootNode.subRows ?? [], [data])
-  console.log(rows)
+  const rows = useMemo(() => buildTree(data), [data])
+  // console.log(new Date().toLocaleTimeString(), { rows })
   return rows
-
-  // return data
 }

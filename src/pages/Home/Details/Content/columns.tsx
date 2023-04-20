@@ -1,4 +1,4 @@
-import { File } from '@/types'
+import { FileType } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage } from '@/lib/utils'
@@ -10,13 +10,13 @@ import {
   FolderOpenIcon,
 } from 'lucide-react'
 
-const ch = createColumnHelper<File>()
+const ch = createColumnHelper<FileType>()
 
 const collapsedIcon = <ChevronRight className="mr-1 h-4 w-4 flex-none" />
 const expandedIcon = <ChevronDown className="mr-1 h-4 w-4 flex-none" />
 
 export const filesColumns = [
-  selectColumnDef as ColumnDef<File>,
+  selectColumnDef as ColumnDef<FileType>,
   ch.accessor('name', {
     id: 'name',
     header: ({ table }) => (
