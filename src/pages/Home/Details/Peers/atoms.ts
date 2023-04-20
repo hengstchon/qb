@@ -9,6 +9,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table'
 import { mergeToStorage } from '@/lib/utils'
+import { produce } from 'immer'
 
 export const peersRidAtom = atom(0)
 
@@ -20,14 +21,16 @@ export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
   } else {
     if (val.peers) {
       set(peersAtom, (prev) => {
-        for (const [peer, props] of Object.entries(val.peers!)) {
-          if (Object.keys(prev).includes(peer)) {
-            prev[peer] = { ...prev[peer], ...props }
-          } else {
-            prev[peer] = props
+        const newPeers = produce(prev, (draft) => {
+          for (const [peer, props] of Object.entries(val.peers!)) {
+            if (Object.keys(draft).includes(peer)) {
+              draft[peer] = { ...draft[peer], ...props }
+            } else {
+              draft[peer] = props
+            }
           }
-        }
-        return prev
+        })
+        return newPeers
       })
     }
     if (val.peers_removed) {

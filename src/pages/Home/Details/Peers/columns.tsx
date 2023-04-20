@@ -1,6 +1,8 @@
 import { Peer } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
+import { formatBytes, formatPercentage, formatSpeed } from '@/lib/utils'
+import ReactCountryFlag from 'react-country-flag'
 
 const ch = createColumnHelper<Peer>()
 
@@ -10,7 +12,16 @@ export const peersColumns = [
     id: 'countryRegion',
     header: 'Country/Region',
     size: 50,
-    cell: (p) => p.getValue().country_code,
+    cell: (p) => {
+      const { country_code, country } = p.getValue()
+      return (
+        <ReactCountryFlag
+          className="text-center"
+          countryCode={country_code}
+          aria-label={country}
+        />
+      )
+    },
   }),
   ch.accessor('ip', {
     id: 'ip',
@@ -41,31 +52,37 @@ export const peersColumns = [
     id: 'progress',
     header: 'Progress',
     size: 100,
+    cell: (p) => formatPercentage(p.getValue()),
   }),
   ch.accessor('dl_speed', {
     id: 'dl_speed',
     header: 'Down Speed',
     size: 100,
+    cell: (p) => formatSpeed(p.getValue()),
   }),
   ch.accessor('up_speed', {
     id: 'up_speed',
     header: 'Up Speed',
     size: 100,
+    cell: (p) => formatSpeed(p.getValue()),
   }),
   ch.accessor('downloaded', {
     id: 'downloaded',
     header: 'Downloaded',
     size: 100,
+    cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('uploaded', {
     id: 'uploaded',
     header: 'Uploaded',
     size: 100,
+    cell: (p) => formatBytes(p.getValue()),
   }),
   ch.accessor('relevance', {
     id: 'relevance',
     header: 'Relevance',
     size: 100,
+    cell: (p) => formatPercentage(p.getValue()),
   }),
   ch.accessor('files', {
     id: 'files',
