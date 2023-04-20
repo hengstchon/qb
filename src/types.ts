@@ -208,7 +208,7 @@ export type Tracker = {
   url: string
 }
 
-export type Peer = {
+export type PeerType = {
   client: string
   connection: string
   country: string
@@ -226,7 +226,7 @@ export type Peer = {
   uploaded: number
 }
 
-export type Peers = Record<string, Peer>
+export type Peers = Record<string, PeerType>
 
 export type PeersData = {
   rid: number

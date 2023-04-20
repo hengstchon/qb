@@ -66,20 +66,22 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
-  const res = await client.post(API.login, data, {
-    headers: {
+  client
+    .url(API.login)
+    .headers({
       'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  })
-
-  if (res.status == 200) {
-    if (res.data == 'Ok.') {
-      store.set(isAuthedAtom, true)
-      return null
-    } else {
-      return 'Invalid Username or Password!'
-    }
-  } else {
-    return 'Unknown Error!'
-  }
+    })
+    .post(data)
+    .res((res) => {
+      if (res.status == 200) {
+        if (res.data == 'Ok.') {
+          store.set(isAuthedAtom, true)
+          return null
+        } else {
+          return 'Invalid Username or Password!'
+        }
+      } else {
+        return 'Unknown Error!'
+      }
+    })
 }

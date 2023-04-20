@@ -24,9 +24,10 @@ const Toolbar = () => {
       </Button>
       <Button
         className=""
-        onClick={async () => {
-          const res = await client.post(API.logout)
-          if (res.status == 200) setIsAuthed(false)
+        onClick={() => {
+          client.post(API.logout).res((res) => {
+            if (res.status == 200) setIsAuthed(false)
+          })
         }}
       >
         <LogOutIcon />

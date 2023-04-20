@@ -1,13 +1,13 @@
-import { Peer } from '@/types'
+import { PeerType } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage, formatSpeed } from '@/lib/utils'
 import ReactCountryFlag from 'react-country-flag'
 
-const ch = createColumnHelper<Peer>()
+const ch = createColumnHelper<PeerType>()
 
 export const peersColumns = [
-  selectColumnDef as ColumnDef<Peer>,
+  selectColumnDef as ColumnDef<PeerType>,
   ch.accessor(({ country_code, country }) => ({ country_code, country }), {
     id: 'countryRegion',
     header: 'Country/Region',

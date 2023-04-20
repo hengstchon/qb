@@ -6,7 +6,7 @@ import './index.css'
 import client from './api/client'
 
 const swrConfig: SWRConfiguration = {
-  fetcher: (url) => client.get(url).then((res) => res.data),
+  fetcher: (url) => client.get(url).json((res) => res),
 }
 
 export const store = createStore()

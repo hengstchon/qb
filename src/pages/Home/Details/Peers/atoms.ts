@@ -21,7 +21,7 @@ export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
   } else {
     if (val.peers) {
       set(peersAtom, (prev) => {
-        const newPeers = produce(prev, (draft) => {
+        return produce(prev, (draft) => {
           for (const [peer, props] of Object.entries(val.peers!)) {
             if (Object.keys(draft).includes(peer)) {
               draft[peer] = { ...draft[peer], ...props }
@@ -30,7 +30,6 @@ export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
             }
           }
         })
-        return newPeers
       })
     }
     if (val.peers_removed) {

@@ -1,6 +1,6 @@
 import BaseTable from '@/components/Table'
 import { useTorPeers } from '@/hooks/useTorPeers'
-import { Peer } from '@/types'
+import { PeerType } from '@/types'
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -47,7 +47,7 @@ const Peers = () => {
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
-        <BaseTable<Peer>
+        <BaseTable<PeerType>
           table={table}
           colOrderAtom={peersColOrderAtom}
           currRowAtom={currRowAtom}
