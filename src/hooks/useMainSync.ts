@@ -7,15 +7,13 @@ import {
   mainRidAtom,
   updateMainDataAtom,
 } from '@/pages/Home/atoms'
-import { useSWRConfig } from 'swr'
 
 export const useUpdateMainSync = () => {
   const [rid, setRid] = useAtom(mainRidAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
   const setUpdateMainData = useSetAtom(updateMainDataAtom)
-  const { onErrorRetry } = useSWRConfig()
 
-  const { data, mutate } = useSWRImmutable(API.sync.maindata(rid), {
+  const { data } = useSWRImmutable(API.sync.maindata(rid), {
     onSuccess: (data, key, config) => {
       // console.log('data.rid: ', data.rid)
       // console.log('refreshInterval:', refreshInterval)

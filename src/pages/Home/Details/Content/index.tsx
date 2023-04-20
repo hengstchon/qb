@@ -13,23 +13,22 @@ import {
   filesSortAtom,
 } from './atoms'
 import { filesColumns } from './columns'
-import { FileType } from '@/types'
 import BaseTable from '@/components/Table'
 import { useFiles } from '@/hooks/useFiles'
-import React from 'react'
+import { FileNode } from '@/types'
 
-const FilePriority = {
-  Ignored: 0,
-  Normal: 1,
-  High: 6,
-  Maximum: 7,
-  Mixed: -1,
+export enum FilePriority {
+  Ignored = 0,
+  Normal = 1,
+  High = 6,
+  Maximum = 7,
+  Mixed = -1,
 }
 
-const TriState = {
-  Unchecked: 0,
-  Checked: 1,
-  Partial: 2,
+export enum TriState {
+  Unchecked = 0,
+  Checked = 1,
+  Partial = 2,
 }
 
 const Content = () => {
@@ -64,7 +63,7 @@ const Content = () => {
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
-        <BaseTable<FileType>
+        <BaseTable<FileNode>
           table={table}
           colOrderAtom={filesColOrderAtom}
           currRowAtom={currRowAtom}

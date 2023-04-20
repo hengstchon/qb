@@ -1,4 +1,3 @@
-import { FileType } from '@/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage } from '@/lib/utils'
@@ -9,14 +8,16 @@ import {
   FolderClosedIcon,
   FolderOpenIcon,
 } from 'lucide-react'
+import { FilePriority } from '.'
+import { FileNode } from '@/types'
 
-const ch = createColumnHelper<FileType>()
+const ch = createColumnHelper<FileNode>()
 
 const collapsedIcon = <ChevronRight className="mr-1 h-4 w-4 flex-none" />
 const expandedIcon = <ChevronDown className="mr-1 h-4 w-4 flex-none" />
 
 export const filesColumns = [
-  selectColumnDef as ColumnDef<FileType>,
+  selectColumnDef as ColumnDef<FileNode>,
   ch.accessor('name', {
     id: 'name',
     header: ({ table }) => (
@@ -70,6 +71,22 @@ export const filesColumns = [
     id: 'priority',
     header: 'Priority',
     size: 100,
+    cell: (p) => {
+      switch (p.getValue()) {
+        case FilePriority.Ignored:
+          return 'Do not download'
+        case FilePriority.Normal:
+          return 'Normal'
+        case FilePriority.High:
+          return 'High'
+        case FilePriority.Maximum:
+          return 'Maximum'
+        case FilePriority.Mixed:
+          return 'Mixed'
+        default:
+          return 'Normal'
+      }
+    },
   }),
   ch.accessor(({ size, progress }) => ({ size, progress }), {
     id: 'remaining',

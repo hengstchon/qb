@@ -248,3 +248,14 @@ export type FileType = {
 }
 
 export type Files = FileType[]
+
+export type FileNode = {
+  availability: number
+  is_seed?: boolean
+  name: string
+  priority: number
+  progress: number
+  size: number
+  remaining: number
+  subRows: FileNode[]
+}
