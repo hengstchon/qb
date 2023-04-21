@@ -30,7 +30,7 @@ const BaseTable = <T,>({
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 24,
-    overscan: 10,
+    // overscan: 10,
     // debug: true,
   })
 

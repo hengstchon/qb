@@ -44,6 +44,8 @@ const Peers = () => {
     getSortedRowModel: getSortedRowModel(),
   })
 
+  const virtualize = table.getRowModel().flatRows.length > 20
+
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
@@ -51,6 +53,7 @@ const Peers = () => {
           table={table}
           colOrderAtom={peersColOrderAtom}
           currRowAtom={currRowAtom}
+          virtualize={virtualize}
         />
       </div>
     </div>
