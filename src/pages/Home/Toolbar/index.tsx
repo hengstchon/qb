@@ -1,13 +1,17 @@
 import { Button } from '@/ui/Button'
 import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
-import { isAuthedAtom } from '@/routes/Auth'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
-import { mainRidAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
+import {
+  isAuthedAtom,
+  mainRidAtom,
+  refreshIntervalAtom,
+} from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import client from '@/api/client'
 import { peersRidAtom } from '../Details/Peers/atoms'
+import { RESET } from 'jotai/utils'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -29,9 +33,12 @@ const Toolbar = () => {
       <Button
         className=""
         onClick={() => {
-          client.post(API.logout).res((res) => {
-            if (res.status == 200) setIsAuthed(false)
-          })
+          client
+            .url(API.logout)
+            .post()
+            .res((res) => {
+              if (res.status == 200) setIsAuthed(RESET)
+            })
         }}
       >
         <LogOutIcon />

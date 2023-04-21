@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { ActionFunction, Navigate, useActionData } from 'react-router-dom'
+import { Navigate, useActionData } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { isAuthedAtom } from '@/routes/Auth'
 import { API } from '@/api/endpoints'
 import client from '@/api/client'
+import { isAuthedAtom } from '../Home/atoms'
 
 type PayloadType = {
   username: string

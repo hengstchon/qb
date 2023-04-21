@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai'
 import { router } from './routes'
 import './index.css'
 import client from './api/client'
-import { isAuthedAtom } from './routes/Auth'
+import { isAuthedAtom } from './pages/Home/atoms'
 
 const App = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)

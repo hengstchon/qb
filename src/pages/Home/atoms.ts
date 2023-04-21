@@ -6,14 +6,15 @@ import {
   Categories,
   Tags,
   Storage,
+  SettingsStorage,
 } from '@/types'
 import { mergeToStorage } from '@/lib/utils'
 import { atom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
 import { torsColumns } from './Torrents/columns'
 import { trksColumns } from './Details/Trackers/columns'
 import { peersColumns } from './Details/Peers/columns'
 import { filesColumns } from './Details/Content/columns'
+import { atomWithLocalStorage } from '@/lib/storage'
 
 const defaultStorage = {
   settings: {
@@ -55,11 +56,24 @@ const defaultStorage = {
   },
 }
 
-const storageInLocal = localStorage.getItem('App')
-export const storageAtom = atomWithStorage<Storage>(
-  'App',
-  storageInLocal ? JSON.parse(storageInLocal) : defaultStorage
+export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
+
+const defaultSettings = {
+  openDetails: false,
+  refreshInterval: 5000,
+  sidebarWidth: 300,
+  openSidebar: true,
+  openSidebarStatus: true,
+  openSidebarCategories: true,
+  openSidebarTags: true,
+  openSidebarTrackers: true,
+}
+export const settingsAtom = atomWithLocalStorage<SettingsStorage>(
+  'settings',
+  defaultSettings
 )
+
+export const storageAtom = atomWithLocalStorage<Storage>('App', defaultStorage)
 
 export const refreshIntervalAtom = atom(
   (get) => get(storageAtom).settings.refreshInterval,

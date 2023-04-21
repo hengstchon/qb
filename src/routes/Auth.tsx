@@ -1,8 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
-
-export const isAuthedAtom = atomWithStorage('isAuthed', false)
+import { isAuthedAtom } from '@/pages/Home/atoms'
 
 const Auth = () => {
   const isAuthed = useAtomValue(isAuthedAtom)
