@@ -4,14 +4,18 @@ import { useAtom, useSetAtom } from 'jotai'
 import { isAuthedAtom } from '@/routes/Auth'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
-import { refreshIntervalAtom } from '@/pages/Home/atoms'
+import { mainRidAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import client from '@/api/client'
+import { peersRidAtom } from '../Details/Peers/atoms'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
+
+  const setMainRid = useSetAtom(mainRidAtom)
+  const setPeersRid = useSetAtom(peersRidAtom)
 
   return (
     <div className="flex h-12 items-center bg-red-50 px-2">
@@ -45,6 +49,15 @@ const Toolbar = () => {
           </option>
         ))}
       </select>
+      <Button
+        className="ml-2 border"
+        onClick={() => {
+          // setMainRid((prev) => prev + 1)
+          setPeersRid((prev) => prev + 1)
+        }}
+      >
+        render
+      </Button>
     </div>
   )
 }

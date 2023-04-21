@@ -32,7 +32,6 @@ const Torrents = () => {
   const [rowSelection, onRowSelectionChange] = useAtom(torsRowSeleAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
-
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
 
   const table = useReactTable({
