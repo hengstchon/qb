@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/api/endpoints'
@@ -30,5 +31,6 @@ export const useTorPeers = () => {
   })
 
   // console.log('peers: ', Object.values(peers))
-  return peers
+  const peersArr = useMemo(() => Object.values(peers), [peers])
+  return peersArr
 }

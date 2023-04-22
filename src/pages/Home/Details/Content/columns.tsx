@@ -54,6 +54,9 @@ export const filesColumns = [
       </>
     ),
     size: 200,
+    meta: {
+      className: 'justify-start',
+    },
   }),
   ch.accessor('size', {
     id: 'size',

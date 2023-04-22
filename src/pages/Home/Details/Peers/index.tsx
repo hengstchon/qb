@@ -31,8 +31,7 @@ const peersSortAtom = focusAtom(torrentsTableAtom, (optic) =>
 )
 
 const Peers = () => {
-  const peers = useTorPeers()
-  const peersArr = useMemo(() => Object.values(peers), [peers])
+  const data = useTorPeers()
 
   const [columnOrder, onColumnOrderChange] = useAtom(peersColOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(peersColSizingAtom)
@@ -40,7 +39,7 @@ const Peers = () => {
   const [sorting, onSortingChange] = useAtom(peersSortAtom)
 
   const table = useReactTable({
-    data: peersArr,
+    data,
     columns: peersColumns,
     state: {
       columnOrder,

@@ -40,6 +40,7 @@ const HeaderColumn = <T,>({
   const [columnOrder] = useAtom(colOrderAtom)
   const activeIndex = columnOrder.indexOf(active?.id as string)
   const overIndex = over?.id ? columnOrder.indexOf(over?.id as string) : -1
+  const className = header.column.columnDef.meta?.className
 
   return isFirstCol ? (
     <div className="flex items-center border border-dotted px-1">
@@ -67,7 +68,8 @@ const HeaderColumn = <T,>({
       <div
         className={cn(
           'flex cursor-pointer select-none items-center justify-center gap-1 px-1 text-sm font-semibold',
-          isOver ? 'cursor-move' : 'cursor-pointer'
+          isOver ? 'cursor-move' : 'cursor-pointer',
+          className
         )}
         onClick={header.column.getToggleSortingHandler()}
       >
