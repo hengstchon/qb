@@ -1,5 +1,10 @@
 import { Button } from '@/ui/Button'
-import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
+import {
+  LogOutIcon,
+  PlusCircleIcon,
+  SidebarCloseIcon,
+  SidebarOpenIcon,
+} from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
@@ -22,6 +27,11 @@ const Toolbar = () => {
           <SidebarOpenIcon className="h-6 w-6" />
         )}
       </Button>
+
+      <Button>
+        <PlusCircleIcon className="h-6 w-6" />
+      </Button>
+
       <Button
         className=""
         onClick={() => {
@@ -35,7 +45,9 @@ const Toolbar = () => {
       >
         <LogOutIcon />
       </Button>
+
       <FilterInput />
+
       <select
         value={refreshInterval}
         onChange={(e) => {
