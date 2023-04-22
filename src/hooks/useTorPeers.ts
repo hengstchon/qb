@@ -1,13 +1,12 @@
 import { useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/api/endpoints'
-import { refreshIntervalAtom } from '@/pages/Home/atoms'
+import { getCurrHashAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import {
   peersAtom,
   peersRidAtom,
   updatePeersAtom,
 } from '@/pages/Home/Details/Peers/atoms'
-import { getCurrHashAtom } from '@/pages/Home/Details/atoms'
 
 export const useTorPeers = () => {
   const [rid, setRid] = useAtom(peersRidAtom)

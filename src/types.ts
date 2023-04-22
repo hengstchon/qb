@@ -8,12 +8,6 @@ import {
   VisibilityState,
 } from '@tanstack/react-table'
 
-export type NestedKeyOf<ObjectType extends object> = {
-  [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
-    ? `${Key}` | `${Key}.${NestedKeyOf<ObjectType[Key]>}`
-    : `${Key}`
-}[keyof ObjectType & (string | number)]
-
 export type SettingsStorage = {
   openDetails: boolean
   refreshInterval: number
@@ -25,47 +19,7 @@ export type SettingsStorage = {
   openSidebarTrackers: boolean
 }
 
-export type tablesStorage = {
-  torrentsTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    columnFilters: ColumnFiltersState
-    sorting: SortingState
-    pagination: PaginationState
-    rowSelection: RowSelectionState
-  }
-  trackersTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
-  peersTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
-  filesTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
-}
-
-export type Storage = {
-  settings: {
-    openDetails: boolean
-    refreshInterval: number
-    sidebarWidth: number
-    openSidebar: boolean
-    openSidebarStatus: boolean
-    openSidebarCategories: boolean
-    openSidebarTags: boolean
-    openSidebarTrackers: boolean
-  }
+export type TablesStorage = {
   torrentsTable: {
     columnOrder: ColumnOrderState
     columnSizing: ColumnSizingState

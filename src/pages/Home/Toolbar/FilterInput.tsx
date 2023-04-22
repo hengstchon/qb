@@ -1,7 +1,7 @@
 import { Input } from '@/ui/Input'
 import { atom, useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { torsColFiltersAtom } from '../Torrents/atoms'
+import { torsColFiltersAtom } from '@/pages/Home/Torrents'
 
 const nameFilterAtom = atom(
   (get) => get(torsColFiltersAtom)[0].value,

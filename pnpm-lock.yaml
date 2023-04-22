@@ -37,6 +37,9 @@ dependencies:
   jotai:
     specifier: ^2.0.4
     version: 2.0.4(react@18.2.0)
+  jotai-optics:
+    specifier: ^0.3.0
+    version: 0.3.0(jotai@2.0.4)(optics-ts@2.4.0)
   lucide-react:
     specifier: ^0.130.1
     version: 0.130.1(react@18.2.0)
@@ -2195,6 +2198,16 @@ packages:
     hasBin: true
     dev: true
 
+  /jotai-optics@0.3.0(jotai@2.0.4)(optics-ts@2.4.0):
+    resolution: {integrity: sha512-5ttpCRREIBu6DJix0wlyBP6y1QDPlePnoMZSXNDi/FOkXZrhk9uIXKjwvw34/yBCHT5mYpFUD4sFDvRUU2vkvQ==}
+    peerDependencies:
+      jotai: '>=1.11.0'
+      optics-ts: '*'
+    dependencies:
+      jotai: 2.0.4(react@18.2.0)
+      optics-ts: 2.4.0
+    dev: false
+
   /jotai@2.0.4(react@18.2.0):
     resolution: {integrity: sha512-XkR1Jtm4a2iKV/7fdB3rNHjJz8FkkDMVczqiAok7lt8W4F69l/ZQkPGWSEV+hJOJXRn27k6XYKOoKEQIwBuAMA==}
     engines: {node: '>=12.20.0'}
@@ -2413,6 +2426,10 @@ packages:
     dependencies:
       wrappy: 1.0.2
     dev: true
+
+  /optics-ts@2.4.0:
+    resolution: {integrity: sha512-BIYgnqOTEf+WiXuxuBFXeoCtyIDOwnUwCMybdQh8qdHyWXunwVVt7iD9XwNq8SCd5vUo9vqgYxF5ati/6inIuQ==}
+    dev: false
 
   /optionator@0.9.1:
     resolution: {integrity: sha512-74RlY5FCnhq4jRxVUPKDaRwrVNXMqsGsiW6AJw4XK8hmtm10wC0ypZBLw5IIp85NZMr91+qd1RvvENwg7jjRFw==}

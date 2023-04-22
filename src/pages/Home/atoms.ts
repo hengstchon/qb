@@ -1,3 +1,5 @@
+import { atom } from 'jotai'
+import { focusAtom } from 'jotai-optics'
 import {
   SyncData,
   ServerState,
@@ -5,28 +7,33 @@ import {
   Trackers,
   Categories,
   Tags,
-  Storage,
+  TablesStorage,
   SettingsStorage,
 } from '@/types'
-import { mergeToStorage } from '@/lib/utils'
-import { atom } from 'jotai'
+import { atomWithLocalStorage } from '@/lib/storage'
 import { torsColumns } from './Torrents/columns'
 import { trksColumns } from './Details/Trackers/columns'
 import { peersColumns } from './Details/Peers/columns'
 import { filesColumns } from './Details/Content/columns'
-import { atomWithLocalStorage } from '@/lib/storage'
 
-const defaultStorage = {
-  settings: {
-    openDetails: false,
-    refreshInterval: 5000,
-    sidebarWidth: 300,
-    openSidebar: true,
-    openSidebarStatus: true,
-    openSidebarCategories: true,
-    openSidebarTags: true,
-    openSidebarTrackers: true,
-  },
+export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
+
+const defaultSettings = {
+  openDetails: false,
+  refreshInterval: 5000,
+  sidebarWidth: 300,
+  openSidebar: true,
+  openSidebarStatus: true,
+  openSidebarCategories: true,
+  openSidebarTags: true,
+  openSidebarTrackers: true,
+}
+export const settingsAtom = atomWithLocalStorage<SettingsStorage>(
+  'settings',
+  defaultSettings
+)
+
+const defaultTables = {
   torrentsTable: {
     columnOrder: torsColumns.map((c) => c.id!),
     columnSizing: {},
@@ -55,32 +62,13 @@ const defaultStorage = {
     sorting: [],
   },
 }
-
-export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
-
-const defaultSettings = {
-  openDetails: false,
-  refreshInterval: 5000,
-  sidebarWidth: 300,
-  openSidebar: true,
-  openSidebarStatus: true,
-  openSidebarCategories: true,
-  openSidebarTags: true,
-  openSidebarTrackers: true,
-}
-export const settingsAtom = atomWithLocalStorage<SettingsStorage>(
-  'settings',
-  defaultSettings
+export const tablesAtom = atomWithLocalStorage<TablesStorage>(
+  'tables',
+  defaultTables
 )
 
-export const storageAtom = atomWithLocalStorage<Storage>('App', defaultStorage)
-
-export const refreshIntervalAtom = atom(
-  (get) => get(storageAtom).settings.refreshInterval,
-  (_, set, val: number) =>
-    set(storageAtom, (prev) =>
-      mergeToStorage(prev, 'settings.refreshInterval', val)
-    )
+export const refreshIntervalAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('refreshInterval')
 )
 
 export const torrentsAtom = atom<Torrents>({})
@@ -189,4 +177,12 @@ export const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
       }
     }
   }
+})
+
+export const currTorAtom = atom(-1)
+
+export const getCurrHashAtom = atom((get) => {
+  const currTor = get(currTorAtom)
+  const torrents = get(getTorrentsAtom)
+  return currTor === -1 ? null : torrents[currTor].hash
 })

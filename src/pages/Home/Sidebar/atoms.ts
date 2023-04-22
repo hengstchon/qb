@@ -1,83 +1,21 @@
-import { getRound, mergeToStorage } from '@/lib/utils'
-import { atom } from 'jotai'
-import { SetStateAction } from 'react'
-import { storageAtom } from '../atoms'
+import { focusAtom } from 'jotai-optics'
+import { settingsAtom } from '../atoms'
 
-export const openSidebarAtom = atom(
-  (get) => get(storageAtom).settings.openSidebar,
-  (get, set, arg: SetStateAction<boolean>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.openSidebar',
-        typeof arg === 'function' ? arg(get(openSidebarAtom)) : arg
-      )
-    )
-  }
+export const openSidebarAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('openSidebar')
 )
-
-export const sidebarWidthAtom = atom(
-  (get) => get(storageAtom).settings.sidebarWidth,
-  (get, set, arg: SetStateAction<number>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.sidebarWidth',
-        typeof arg === 'function'
-          ? arg(getRound(get(sidebarWidthAtom)))
-          : getRound(arg)
-      )
-    )
-  }
+export const sidebarWidthAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('sidebarWidth')
 )
-export const openSideStatusAtom = atom(
-  (get) => get(storageAtom).settings.openSidebarStatus,
-  (get, set, arg: SetStateAction<boolean>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.openSidebarStatus',
-        typeof arg === 'function' ? arg(get(openSideStatusAtom)) : arg
-      )
-    )
-  }
+export const openSideStatusAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('openSidebarStatus')
 )
-
-export const openSideCatAtom = atom(
-  (get) => get(storageAtom).settings.openSidebarCategories,
-  (get, set, arg: SetStateAction<boolean>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.openSidebarCategories',
-        typeof arg === 'function' ? arg(get(openSideCatAtom)) : arg
-      )
-    )
-  }
+export const openSideCatAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('openSidebarCategories')
 )
-
-export const openSideTagsAtom = atom(
-  (get) => get(storageAtom).settings.openSidebarTags,
-  (get, set, arg: SetStateAction<boolean>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.openSidebarTags',
-        typeof arg === 'function' ? arg(get(openSideTagsAtom)) : arg
-      )
-    )
-  }
+export const openSideTagsAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('openSidebarTags')
 )
-
-export const openSideTrackersAtom = atom(
-  (get) => get(storageAtom).settings.openSidebarTrackers,
-  (get, set, arg: SetStateAction<boolean>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'settings.openSidebarTrackers',
-        typeof arg === 'function' ? arg(get(openSideTrackersAtom)) : arg
-      )
-    )
-  }
+export const openSideTrackersAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('openSidebarTrackers')
 )

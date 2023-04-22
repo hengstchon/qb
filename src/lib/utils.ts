@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Storage, NestedKeyOf } from '@/types'
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -43,20 +42,4 @@ export const formatDuration = (seconds: number, maxCap = -1) => {
   if (d.hours() > 0) return `${d.hours()}h ${d.minutes()}m`
   if (d.minutes() > 1 && d.minutes() < 60) return `${d.minutes()}m`
   return '< 1m'
-}
-
-export const mergeToStorage = (
-  prev: Storage,
-  keyPath: NestedKeyOf<Storage>,
-  newValue: unknown
-): Storage => {
-  const keys = keyPath.split('.')
-  const merge = <T>(prev: T, i: number): T => ({
-    ...prev,
-    [keys[i]]:
-      i === keys.length - 1
-        ? newValue
-        : merge(prev[keys[i] as keyof typeof prev], i + 1),
-  })
-  return merge(prev, 0)
 }

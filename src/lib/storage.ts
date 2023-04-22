@@ -21,8 +21,7 @@ export const atomWithLocalStorage = <Value>(
   key: string,
   initialValue: Value
 ) => {
-  const baseAtom = atom(getItem(key) ?? initialValue)
-  console.log('atomWithLocalStorage', key)
+  const baseAtom = atom((getItem(key) ?? initialValue) as Value)
   return atom(
     (get) => get(baseAtom),
     (get, set, update: Value | typeof RESET | ((prev: Value) => Value)) => {

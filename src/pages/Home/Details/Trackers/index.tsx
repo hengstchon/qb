@@ -1,23 +1,35 @@
-import { Tracker } from '@/types'
-import { API } from '@/api/endpoints'
 import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAtom } from 'jotai'
 import useSWR from 'swr'
+import { atom, useAtom } from 'jotai'
+import { focusAtom } from 'jotai-optics'
+import { Tracker } from '@/types'
+import { API } from '@/api/endpoints'
+import BaseTable from '@/components/Table'
+import { getCurrHashAtom, tablesAtom } from '@/pages/Home/atoms'
 import Actions from './Actions'
 import { trksColumns } from './columns'
-import {
-  currTrkAtom,
-  trksColOrderAtom,
-  trksColSizingAtom,
-  trksColVisiAtom,
-  trksSortAtom,
-} from './atoms'
-import BaseTable from '@/components/Table'
-import { getCurrHashAtom } from '../atoms'
+
+const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
+  optic.prop('trackersTable')
+)
+const trksColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnOrder')
+)
+const trksColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnSizing')
+)
+const trksColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnVisibility')
+)
+const trksSortAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('sorting')
+)
+
+export const currTrkAtom = atom(-1)
 
 const Trackers = () => {
   const [currHash] = useAtom(getCurrHashAtom)

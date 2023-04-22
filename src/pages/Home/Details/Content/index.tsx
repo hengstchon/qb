@@ -4,32 +4,31 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAtom } from 'jotai'
-import {
-  currRowAtom,
-  filesColOrderAtom,
-  filesColSizingAtom,
-  filesColVisiAtom,
-  filesSortAtom,
-} from './atoms'
+import { atom, useAtom } from 'jotai'
 import { filesColumns } from './columns'
 import BaseTable from '@/components/Table'
 import { useFiles } from '@/hooks/useFiles'
 import { FileNode } from '@/types'
+import { focusAtom } from 'jotai-optics'
+import { tablesAtom } from '@/pages/Home/atoms'
 
-export enum FilePriority {
-  Ignored = 0,
-  Normal = 1,
-  High = 6,
-  Maximum = 7,
-  Mixed = -1,
-}
+const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
+  optic.prop('filesTable')
+)
+const filesColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnOrder')
+)
+const filesColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnSizing')
+)
+const filesColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('columnVisibility')
+)
+const filesSortAtom = focusAtom(torrentsTableAtom, (optic) =>
+  optic.prop('sorting')
+)
 
-export enum TriState {
-  Unchecked = 0,
-  Checked = 1,
-  Partial = 2,
-}
+const currRowAtom = atom(-1)
 
 const Content = () => {
   const data = useFiles()

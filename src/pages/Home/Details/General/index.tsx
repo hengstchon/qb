@@ -8,8 +8,8 @@ import {
 } from '@/lib/utils'
 import { API } from '@/api/endpoints'
 import { Propperties } from '@/types'
-import { getCurrHashAtom } from '../atoms'
 import { MAX_ETA } from '@/lib/constants'
+import { getCurrHashAtom } from '../../atoms'
 
 const General = () => {
   const [currHash] = useAtom(getCurrHashAtom)

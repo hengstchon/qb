@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
-import { getCurrHashAtom } from '@/pages/Home/Details/atoms'
 import { FileNode, FileType, Files } from '@/types'
 import { API } from '@/api/endpoints'
-import { FilePriority } from '@/pages/Home/Details/Content'
+import { getCurrHashAtom } from '@/pages/Home/atoms'
+import { FilePriority } from '@/lib/constants'
 
 const PathSeparator = '/'
 

@@ -1,14 +1,5 @@
 import { atom } from 'jotai'
 import { Peers, PeersData } from '@/types'
-import { storageAtom } from '../../atoms'
-import { SetStateAction } from 'react'
-import {
-  ColumnOrderState,
-  ColumnSizingState,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/react-table'
-import { mergeToStorage } from '@/lib/utils'
 import { produce } from 'immer'
 
 export const peersRidAtom = atom(0)
@@ -41,57 +32,3 @@ export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
     }
   }
 })
-
-export const peersColOrderAtom = atom(
-  (get) => get(storageAtom).peersTable.columnOrder,
-  (get, set, arg: SetStateAction<ColumnOrderState>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'peersTable.columnOrder',
-        typeof arg === 'function' ? arg(get(peersColOrderAtom)) : arg
-      )
-    )
-  }
-)
-
-export const peersColSizingAtom = atom(
-  (get) => get(storageAtom).peersTable.columnSizing,
-  (get, set, arg: SetStateAction<ColumnSizingState>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'peersTable.columnSizing',
-        typeof arg === 'function' ? arg(get(peersColSizingAtom)) : arg
-      )
-    )
-  }
-)
-
-export const peersColVisiAtom = atom(
-  (get) => get(storageAtom).peersTable.columnVisibility,
-  (get, set, arg: SetStateAction<VisibilityState>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'peersTable.columnVisibility',
-        typeof arg === 'function' ? arg(get(peersColVisiAtom)) : arg
-      )
-    )
-  }
-)
-
-export const peersSortAtom = atom(
-  (get) => get(storageAtom).peersTable.sorting,
-  (get, set, arg: SetStateAction<SortingState>) => {
-    set(storageAtom, (prev) =>
-      mergeToStorage(
-        prev,
-        'peersTable.sorting',
-        typeof arg === 'function' ? arg(get(peersSortAtom)) : arg
-      )
-    )
-  }
-)
-
-export const currRowAtom = atom(-1)
