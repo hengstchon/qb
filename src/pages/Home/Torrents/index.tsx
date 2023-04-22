@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import BaseTable from '@/components/Table'
-import { Torrent } from '@/types'
+import { Torrent } from '@/lib/types'
 import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
 import Pagination from './Pagination'
 import { torsColumns } from './columns'

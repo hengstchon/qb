@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import { Peers, PeersData } from '@/types'
+import { Peers, PeersData } from '@/lib/types'
 import { produce } from 'immer'
 
 export const peersRidAtom = atom(0)

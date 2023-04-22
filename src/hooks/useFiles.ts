@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
-import { FileNode, FileType, Files } from '@/types'
+import { FileNode, FileType, Files } from '@/lib/types'
 import { API } from '@/api/endpoints'
 import { getCurrHashAtom } from '@/pages/Home/atoms'
 import { FilePriority } from '@/lib/constants'

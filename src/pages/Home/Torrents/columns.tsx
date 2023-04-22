@@ -1,5 +1,5 @@
-import { Torrent } from '@/types'
-import { Checkbox } from '@/ui/Checkbox'
+import { ColumnDef, createColumnHelper, SortingFn } from '@tanstack/react-table'
+import { Torrent } from '@/lib/types'
 import {
   formatBytes,
   formatDuration,
@@ -7,9 +7,8 @@ import {
   formatSpeed,
   formatTimestamp,
 } from '@/lib/utils'
-import { ColumnDef, createColumnHelper, SortingFn } from '@tanstack/react-table'
-import { selectColumnDef } from '@/components/Table'
 import { MAX_ETA } from '@/lib/constants'
+import { selectColumnDef } from '@/components/Table'
 
 const sortingFnWithField =
   <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
@@ -27,6 +26,9 @@ export const torsColumns = [
     id: 'name',
     header: 'Name',
     size: 360,
+    meta: {
+      className: 'justify-start',
+    },
   }),
   ch.accessor('size', {
     id: 'size',

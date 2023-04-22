@@ -7,7 +7,7 @@ import {
   formatTimestamp,
 } from '@/lib/utils'
 import { API } from '@/api/endpoints'
-import { Propperties } from '@/types'
+import { Propperties } from '@/lib/types'
 import { MAX_ETA } from '@/lib/constants'
 import { getCurrHashAtom } from '../../atoms'
 

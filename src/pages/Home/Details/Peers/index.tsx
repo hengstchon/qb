@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-table'
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import { PeerType } from '@/types'
+import { PeerType } from '@/lib/types'
 import BaseTable from '@/components/Table'
 import { useTorPeers } from '@/hooks/useTorPeers'
 import { tablesAtom } from '@/pages/Home/atoms'

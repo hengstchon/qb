@@ -1,4 +1,4 @@
-import { Torrent } from '@/types'
+import { Torrent } from '@/lib/types'
 import { Table } from '@tanstack/react-table'
 
 const Pagination = ({ table }: { table: Table<Torrent> }) => {

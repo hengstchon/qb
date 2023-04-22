@@ -6,7 +6,7 @@ import {
 import useSWR from 'swr'
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import { Tracker } from '@/types'
+import { Tracker } from '@/lib/types'
 import { API } from '@/api/endpoints'
 import BaseTable from '@/components/Table'
 import { getCurrHashAtom, tablesAtom } from '@/pages/Home/atoms'

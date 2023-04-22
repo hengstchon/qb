@@ -1,4 +1,4 @@
-import { PeerType } from '@/types'
+import { PeerType } from '@/lib/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 import { formatBytes, formatPercentage, formatSpeed } from '@/lib/utils'

@@ -1,15 +1,14 @@
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import {
-  SyncData,
+  Categories,
   ServerState,
+  SettingsStorage,
+  TablesStorage,
+  Tags,
   Torrents,
   Trackers,
-  Categories,
-  Tags,
-  TablesStorage,
-  SettingsStorage,
-} from '@/types'
+} from '@/lib/types'
 import { atomWithLocalStorage } from '@/lib/storage'
 import { torsColumns } from './Torrents/columns'
 import { trksColumns } from './Details/Trackers/columns'
@@ -104,79 +103,6 @@ export const serverStateAtom = atom<ServerState>({
   up_rate_limit: 0,
   use_alt_speed_limits: false,
   write_cache_overload: '',
-})
-
-export const mainRidAtom = atom(0)
-
-export const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
-  if (val.full_update) {
-    set(torrentsAtom, val.torrents as Torrents)
-    set(trackersAtom, val.trackers as Trackers)
-    set(categoriesAtom, val.categories as Categories)
-    set(tagsAtom, val.tags as Tags)
-    set(serverStateAtom, val.server_state as ServerState)
-  } else {
-    for (const key in val) {
-      switch (key) {
-        case 'tags':
-          set(tagsAtom, (prev) => [...prev, ...val.tags!])
-          break
-        case 'tags_removed':
-          set(tagsAtom, (prev) => prev.filter((v) => !val.tags?.includes(v)))
-          break
-        case 'categories':
-          set(categoriesAtom, (prev) => ({ ...prev, ...val.categories }))
-          break
-        case 'categories_removed':
-          set(categoriesAtom, (prev) =>
-            Object.fromEntries(
-              Object.entries(prev).filter(
-                ([k]) => !val.categories_removed?.includes(k)
-              )
-            )
-          )
-          break
-        case 'trackers':
-          set(trackersAtom, (prev) => ({ ...prev, ...val.trackers }))
-          break
-        case 'trackers_removed':
-          set(trackersAtom, (prev) =>
-            Object.fromEntries(
-              Object.entries(prev).filter(
-                ([k]) => !val.trackers_removed?.includes(k)
-              )
-            )
-          )
-          break
-        case 'torrents': {
-          set(torrentsAtom, (prev) => {
-            const newTors = { ...prev }
-            for (const [hash, props] of Object.entries(val.torrents!)) {
-              if (Object.keys(newTors).includes(hash)) {
-                newTors[hash] = { ...newTors[hash], ...props }
-              } else {
-                newTors[hash] = props
-              }
-            }
-            return newTors
-          })
-          break
-        }
-        case 'torrents_removed':
-          set(torrentsAtom, (prev) =>
-            Object.fromEntries(
-              Object.entries(prev).filter(
-                ([k]) => !val.torrents_removed?.includes(k)
-              )
-            )
-          )
-          break
-        case 'server_state':
-          set(serverStateAtom, (prev) => ({ ...prev, ...val.server_state }))
-          break
-      }
-    }
-  }
 })
 
 export const currTorAtom = atom(-1)

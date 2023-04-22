@@ -1,4 +1,4 @@
-import { Tracker } from '@/types'
+import { Tracker } from '@/lib/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/Table'
 

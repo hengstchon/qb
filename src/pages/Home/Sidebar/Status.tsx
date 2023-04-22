@@ -1,4 +1,4 @@
-import { Torrent } from '@/types'
+import { Torrent } from '@/lib/types'
 import { useAtom } from 'jotai'
 import { torrentsAtom } from '../atoms'
 import { openSideStatusAtom } from './atoms'

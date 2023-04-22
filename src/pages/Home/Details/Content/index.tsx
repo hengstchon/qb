@@ -8,7 +8,7 @@ import { atom, useAtom } from 'jotai'
 import { filesColumns } from './columns'
 import BaseTable from '@/components/Table'
 import { useFiles } from '@/hooks/useFiles'
-import { FileNode } from '@/types'
+import { FileNode } from '@/lib/types'
 import { focusAtom } from 'jotai-optics'
 import { tablesAtom } from '@/pages/Home/atoms'
 

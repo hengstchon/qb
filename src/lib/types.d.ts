@@ -1,12 +1,10 @@
-import {
-  ColumnFiltersState,
-  ColumnOrderState,
-  ColumnSizingState,
-  PaginationState,
-  RowSelectionState,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/react-table'
+import '@tanstack/react-table'
+
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    className?: string
+  }
+}
 
 export type SettingsStorage = {
   openDetails: boolean

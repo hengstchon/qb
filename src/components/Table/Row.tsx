@@ -20,11 +20,15 @@ const Row = <T,>({
       onClick={() => setCurrRow(row.index)}
     >
       {row.getVisibleCells().map((cell) => {
+        const className = cell.column.columnDef.meta?.className
         const isFirstCol = cell.column.id === 'select'
         return (
           <div
             key={cell.id}
-            className="flex items-center border border-dotted px-1"
+            className={cn(
+              'flex items-center justify-center border border-dotted px-1',
+              className
+            )}
             style={isFirstCol ? undefined : { width: cell.column.getSize() }}
           >
             {isFirstCol ? (

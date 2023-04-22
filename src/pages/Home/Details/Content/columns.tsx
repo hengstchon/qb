@@ -8,7 +8,7 @@ import {
   FolderClosedIcon,
   FolderOpenIcon,
 } from 'lucide-react'
-import { FileNode } from '@/types'
+import { FileNode } from '@/lib/types'
 import { FilePriority } from '@/lib/constants'
 
 const ch = createColumnHelper<FileNode>()

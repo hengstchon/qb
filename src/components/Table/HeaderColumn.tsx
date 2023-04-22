@@ -66,7 +66,7 @@ const HeaderColumn = <T,>({
     >
       <div
         className={cn(
-          'flex cursor-pointer select-none items-center gap-1 px-1 text-sm font-semibold',
+          'flex cursor-pointer select-none items-center justify-center gap-1 px-1 text-sm font-semibold',
           isOver ? 'cursor-move' : 'cursor-pointer'
         )}
         onClick={header.column.getToggleSortingHandler()}
