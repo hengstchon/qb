@@ -1,10 +1,5 @@
 import { Button } from '@/ui/Button'
-import {
-  LogOutIcon,
-  PlusCircleIcon,
-  SidebarCloseIcon,
-  SidebarOpenIcon,
-} from 'lucide-react'
+import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
@@ -12,6 +7,7 @@ import { isAuthedAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import client from '@/api/client'
 import { RESET } from 'jotai/utils'
+import { AddTorrent } from './AddTorrent'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -28,9 +24,7 @@ const Toolbar = () => {
         )}
       </Button>
 
-      <Button>
-        <PlusCircleIcon className="h-6 w-6" />
-      </Button>
+      <AddTorrent />
 
       <Button
         className=""
