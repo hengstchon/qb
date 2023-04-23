@@ -46,7 +46,11 @@ const Details = () => {
 
       {openDetails &&
         tabs.map(({ name, content }) => (
-          <TabsContent key={name} value={name} className="flex-1 overflow-auto">
+          <TabsContent
+            key={name}
+            value={name}
+            className="flex-1 overflow-auto px-2"
+          >
             {content}
           </TabsContent>
         ))}

@@ -53,7 +53,7 @@ const ContextMenuSubContent = React.forwardRef<
   <ContextMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      'animate-in slide-in-from-left-1 z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md',
+      'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md animate-in slide-in-from-left-1',
       className
     )}
     {...props}
@@ -71,7 +71,7 @@ const ContextMenuContent = React.forwardRef<
     <ContextMenuPrimitive.Content
       ref={ref}
       className={cn(
-        'animate-in fade-in-80 z-50 max-h-[70vh] min-w-[8rem] overflow-y-auto rounded-md border bg-amber-50 p-1 shadow-md',
+        'z-50 max-h-[70vh] min-w-[8rem] overflow-y-auto rounded-md border bg-amber-50 p-1 shadow-md animate-in fade-in-80',
         className
       )}
       {...props}

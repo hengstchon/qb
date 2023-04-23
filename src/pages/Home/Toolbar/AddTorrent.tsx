@@ -2,7 +2,6 @@ import { Button } from '@/ui/Button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,12 +19,9 @@ export function AddTorrent() {
           <PlusCircleIcon className="h-6 w-6" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[40%]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Add Torrent</DialogTitle>
-          <DialogDescription>
-            Upload torrent from local or link.
-          </DialogDescription>
+          <DialogTitle>Upload Torrents</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
