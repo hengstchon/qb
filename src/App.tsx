@@ -1,13 +1,13 @@
-import { RouterProvider } from 'react-router-dom'
 import { SWRConfig, SWRConfiguration } from 'swr'
-import { useSetAtom } from 'jotai'
-import { router } from './routes'
+import { useAtom } from 'jotai'
 import './index.css'
-import client from './api/client'
-import { isAuthedAtom } from './pages/Home/atoms'
+import client from '@/api/client'
+import { isAuthedAtom } from '@/pages/Home/atoms'
+import Home from '@/pages/Home'
+import { Login } from '@/pages/Login'
 
 const App = () => {
-  const setIsAuthed = useSetAtom(isAuthedAtom)
+  const [isAuthed, setIsAuthed] = useAtom(isAuthedAtom)
 
   const swrConfig: SWRConfiguration = {
     fetcher: (url) => client.get(url).json((res) => res),
@@ -19,9 +19,7 @@ const App = () => {
   }
 
   return (
-    <SWRConfig value={swrConfig}>
-      <RouterProvider router={router} />
-    </SWRConfig>
+    <SWRConfig value={swrConfig}>{isAuthed ? <Home /> : <Login />}</SWRConfig>
   )
 }
 

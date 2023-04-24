@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Navigate, useActionData } from 'react-router-dom'
-import { useAtom } from 'jotai'
+import { useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
@@ -26,16 +25,11 @@ const login = (payload: PayloadType) => {
 }
 
 export const Login = () => {
-  const [isAuthed, setIsAuthed] = useAtom(isAuthedAtom)
+  const setIsAuthed = useSetAtom(isAuthedAtom)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const err = useActionData() as string | undefined
   const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    err && setIsLoading(false)
-  }, [err, isLoading])
 
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -55,9 +49,7 @@ export const Login = () => {
     }
   }
 
-  return isAuthed ? (
-    <Navigate to="/" />
-  ) : (
+  return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="flex w-full max-w-md flex-col">
         <h1 className="text-center text-3xl font-semibold">Welcome</h1>
@@ -83,7 +75,6 @@ export const Login = () => {
             />
           </div>
           <div className="w-full space-y-2 text-center">
-            <p className="h-6 text-red-400">{err}</p>
             <Button
               className="w-full bg-blue-200 px-12 py-2"
               onClick={handleSubmit}
