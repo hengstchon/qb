@@ -28,7 +28,13 @@ const FilterInput = () => {
     return () => clearTimeout(timeout)
   }, [value])
 
-  return <Input value={value} onChange={(e) => setValue(e.target.value)} />
+  return (
+    <Input
+      className="mx-12"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  )
 }
 
 export default FilterInput

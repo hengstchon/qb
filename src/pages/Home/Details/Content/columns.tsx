@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { FileNode } from '@/lib/types'
 import { FilePriority } from '@/lib/constants'
+import { Button } from '@/ui/Button'
 
 const ch = createColumnHelper<FileNode>()
 
@@ -22,9 +23,14 @@ export const filesColumns = [
     id: 'name',
     header: ({ table }) => (
       <>
-        <button onClick={table.getToggleAllRowsExpandedHandler()}>
+        <Button
+          className="h-4 p-0"
+          variant="ghost"
+          size="sm"
+          onClick={table.getToggleAllRowsExpandedHandler()}
+        >
           {table.getIsAllRowsExpanded() ? expandedIcon : collapsedIcon}
-        </button>{' '}
+        </Button>{' '}
         Name
       </>
     ),
@@ -32,12 +38,15 @@ export const filesColumns = [
       <>
         {row.getCanExpand() ? (
           <>
-            <button
+            <Button
+              className="h-4 p-0"
+              variant="ghost"
+              size="sm"
               onClick={row.getToggleExpandedHandler()}
               style={{ marginLeft: `${row.depth * 2}rem` }}
             >
               {row.getIsExpanded() ? expandedIcon : collapsedIcon}
-            </button>
+            </Button>
             {row.getIsExpanded() ? (
               <FolderOpenIcon className="mr-1 h-4 w-4 flex-none" />
             ) : (

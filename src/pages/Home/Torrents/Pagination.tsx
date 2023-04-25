@@ -1,37 +1,53 @@
-import { Torrent } from '@/lib/types'
 import { Table } from '@tanstack/react-table'
+import { Torrent } from '@/lib/types'
+import { Button } from '@/ui/Button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/ui/Select'
 
 const Pagination = ({ table }: { table: Table<Torrent> }) => {
   return (
-    <div className="flex items-center justify-center gap-2 bg-green-50">
-      <button
+    <div className="flex items-center justify-center gap-2 bg-green-50 py-1">
+      <Button
+        variant="outline"
+        size="sm"
         className="rounded border p-1"
         onClick={() => table.setPageIndex(0)}
         disabled={!table.getCanPreviousPage()}
       >
         {'<<'}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
         className="rounded border p-1"
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
         {'<'}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
         className="rounded border p-1"
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
         {'>'}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
         className="rounded border p-1"
         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
         disabled={!table.getCanNextPage()}
       >
         {'>>'}
-      </button>
+      </Button>
       <span className="flex items-center gap-1">
         <div>Page</div>
         <strong>
@@ -50,18 +66,22 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
           className="w-16 rounded border p-1"
         />
       </span>
-      <select
-        value={table.getState().pagination.pageSize}
-        onChange={(e) => {
-          table.setPageSize(Number(e.target.value))
+      <Select
+        onValueChange={(value) => {
+          table.setPageSize(Number(value))
         }}
       >
-        {[1, 10, 20, 30, 50, 100].map((pageSize) => (
-          <option key={pageSize} value={pageSize}>
-            Show {pageSize}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger className="h-8 w-32">
+          <SelectValue>{table.getState().pagination.pageSize}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {[1, 10, 20, 30, 50, 100].map((pageSize) => (
+            <SelectItem key={pageSize} value={String(pageSize)}>
+              Show {pageSize}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   )
 }

@@ -39,7 +39,11 @@ const Details = () => {
             </TabsTrigger>
           ))}
         </div>
-        <Button onClick={() => setOpenDetails((v) => !v)}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setOpenDetails((v) => !v)}
+        >
           {openDetails ? <ChevronsDownIcon /> : <ChevronsUpIcon />}
         </Button>
       </TabsList>

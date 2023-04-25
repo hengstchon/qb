@@ -8,6 +8,13 @@ import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import client from '@/api/client'
 import { RESET } from 'jotai/utils'
 import { AddTorrent } from './AddTorrent'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/ui/Select'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -15,8 +22,12 @@ const Toolbar = () => {
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
 
   return (
-    <div className="flex h-12 items-center bg-red-50 px-2">
-      <Button onClick={() => setOpenSidebar((v) => !v)}>
+    <div className="flex h-12 items-center bg-red-50 p-2">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setOpenSidebar((v) => !v)}
+      >
         {openSidebar ? (
           <SidebarCloseIcon className="h-6 w-6" />
         ) : (
@@ -27,7 +38,8 @@ const Toolbar = () => {
       <AddTorrent />
 
       <Button
-        className=""
+        variant="ghost"
+        size="sm"
         onClick={() => {
           client
             .url(API.logout)
@@ -42,18 +54,22 @@ const Toolbar = () => {
 
       <FilterInput />
 
-      <select
-        value={refreshInterval}
-        onChange={(e) => {
-          setRefreshInterval(Number(e.target.value))
+      <Select
+        onValueChange={(value) => {
+          setRefreshInterval(Number(value))
         }}
       >
-        {[1000, 3000, 5000, 10000000].map((val) => (
-          <option key={val} value={val}>
-            {val}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger className="h-8 w-32">
+          <SelectValue>{refreshInterval}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {[1000, 3000, 5000, 10000000].map((val) => (
+            <SelectItem key={val} value={String(val)}>
+              {val}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { Button } from '@/ui/Button'
 import {
   Collapsible,
   CollapsibleContent,
@@ -8,9 +9,13 @@ import { ChevronDownIcon } from 'lucide-react'
 const Item = ({ children }: { children: JSX.Element[] }) => {
   return (
     <li>
-      <button className="flex w-full justify-between rounded px-2 py-[2px] hover:bg-green-100">
+      <Button
+        className="flex h-8 w-full justify-between rounded px-2 py-[2px] hover:bg-green-100"
+        variant="ghost"
+        size="sm"
+      >
         {children}
-      </button>
+      </Button>
     </li>
   )
 }
