@@ -9,16 +9,28 @@ import {
 } from '@/ui/Dialog'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { Tabs, TabsList, TabsTrigger } from '@/ui/Tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
 import { PlusCircleIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Textarea } from '@/ui/Textarea'
 
 function FromLocalTab() {
-  return <div>FromLocalTab</div>
+  return (
+    <div className="w-full py-4">
+      <Input id="torrents" type="file" multiple />
+    </div>
+  )
 }
 
 function FromLinksTab() {
-  return <div>FromLinksTab</div>
+  return (
+    <div className="grid gap-4 py-4">
+      <span className="text-sm">
+        Download Torrents from their URLs or Magnet links:
+      </span>
+      <Textarea placeholder="Input your torrent links..." />
+    </div>
+  )
 }
 
 const tabs = [
@@ -39,7 +51,10 @@ export function AddTorrent() {
           <DialogTitle>Upload Torrents</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <Tabs className={cn('flex flex-col bg-pink-50')}>
+          <Tabs
+            className={cn('flex flex-col bg-pink-50')}
+            defaultValue={tabs[0].name}
+          >
             <TabsList className="flex justify-between">
               <div>
                 {tabs.map(({ name }) => (
@@ -49,12 +64,21 @@ export function AddTorrent() {
                 ))}
               </div>
             </TabsList>
+            {tabs.map(({ name, content }) => (
+              <TabsContent
+                key={name}
+                value={name}
+                className="flex-1 overflow-auto px-2"
+              >
+                {content}
+              </TabsContent>
+            ))}
           </Tabs>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+            <Input id="name" className="col-span-3" />
           </div>
         </div>
         <DialogFooter>
