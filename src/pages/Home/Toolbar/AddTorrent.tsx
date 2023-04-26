@@ -11,7 +11,7 @@ import {
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
-import { ChevronDownIcon, ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
+import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Textarea } from '@/ui/Textarea'
 import { RadioGroup, RadioGroupItem } from '@/ui/RadioGroup'
@@ -35,7 +35,7 @@ import { Switch } from '@/ui/Switch'
 function FromLocalTab() {
   return (
     <div className="w-full py-4">
-      <Input id="torrents" type="file" multiple />
+      <Input id="torrents" type="file" className="h-10" multiple />
     </div>
   )
 }
