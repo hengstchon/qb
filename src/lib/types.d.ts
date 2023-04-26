@@ -252,3 +252,8 @@ export type FileNode = {
   remaining: number
   subRows: FileNode[]
 }
+
+export type Cateogry = {
+  name: string
+  savePath: string
+}
