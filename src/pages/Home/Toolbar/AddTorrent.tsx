@@ -31,6 +31,7 @@ import { API } from '@/api/endpoints'
 import { Category } from '@/lib/types'
 import { Checkbox } from '@/ui/Checkbox'
 import { Switch } from '@/ui/Switch'
+import { useState } from 'react'
 
 function FromLocalTab() {
   return (
@@ -57,6 +58,23 @@ const tabs = [
 ]
 
 export function AddTorrent() {
+  const [files, setFiles] = useState([])
+  const [urls, setUrls] = useState('')
+  const [savepath, setSavepath] = useState('')
+  const [cookie, setCookie] = useState('')
+  const [category, setCategory] = useState('')
+  const [tags, setTags] = useState('')
+  const [skip_checking, setSkip_checking] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [root_folder, setRoot_folder] = useState(false)
+  const [rename, setRename] = useState('')
+  const [upLimit, setUpLimit] = useState(0)
+  const [dlLimit, setDlLimit] = useState(0)
+  const [ratioLimit, setRatioLimit] = useState(0)
+  const [autoTMM, setAutoTMM] = useState(false)
+  const [sequentialDownload, setSequentialDownload] = useState(false)
+  const [firstLastPiecePrio, setFirstLastPiecePrio] = useState(false)
+
   const { data: categories } = useSWR<Record<string, Category>>(
     API.torrents.categories
   )
