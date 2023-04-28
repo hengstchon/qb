@@ -15,5 +15,6 @@ export const API = {
     pieceStates: (hash: string) => `/torrents/pieceStates?hash=${hash}`,
     pieceHashes: (hash: string) => `/torrents/pieceHashes?hash=${hash}`,
     categories: '/torrents/categories',
+    addTorrents: '/torrents/add',
   },
 }

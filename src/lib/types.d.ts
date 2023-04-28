@@ -291,4 +291,5 @@ export interface AddTorrentPayload {
   upLimit?: number
   /** URLs separated with newlines */
   urls?: string
+  torrents?: File[]
 }
