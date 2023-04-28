@@ -40,22 +40,20 @@ import { categoriesAtom } from '../atoms'
 type FromLocalTabType = {
   setFiles: Dispatch<SetStateAction<File[]>>
 }
-function UploadTorrentsTab({ setFiles }: FromLocalTabType) {
+function UploadLocalTab({ setFiles }: FromLocalTabType) {
   return (
-    <div className="w-full py-4">
-      <Input
-        id="torrents"
-        type="file"
-        className="h-10"
-        multiple
-        accept=".torrent"
-        onChange={(e) => {
-          if (e.target.files) {
-            setFiles([...e.target.files])
-          }
-        }}
-      />
-    </div>
+    <Input
+      id="torrents"
+      type="file"
+      className="h-10"
+      multiple
+      accept=".torrent"
+      onChange={(e) => {
+        if (e.target.files) {
+          setFiles([...e.target.files])
+        }
+      }}
+    />
   )
 }
 
@@ -72,9 +70,10 @@ function UploadLinksTab({
   setCookie,
 }: FromLinksTabType) {
   return (
-    <div className="grid gap-4 py-4">
+    <>
       <span className="text-sm">
-        Download Torrents from their URLs or Magnet links:
+        Download Torrents from their URLs or Magnet links (only one link per
+        line):
       </span>
       <Textarea
         placeholder="Input your torrent links..."
@@ -82,7 +81,9 @@ function UploadLinksTab({
         onChange={(e) => setUrls(e.target.value)}
       />
       <div className="flex items-center space-x-2">
-        <Label htmlFor="cookie">Cookie:</Label>
+        <Label htmlFor="cookie" className="font-normal">
+          Cookie:
+        </Label>
         <Input
           id="cookie"
           className=""
@@ -90,7 +91,7 @@ function UploadLinksTab({
           onChange={(e) => setCookie(e.target.value)}
         />
       </div>
-    </div>
+    </>
   )
 }
 
@@ -118,11 +119,11 @@ export function AddTorrent() {
 
   const tabs = [
     {
-      name: 'fromLocal',
-      content: <UploadTorrentsTab setFiles={setFiles} />,
+      name: 'Local',
+      content: <UploadLocalTab setFiles={setFiles} />,
     },
     {
-      name: 'fromLinks',
+      name: 'Links',
       content: (
         <UploadLinksTab
           urls={urls}
@@ -190,7 +191,7 @@ export function AddTorrent() {
           <DialogTitle>Upload Torrents</DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-8 py-4">
           <Tabs className={cn('flex flex-col')} defaultValue={tabs[0].name}>
             <TabsList className="flex justify-between">
               <div>
@@ -205,7 +206,7 @@ export function AddTorrent() {
               <TabsContent
                 key={name}
                 value={name}
-                className="flex-1 overflow-auto px-2"
+                className="flex-1 space-y-4 overflow-auto px-4 py-2"
               >
                 {content}
               </TabsContent>
@@ -214,34 +215,41 @@ export function AddTorrent() {
 
           {/* Options */}
           <Collapsible>
-            <CollapsibleTrigger className="group flex w-full items-center space-x-2 rounded px-2">
-              <ChevronRightIcon className="h-5 w-5 transform duration-100 ease-in-out group-data-[state=open]:rotate-90" />
-              <span>Options</span>
+            <CollapsibleTrigger className="group flex w-full items-center space-x-2 rounded bg-muted p-2">
+              <ChevronRightIcon className="h-5 w-5 transform rounded-full duration-100 ease-in-out group-data-[state=open]:rotate-90" />
+              <span className="text-sm font-medium">Options</span>
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-4">
+            <CollapsibleContent className="mt-2 space-y-8 px-4 py-2">
               {/* Mode */}
               <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="mode" className="text-right">
-                  Mode
+                <Label htmlFor="mode" className="text-right font-normal">
+                  Management Mode
                 </Label>
                 <RadioGroup
                   defaultValue="manual"
                   id="mode"
-                  className="col-span-2 flex gap-12"
+                  className="col-span-2 flex h-8 gap-12"
                   value={String(autoTMM)}
                   onValueChange={(value) => setAutoTMM(value === 'true')}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="false" id="manual" />
-                    <Label htmlFor="manual">Manual</Label>
+                    <Label htmlFor="manual" className="font-normal">
+                      Manual
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="true" id="auto" />
-                    <Label htmlFor="auto">Automatic</Label>
+                    <Label htmlFor="auto" className="font-normal">
+                      Automatic
+                    </Label>
                   </div>
                 </RadioGroup>
                 {/* Save location */}
-                <Label htmlFor="save-location" className="text-right">
+                <Label
+                  htmlFor="save-location"
+                  className="text-right font-normal"
+                >
                   Save location
                 </Label>
                 <Input
@@ -251,7 +259,10 @@ export function AddTorrent() {
                   onChange={(e) => setSavepath(e.target.value)}
                 />
                 {/* Rename torrent */}
-                <Label htmlFor="rename-torrent" className="text-right">
+                <Label
+                  htmlFor="rename-torrent"
+                  className="text-right font-normal"
+                >
                   Rename torrent
                 </Label>
                 <Input
@@ -266,7 +277,7 @@ export function AddTorrent() {
                     setCategory(value)
                   }}
                 >
-                  <Label htmlFor="category" className="text-right">
+                  <Label htmlFor="category" className="text-right font-normal">
                     Category
                   </Label>
                   <SelectTrigger className="col-span-2 h-8 w-32" id="category">
@@ -284,14 +295,16 @@ export function AddTorrent() {
                 </Select>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="start-torrent"
                     checked={startTorrent}
                     onCheckedChange={() => setStartTorrent((v) => !v)}
                   />
-                  <Label htmlFor="start-torrent">Start torrent</Label>
+                  <Label htmlFor="start-torrent" className="font-normal">
+                    Start torrent
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -299,7 +312,9 @@ export function AddTorrent() {
                     checked={skip_checking}
                     onCheckedChange={() => setSkip_checking((v) => !v)}
                   />
-                  <Label htmlFor="skip-check">Skip hash check</Label>
+                  <Label htmlFor="skip-check" className="font-normal">
+                    Skip hash check
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -307,7 +322,7 @@ export function AddTorrent() {
                     checked={sequentialDownload}
                     onCheckedChange={() => setSequentialDownload((v) => !v)}
                   />
-                  <Label htmlFor="sequential-download">
+                  <Label htmlFor="sequential-download" className="font-normal">
                     Download in sequential order
                   </Label>
                 </div>
@@ -317,7 +332,7 @@ export function AddTorrent() {
                     checked={firstLastPiecePrio}
                     onCheckedChange={() => setFirstLastPiecePrio((v) => !v)}
                   />
-                  <Label htmlFor="first-last-piece">
+                  <Label htmlFor="first-last-piece" className="font-normal">
                     Download first and last pieces first
                   </Label>
                 </div>
@@ -327,37 +342,49 @@ export function AddTorrent() {
                     checked={root_folder}
                     onCheckedChange={() => setRoot_folder((v) => !v)}
                   />
-                  <Label htmlFor="create-subfolder">Create subfolder</Label>
+                  <Label htmlFor="create-subfolder" className="font-normal">
+                    Create subfolder
+                  </Label>
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="download-limit" className="text-right">
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label
+                  htmlFor="download-limit"
+                  className="text-right font-normal"
+                >
                   Limit download rate
                 </Label>
-                <Input
-                  id="download-limit"
-                  className="col-span-2"
-                  type="number"
-                  value={dlLimit}
-                  onChange={(e) => setDlLimit(parseFloat(e.target.value))}
-                />
-                <Label htmlFor="upload-limit" className="text-right">
+                <div className="col-span-2 flex items-center">
+                  <Input
+                    id="download-limit"
+                    type="number"
+                    value={dlLimit}
+                    onChange={(e) => setDlLimit(parseFloat(e.target.value))}
+                  />
+                  <span className="pl-2 text-sm">B/s</span>
+                </div>
+                <Label
+                  htmlFor="upload-limit"
+                  className="text-right font-normal"
+                >
                   Limit upload rate
                 </Label>
-                <Input
-                  id="upload-limit"
-                  className="col-span-2"
-                  type="number"
-                  value={upLimit}
-                  onChange={(e) => setUpLimit(parseFloat(e.target.value))}
-                />
+                <div className="col-span-2 flex items-center">
+                  <Input
+                    id="upload-limit"
+                    type="number"
+                    value={upLimit}
+                    onChange={(e) => setUpLimit(parseFloat(e.target.value))}
+                  />
+                  <span className="pl-2 text-sm">B/s</span>
+                </div>
               </div>
 
-              <div className="mt-8 flex items-center justify-end space-x-2">
-                <Switch id="remember" />
-                <Label htmlFor="remember">Remember options</Label>
-              </div>
+              {/* <div className="flex items-center justify-end space-x-2"> */}
+              {/*   <Switch id="remember" /> */}
+              {/*   <Label htmlFor="remember">Remember options</Label> */}
+              {/* </div> */}
             </CollapsibleContent>
           </Collapsible>
         </div>
