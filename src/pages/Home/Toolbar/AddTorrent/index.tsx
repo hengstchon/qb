@@ -29,13 +29,13 @@ import {
 import { API } from '@/api/endpoints'
 import { AddTorrentPayload } from '@/lib/types'
 import { Checkbox } from '@/ui/Checkbox'
-import { Switch } from '@/ui/Switch'
 import { Dispatch, useState } from 'react'
 import { SetStateAction, useAtom } from 'jotai'
 import client from '@/api/client'
 import FormDataAddon from 'wretch/addons/formData'
-import { tagsAtom } from '../atoms'
-import { categoriesAtom } from '../atoms'
+import { tagsAtom } from '@/pages/Home/atoms'
+import { categoriesAtom } from '@/pages/Home/atoms'
+import TagsSelector from './TagsSelector'
 
 type FromLocalTabType = {
   setFiles: Dispatch<SetStateAction<File[]>>
@@ -101,7 +101,7 @@ export function AddTorrent() {
   const [savepath, setSavepath] = useState('')
   const [cookie, setCookie] = useState('')
   const [category, setCategory] = useState('')
-  const [tags, setTags] = useState('')
+  const [tags, setTags] = useState<string[]>([])
   const [skip_checking, setSkip_checking] = useState(false)
   const [startTorrent, setStartTorrent] = useState(false)
   const [root_folder, setRoot_folder] = useState(false)
@@ -113,9 +113,7 @@ export function AddTorrent() {
   const [firstLastPiecePrio, setFirstLastPiecePrio] = useState(false)
 
   const [allCategories] = useAtom(categoriesAtom)
-  console.log('all categories:', allCategories)
   const [allTags] = useAtom(tagsAtom)
-  console.log('all tags:', allTags)
 
   const tabs = [
     {
@@ -157,7 +155,7 @@ export function AddTorrent() {
       savepath,
       cookie,
       category,
-      tags,
+      tags: tags.join(','),
       skip_checking,
       paused: !startTorrent,
       root_folder,
@@ -280,7 +278,7 @@ export function AddTorrent() {
                   <Label htmlFor="category" className="text-right font-normal">
                     Category
                   </Label>
-                  <SelectTrigger className="col-span-2 h-8 w-32" id="category">
+                  <SelectTrigger className="col-span-2 h-8" id="category">
                     <SelectValue></SelectValue>
                   </SelectTrigger>
                   {allCategories && (
@@ -293,6 +291,8 @@ export function AddTorrent() {
                     </SelectContent>
                   )}
                 </Select>
+                {/* Tags */}
+                <TagsSelector tags={tags} setTags={setTags} allTags={allTags} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
