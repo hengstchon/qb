@@ -134,21 +134,21 @@ export function AddTorrent() {
   ]
 
   function handleSubmit() {
-    console.log('torrents:', files)
-    console.log('urls:', urls)
-    console.log('savepath:', savepath)
-    console.log('cookie:', cookie)
-    console.log('category:', category)
-    console.log('tags:', tags)
-    console.log('skip_checking:', skip_checking)
-    console.log('startTorrent:', startTorrent)
-    console.log('root_folder:', root_folder)
-    console.log('rename:', rename)
-    console.log('upLimit:', upLimit)
-    console.log('dlLimit:', dlLimit)
-    console.log('autoTMM:', autoTMM)
-    console.log('sequentialDownload:', sequentialDownload)
-    console.log('firstLastPiecePrio:', firstLastPiecePrio)
+    // console.log('torrents:', files)
+    // console.log('urls:', urls)
+    // console.log('savepath:', savepath)
+    // console.log('cookie:', cookie)
+    // console.log('category:', category)
+    // console.log('tags:', tags)
+    // console.log('skip_checking:', skip_checking)
+    // console.log('startTorrent:', startTorrent)
+    // console.log('root_folder:', root_folder)
+    // console.log('rename:', rename)
+    // console.log('upLimit:', upLimit)
+    // console.log('dlLimit:', dlLimit)
+    // console.log('autoTMM:', autoTMM)
+    // console.log('sequentialDownload:', sequentialDownload)
+    // console.log('firstLastPiecePrio:', firstLastPiecePrio)
     const params: AddTorrentPayload = {
       torrents: files,
       urls,

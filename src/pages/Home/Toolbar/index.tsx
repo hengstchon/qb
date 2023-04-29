@@ -1,5 +1,10 @@
 import { Button } from '@/ui/Button'
-import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
+import {
+  LogOutIcon,
+  SidebarCloseIcon,
+  SidebarOpenIcon,
+  Trash2,
+} from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
@@ -15,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
+import DeleteTorrent from './DeleteTorrent'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -36,6 +42,8 @@ const Toolbar = () => {
       </Button>
 
       <AddTorrent />
+
+      <DeleteTorrent />
 
       <Button
         variant="ghost"
