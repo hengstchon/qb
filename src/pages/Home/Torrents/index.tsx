@@ -12,6 +12,7 @@ import { Torrent } from '@/lib/types'
 import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
 import Pagination from './Pagination'
 import { torsColumns } from './columns'
+import TorrentsActions from './Actions'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable')
@@ -80,6 +81,7 @@ const Torrents = () => {
 
   return (
     <div className="flex flex-1 flex-col overflow-y-hidden bg-yellow-50">
+      <TorrentsActions />
       <div className="flex-1 overflow-auto">
         <BaseTable<Torrent>
           table={table}

@@ -13,6 +13,52 @@ Customization of headers:
 - Pagination
 
 
+## Design
+
+### Toolbar
+
+- left
+    - open sidebar
+    - add torrent
+    - settings
+- right
+    - theme
+    - lang
+    - logout
+    - about
+    - refresh time
+
+### Torrents table actions
+
+- add torrents
+
+- single torrent
+    - rename
+- multiple torrents
+    - delete torrents
+    - resume torrents
+    - force resume torrents
+    - pause torrents
+    - set location
+    - category
+        - new
+        - reset
+        - select category
+    - tags
+        - add
+        - remove all
+        - select tags
+    - autoTMM
+    - limit upload rate
+    - limit share ratio
+    - super seeding mode
+    - force recheck
+    - force reannounce
+    - copy
+        - name
+        - hash
+        - magnet link
+
 ## Development
 
 ### Qbittorrent test client

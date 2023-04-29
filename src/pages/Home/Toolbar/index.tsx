@@ -1,10 +1,5 @@
 import { Button } from '@/ui/Button'
-import {
-  LogOutIcon,
-  SidebarCloseIcon,
-  SidebarOpenIcon,
-  Trash2,
-} from 'lucide-react'
+import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
 import FilterInput from './FilterInput'
