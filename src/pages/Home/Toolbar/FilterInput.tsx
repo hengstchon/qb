@@ -30,7 +30,7 @@ const FilterInput = () => {
 
   return (
     <Input
-      className="ml-auto w-[300px]"
+      className="w-[400px]"
       value={value}
       onChange={(e) => setValue(e.target.value)}
     />

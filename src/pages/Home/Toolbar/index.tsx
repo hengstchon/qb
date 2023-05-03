@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
+import FilterInput from './FilterInput'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -54,6 +55,8 @@ const Toolbar = () => {
 
         <AddTorrent />
       </div>
+
+      <FilterInput />
 
       <div className="flex">
         <Select
