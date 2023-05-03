@@ -1,8 +1,16 @@
 import { Button } from '@/ui/Button'
-import { LogOutIcon, SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react'
+import {
+  Info,
+  Languages,
+  LogOutIcon,
+  Moon,
+  Rss,
+  Settings,
+  SidebarCloseIcon,
+  SidebarOpenIcon,
+} from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
-import FilterInput from './FilterInput'
 import { isAuthedAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import client from '@/api/client'
@@ -15,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
-import DeleteTorrent from './DeleteTorrent'
 
 const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
@@ -23,56 +30,76 @@ const Toolbar = () => {
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
 
   return (
-    <div className="flex h-12 items-center bg-red-50 p-2">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => setOpenSidebar((v) => !v)}
-      >
-        {openSidebar ? (
-          <SidebarCloseIcon className="h-6 w-6" />
-        ) : (
-          <SidebarOpenIcon className="h-6 w-6" />
-        )}
-      </Button>
+    <div className="flex h-12 items-center justify-between bg-red-50 p-2">
+      <div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setOpenSidebar((v) => !v)}
+        >
+          {openSidebar ? (
+            <SidebarCloseIcon className="h-6 w-6" />
+          ) : (
+            <SidebarOpenIcon className="h-6 w-6" />
+          )}
+        </Button>
 
-      <AddTorrent />
+        <Button variant="ghost" size="sm">
+          <Settings />
+        </Button>
 
-      <DeleteTorrent />
+        <Button variant="ghost" size="sm">
+          <Rss />
+        </Button>
 
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => {
-          client
-            .url(API.logout)
-            .post()
-            .res((res) => {
-              if (res.status == 200) setIsAuthed(RESET)
-            })
-        }}
-      >
-        <LogOutIcon />
-      </Button>
+        <AddTorrent />
+      </div>
 
-      <FilterInput />
+      <div className="flex">
+        <Select
+          onValueChange={(value) => {
+            setRefreshInterval(Number(value))
+          }}
+        >
+          <SelectTrigger className="h-8 w-32">
+            <SelectValue>{refreshInterval}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {[1000, 3000, 5000, 10000000].map((val) => (
+              <SelectItem key={val} value={String(val)}>
+                {val}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      <Select
-        onValueChange={(value) => {
-          setRefreshInterval(Number(value))
-        }}
-      >
-        <SelectTrigger className="h-8 w-32">
-          <SelectValue>{refreshInterval}</SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {[1000, 3000, 5000, 10000000].map((val) => (
-            <SelectItem key={val} value={String(val)}>
-              {val}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Button variant="ghost" size="sm">
+          <Moon />
+        </Button>
+
+        <Button variant="ghost" size="sm">
+          <Languages />
+        </Button>
+
+        <Button variant="ghost" size="sm">
+          <Info />
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            client
+              .url(API.logout)
+              .post()
+              .res((res) => {
+                if (res.status == 200) setIsAuthed(RESET)
+              })
+          }}
+        >
+          <LogOutIcon />
+        </Button>
+      </div>
     </div>
   )
 }

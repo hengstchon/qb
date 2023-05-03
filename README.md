@@ -13,6 +13,7 @@ Customization of headers:
 - Pagination
 
 
+
 ## Design
 
 ### Toolbar
@@ -33,31 +34,38 @@ Customization of headers:
 - add torrents
 
 - single torrent
-    - rename
+    - rename (in General tab?)
 - multiple torrents
-    - delete torrents
-    - resume torrents
-    - force resume torrents
-    - pause torrents
-    - set location
-    - category
-        - new
-        - reset
-        - select category
-    - tags
-        - add
-        - remove all
-        - select tags
-    - autoTMM
-    - limit upload rate
-    - limit share ratio
-    - super seeding mode
-    - force recheck
-    - force reannounce
-    - copy
+    - (main btn)resume torrents
+    - (main btn)pause torrents
+    - (main btn)delete torrents
+
+    Popover:
+    - (btn)force resume torrents
+    - (btn)force recheck
+    - (btn)force reannounce
+    - (btn)copy
         - name
         - hash
         - magnet link
+    - (input)set location
+    - (input)limit download rate
+    - (input)limit upload rate
+    - (input)limit share ratio
+    - (select)category
+        - new
+        - reset
+        - select category
+    - (multi select)tags
+        - add
+        - remove all
+        - select tags
+    - (switch)autoTMM
+    - (switch)super seeding mode(only in seeding status)
+    - (switch)download in sequential order
+    - (switch)download first and last pieces first
+
+
 
 ## Development
 
