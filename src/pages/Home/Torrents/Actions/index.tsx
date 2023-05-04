@@ -18,73 +18,91 @@ import {
   TagsIcon,
 } from 'lucide-react'
 import { Separator } from '@/ui/Separator'
+import SetLocation from './SetLocation'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/ui/Tooltip'
+import SetCategory from './SetCategory'
+import SetTags from './SetTags'
+import SetLimits from './SetLimits'
+import SetOthers from './SetOthers'
+import Copy from './Copy'
 
 function TorrentsActions() {
   return (
     <div className="flex h-8 items-center px-2">
-      {/* resume */}
-      <Button variant="ghost" size="sm">
-        <Play className="h-4 w-4" />
-      </Button>
+      <TooltipProvider delayDuration={300}>
+        {/* resume */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <Play className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Resume Torrents</TooltipContent>
+        </Tooltip>
 
-      {/* pause */}
-      <Button variant="ghost" size="sm">
-        <Pause className="h-4 w-4" />
-      </Button>
+        {/* pause */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <Pause className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Pause Torrents</TooltipContent>
+        </Tooltip>
 
-      {/* delete */}
-      <DeleteTorrent />
+        <DeleteTorrent />
 
-      {/* force resume */}
-      <Button variant="ghost" size="sm">
-        <FastForward className="h-4 w-4" />
-      </Button>
+        {/* force resume */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <FastForward className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Force Resume</TooltipContent>
+        </Tooltip>
 
-      <Separator orientation="vertical" />
+        <Separator orientation="vertical" />
 
-      {/* set location */}
-      <Button variant="ghost" size="sm">
-        <MapPin className="h-4 w-4" />
-      </Button>
+        <SetLocation />
 
-      {/* set category */}
-      <Button variant="ghost" size="sm">
-        <LayoutList className="h-4 w-4" />
-      </Button>
+        <SetCategory />
 
-      {/* set tags */}
-      <Button variant="ghost" size="sm">
-        <TagsIcon className="h-4 w-4" />
-      </Button>
+        <SetTags />
 
-      {/* limit upload, download, share ratio */}
-      <Button variant="ghost" size="sm">
-        <Gauge className="h-4 w-4" />
-      </Button>
+        <SetLimits />
 
-      <Separator orientation="vertical" />
+        <Separator orientation="vertical" />
 
-      {/* force recheck */}
-      <Button variant="ghost" size="sm">
-        <CheckCheck className="h-4 w-4" />
-      </Button>
+        {/* force recheck */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <CheckCheck className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Force Recheck</TooltipContent>
+        </Tooltip>
 
-      {/* force reannounce */}
-      <Button variant="ghost" size="sm">
-        <SatelliteDish className="h-4 w-4" />
-      </Button>
+        {/* force reannounce */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <SatelliteDish className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Force Reannounce</TooltipContent>
+        </Tooltip>
 
-      {/* autoTMM, super seeding mode, */}
-      {/* download in sequential order, */}
-      {/* download first and last pieces first */}
-      <Button variant="ghost" size="sm">
-        <Wrench className="h-4 w-4" />
-      </Button>
+        <SetOthers />
 
-      {/* copy name, hash, magnet link */}
-      <Button variant="ghost" size="sm">
-        <ClipboardCopy className="h-4 w-4" />
-      </Button>
+        <Copy />
+      </TooltipProvider>
     </div>
   )
 }

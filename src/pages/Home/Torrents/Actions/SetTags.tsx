@@ -1,0 +1,22 @@
+import { Button } from '@/ui/Button'
+import { Label } from '@/ui/Label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
+import { TagsIcon } from 'lucide-react'
+
+export default function SetTags() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="sm">
+          <TagsIcon className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <Label htmlFor="set-category">Set Tags:</Label>
+        <Button variant="secondary" size="sm" className="mt-2">
+          Confirm
+        </Button>
+      </PopoverContent>
+    </Popover>
+  )
+}
