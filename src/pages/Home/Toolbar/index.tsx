@@ -32,7 +32,7 @@ const Toolbar = () => {
 
   return (
     <div className="flex h-12 items-center justify-between bg-red-50 p-2">
-      <div>
+      <div className="flex">
         <Button
           variant="ghost"
           size="sm"
