@@ -92,7 +92,7 @@ const HeaderColumn = <T,>({
         <div
           ref={dragRef}
           className={cn(
-            'flex cursor-move items-center rounded hover:bg-gray-200'
+            'flex cursor-move items-center rounded-md hover:bg-gray-200'
           )}
           {...listeners}
           {...attributes}

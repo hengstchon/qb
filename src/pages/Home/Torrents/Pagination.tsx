@@ -15,7 +15,7 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
       <Button
         variant="outline"
         size="sm"
-        className="rounded border p-1"
+        className="rounded-md border p-1"
         onClick={() => table.setPageIndex(0)}
         disabled={!table.getCanPreviousPage()}
       >
@@ -24,7 +24,7 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
       <Button
         variant="outline"
         size="sm"
-        className="rounded border p-1"
+        className="rounded-md border p-1"
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
@@ -33,7 +33,7 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
       <Button
         variant="outline"
         size="sm"
-        className="rounded border p-1"
+        className="rounded-md border p-1"
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
@@ -42,7 +42,7 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
       <Button
         variant="outline"
         size="sm"
-        className="rounded border p-1"
+        className="rounded-md border p-1"
         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
         disabled={!table.getCanNextPage()}
       >
@@ -63,7 +63,7 @@ const Pagination = ({ table }: { table: Table<Torrent> }) => {
             const page = e.target.value ? Number(e.target.value) - 1 : 0
             table.setPageIndex(page)
           }}
-          className="w-16 rounded border p-1"
+          className="w-16 rounded-md border p-1"
         />
       </span>
       <Select

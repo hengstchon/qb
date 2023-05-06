@@ -213,7 +213,7 @@ export function AddTorrent() {
 
           {/* Options */}
           <Collapsible>
-            <CollapsibleTrigger className="group flex w-full items-center space-x-2 rounded bg-muted p-2">
+            <CollapsibleTrigger className="group flex w-full items-center space-x-2 rounded-md bg-muted p-2">
               <ChevronRightIcon className="h-5 w-5 transform rounded-full duration-100 ease-in-out group-data-[state=open]:rotate-90" />
               <span className="text-sm font-medium">Options</span>
             </CollapsibleTrigger>

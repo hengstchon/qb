@@ -10,7 +10,7 @@ const Item = ({ children }: { children: JSX.Element[] }) => {
   return (
     <li>
       <Button
-        className="flex h-8 w-full justify-between rounded px-2 py-[2px] hover:bg-green-100"
+        className="flex h-8 w-full justify-between rounded-md px-2 py-[2px] hover:bg-green-100"
         variant="ghost"
         size="sm"
       >
@@ -37,7 +37,7 @@ export const BaseCollapsible = ({
 }: Props) => (
   <div className="bg-green-50">
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="group flex w-full items-center justify-between gap-1 rounded border px-2">
+      <CollapsibleTrigger className="group flex w-full items-center justify-between gap-1 rounded-md border px-2">
         <span>{title}</span>
         <ChevronDownIcon className="h-5 w-5 transform duration-300 ease-in-out group-data-[state=closed]:rotate-90" />
       </CollapsibleTrigger>
