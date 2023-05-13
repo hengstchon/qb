@@ -74,8 +74,8 @@ dependencies:
     specifier: ^0.3.0
     version: 0.3.0(jotai@2.1.0)(optics-ts@2.4.0)
   lucide-react:
-    specifier: ^0.206.0
-    version: 0.206.0(react@18.2.0)
+    specifier: ^0.216.0
+    version: 0.216.0(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -2632,8 +2632,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lucide-react@0.206.0(react@18.2.0):
-    resolution: {integrity: sha512-F19KIhWMs7gy+BFobAdRh822wrEm3b7mPuyX7wNOR2TMQ4QETs5lLkw3SYRLzOA833vpxsY17bvVwK05Z1jzRQ==}
+  /lucide-react@0.216.0(react@18.2.0):
+    resolution: {integrity: sha512-PGWXs6JXI/08rhfkmj/joji0MAKDCcms44j0LYILO4J36AWqKhgjjaZ6WECRSyZ9TQe5gOrAR0g38O8cKrQngw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
