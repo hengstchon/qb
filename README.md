@@ -4,8 +4,8 @@ Yet Another Qbittorrent WebUI
 
 Customization of headers:
 
-- Column Visibility(right click on column)
-- Column Ordering(drag and drop)
+- Column Visibility(a view btn on the right side action)
+- Column Ordering(drag and drop in settings)
 - Column Sizing(move the right edge of column)
 - Filter on name column
 - Sorting(asc, desc, and none)
@@ -64,6 +64,10 @@ Customization of headers:
     - (switch)super seeding mode(only in seeding status)
     - (switch)download in sequential order
     - (switch)download first and last pieces first
+
+
+### Torrents table
+
 
 
 
