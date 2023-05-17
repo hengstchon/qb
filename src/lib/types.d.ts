@@ -25,7 +25,6 @@ export type TablesStorage = {
     columnFilters: ColumnFiltersState
     sorting: SortingState
     pagination: PaginationState
-    rowSelection: RowSelectionState
   }
   trackersTable: {
     columnOrder: ColumnOrderState

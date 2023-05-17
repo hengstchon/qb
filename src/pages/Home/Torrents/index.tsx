@@ -35,9 +35,6 @@ const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
 const torsPagiAtom = focusAtom(torrentsTableAtom, (optic) =>
   optic.prop('pagination')
 )
-const torsRowSeleAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('rowSelection')
-)
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -46,7 +43,6 @@ const Torrents = () => {
   const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
   const [sorting, onSortingChange] = useAtom(torsSortAtom)
   const [pagination, onPaginationChange] = useAtom(torsPagiAtom)
-  const [rowSelection, onRowSelectionChange] = useAtom(torsRowSeleAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
@@ -61,7 +57,6 @@ const Torrents = () => {
       columnFilters,
       sorting,
       pagination,
-      rowSelection,
     },
     onColumnOrderChange,
     onColumnSizingChange,
@@ -69,7 +64,6 @@ const Torrents = () => {
     onColumnFiltersChange,
     onSortingChange,
     onPaginationChange,
-    onRowSelectionChange,
     autoResetPageIndex: false,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
