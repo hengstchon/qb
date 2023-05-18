@@ -2,8 +2,6 @@ import { ColumnOrderState, Table } from '@tanstack/react-table'
 import { PrimitiveAtom, WritableAtom } from 'jotai'
 import React, { SetStateAction } from 'react'
 import HeaderColumn from './HeaderColumn'
-import HeaderContextMenu from './HeaderContextMenu'
-import HeaderDndContext from './HeaderDndContext'
 import Row from './Row'
 import { selectColumnDef } from './selectColumn'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -37,19 +35,15 @@ const BaseTable = <T,>({
   return (
     <div className="table border border-dotted">
       {/* header */}
-      <HeaderContextMenu<T> table={table}>
-        <HeaderDndContext colOrderAtom={colOrderAtom}>
-          <div className="relative flex">
-            {table.getLeafHeaders().map((header) => (
-              <HeaderColumn<T>
-                key={header.id}
-                header={header}
-                colOrderAtom={colOrderAtom}
-              />
-            ))}
-          </div>
-        </HeaderDndContext>
-      </HeaderContextMenu>
+      <div className="relative flex">
+        {table.getLeafHeaders().map((header) => (
+          <HeaderColumn<T>
+            key={header.id}
+            header={header}
+            colOrderAtom={colOrderAtom}
+          />
+        ))}
+      </div>
 
       {virtualize ? (
         <div ref={parentRef} className="h-64 overflow-auto">
