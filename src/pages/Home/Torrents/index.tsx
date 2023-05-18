@@ -74,7 +74,7 @@ const Torrents = () => {
   })
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-hidden bg-yellow-50">
+    <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       <TorrentsActions />
       <div className="flex-1 overflow-auto">
         <BaseTable<Torrent>

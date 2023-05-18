@@ -11,7 +11,7 @@ import {
 
 const Pagination = ({ table }: { table: Table<Torrent> }) => {
   return (
-    <div className="flex items-center justify-center gap-2 bg-green-50 py-1">
+    <div className="flex items-center justify-center gap-2 py-1">
       <Button
         variant="outline"
         size="sm"

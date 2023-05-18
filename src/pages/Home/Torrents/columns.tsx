@@ -24,7 +24,10 @@ export const torsColumns = [
   selectColumnDef as ColumnDef<Torrent>,
   ch.accessor('name', {
     id: 'name',
-    header: 'Name',
+    header: () => <div className="min-w-[90px] max-w-[200px]">Name</div>,
+    cell: (p) => (
+      <div className="min-w-[90px] max-w-[200px] truncate">{p.getValue()}</div>
+    ),
     size: 360,
     meta: {
       className: 'justify-start',
@@ -33,12 +36,12 @@ export const torsColumns = [
   ch.accessor('size', {
     id: 'size',
     header: 'Size',
-    cell: (p) => formatBytes(p.getValue()),
+    cell: (p) => <div className="w-[100px]">{formatBytes(p.getValue())}</div>,
     size: 120,
   }),
   ch.accessor('total_size', {
     id: 'total_size',
-    header: 'Total Size',
+    header: () => <div className="min-w-[90px]">Total Size</div>,
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
@@ -137,6 +140,7 @@ export const torsColumns = [
   ch.accessor('tracker', {
     id: 'tracker',
     header: 'Tracker',
+    cell: (p) => <div className="max-w-[500px] truncate">{p.getValue()}</div>,
   }),
   ch.accessor('dl_limit', {
     id: 'dl_limit',

@@ -1,10 +1,22 @@
-import { ColumnOrderState, Table } from '@tanstack/react-table'
+import {
+  ColumnOrderState,
+  Table as ReactTable,
+  flexRender,
+} from '@tanstack/react-table'
 import { PrimitiveAtom, WritableAtom } from 'jotai'
 import React, { SetStateAction } from 'react'
 import HeaderColumn from './HeaderColumn'
 import Row from './Row'
 import { selectColumnDef } from './selectColumn'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/ui/Table'
 
 const BaseTable = <T,>({
   table,
@@ -12,7 +24,7 @@ const BaseTable = <T,>({
   currRowAtom,
   virtualize,
 }: {
-  table: Table<T>
+  table: ReactTable<T>
   colOrderAtom: WritableAtom<
     ColumnOrderState,
     [arg: SetStateAction<ColumnOrderState>],
@@ -23,6 +35,7 @@ const BaseTable = <T,>({
 }) => {
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
+  window.table = table
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
@@ -33,53 +46,52 @@ const BaseTable = <T,>({
   })
 
   return (
-    <div className="table border border-dotted">
-      {/* header */}
-      <div className="relative flex">
-        {table.getLeafHeaders().map((header) => (
-          <HeaderColumn<T>
-            key={header.id}
-            header={header}
-            colOrderAtom={colOrderAtom}
-          />
-        ))}
-      </div>
-
-      {virtualize ? (
-        <div ref={parentRef} className="h-64 overflow-auto">
-          <div
-            className="relative w-full"
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`,
-            }}
-          >
-            {rowVirtualizer.getVirtualItems().map((virtualItem) => {
-              return (
-                <div
-                  key={virtualItem.key}
-                  className="absolute left-0 top-0 w-full"
-                  style={{
-                    height: `${virtualItem.size}px`,
-                    transform: `translateY(${virtualItem.start}px)`,
-                  }}
-                >
-                  <Row<T>
-                    key={virtualItem.index}
-                    row={rows[virtualItem.index]}
-                    currRowAtom={currRowAtom}
-                  />
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      ) : (
-        table
-          .getRowModel()
-          .rows.map((row) => (
-            <Row<T> key={row.id} row={row} currRowAtom={currRowAtom} />
-          ))
-      )}
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   )
 }

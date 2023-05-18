@@ -33,7 +33,7 @@ import Copy from './Copy'
 
 function TorrentsActions() {
   return (
-    <div className="flex h-8 items-center px-2">
+    <div className="flex h-8 items-center border px-2">
       <TooltipProvider delayDuration={300}>
         {/* resume */}
         <Tooltip>
