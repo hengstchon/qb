@@ -8,7 +8,7 @@ import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { Tracker } from '@/lib/types'
 import { API } from '@/api/endpoints'
-import BaseTable from '@/components/Table'
+import DataTable from '@/components/DataTable'
 import { getCurrHashAtom, tablesAtom } from '@/pages/Home/atoms'
 import Actions from './Actions'
 import { trksColumns } from './columns'
@@ -67,7 +67,7 @@ const Trackers = () => {
     <div className="grid gap-2">
       <Actions />
       <div className="overflow-auto">
-        <BaseTable<Tracker>
+        <DataTable<Tracker>
           table={table}
           colOrderAtom={trksColOrderAtom}
           currRowAtom={currTrkAtom}

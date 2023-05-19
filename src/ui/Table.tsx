@@ -4,13 +4,11 @@ import { cn } from '@/lib/utils'
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {}
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, ...props }, ref) => (
-    <div className="w-full overflow-auto">
-      <table
-        ref={ref}
-        className={cn('w-full caption-bottom text-sm', className)}
-        {...props}
-      />
-    </div>
+    <table
+      ref={ref}
+      className={cn('w-full caption-bottom text-sm', className)}
+      {...props}
+    />
   )
 )
 Table.displayName = 'Table'
@@ -28,11 +26,7 @@ interface TableBodyProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, ...props }, ref) => (
-    <tbody
-      ref={ref}
-      className={cn('[&_tr:last-child]:border-0', className)}
-      {...props}
-    />
+    <tbody ref={ref} className={className} {...props} />
   )
 )
 TableBody.displayName = 'TableBody'

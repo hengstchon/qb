@@ -26,4 +26,5 @@ export const selectColumnDef = ch.display({
       disabled={!row.getCanSelect()}
     />
   ),
+  size: 24,
 })

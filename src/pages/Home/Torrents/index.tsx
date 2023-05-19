@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import BaseTable from '@/components/Table'
+import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
 import Pagination from './Pagination'
@@ -77,7 +77,7 @@ const Torrents = () => {
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       <TorrentsActions />
       <div className="flex-1 overflow-auto">
-        <BaseTable<Torrent>
+        <DataTable<Torrent>
           table={table}
           colOrderAtom={torsColOrderAtom}
           currRowAtom={currTorAtom}

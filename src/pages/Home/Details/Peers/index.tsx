@@ -6,7 +6,7 @@ import {
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { PeerType } from '@/lib/types'
-import BaseTable from '@/components/Table'
+import DataTable from '@/components/DataTable'
 import { useTorPeers } from '@/hooks/useTorPeers'
 import { tablesAtom } from '@/pages/Home/atoms'
 import { peersColumns } from './columns'
@@ -60,7 +60,7 @@ const Peers = () => {
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
-        <BaseTable<PeerType>
+        <DataTable<PeerType>
           table={table}
           colOrderAtom={peersColOrderAtom}
           currRowAtom={currRowAtom}

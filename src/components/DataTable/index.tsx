@@ -7,7 +7,6 @@ import { PrimitiveAtom, WritableAtom } from 'jotai'
 import React, { SetStateAction } from 'react'
 import HeaderColumn from './HeaderColumn'
 import Row from './Row'
-import { selectColumnDef } from './selectColumn'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   Table,
@@ -18,7 +17,7 @@ import {
   TableRow,
 } from '@/ui/Table'
 
-const BaseTable = <T,>({
+const DataTable = <T,>({
   table,
   colOrderAtom,
   currRowAtom,
@@ -35,7 +34,6 @@ const BaseTable = <T,>({
 }) => {
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
-  window.table = table
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
@@ -46,14 +44,17 @@ const BaseTable = <T,>({
   })
 
   return (
-    <div className="rounded-md border">
-      <Table>
+    <div className="rounded-md">
+      <Table style={{ width: table.getTotalSize() }}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{ width: header.getSize() }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -74,7 +75,10 @@ const BaseTable = <T,>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    style={{ width: cell.column.getSize() }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -96,5 +100,4 @@ const BaseTable = <T,>({
   )
 }
 
-export default BaseTable
-export { selectColumnDef }
+export default DataTable

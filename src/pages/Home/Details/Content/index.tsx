@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-table'
 import { atom, useAtom } from 'jotai'
 import { filesColumns } from './columns'
-import BaseTable from '@/components/Table'
+import DataTable from '@/components/DataTable'
 import { useFiles } from '@/hooks/useFiles'
 import { FileNode } from '@/lib/types'
 import { focusAtom } from 'jotai-optics'
@@ -62,7 +62,7 @@ const Content = () => {
   return (
     <div className="grid gap-2">
       <div className="overflow-auto">
-        <BaseTable<FileNode>
+        <DataTable<FileNode>
           table={table}
           colOrderAtom={filesColOrderAtom}
           currRowAtom={currRowAtom}

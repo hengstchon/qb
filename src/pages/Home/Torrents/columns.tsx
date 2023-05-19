@@ -8,7 +8,7 @@ import {
   formatTimestamp,
 } from '@/lib/utils'
 import { MAX_ETA } from '@/lib/constants'
-import { selectColumnDef } from '@/components/Table'
+import { selectColumnDef } from '@/components/DataTable/selectColumn'
 
 const sortingFnWithField =
   <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
@@ -24,14 +24,16 @@ export const torsColumns = [
   selectColumnDef as ColumnDef<Torrent>,
   ch.accessor('name', {
     id: 'name',
-    header: () => <div className="min-w-[90px] max-w-[200px]">Name</div>,
+    header: 'Name',
     cell: (p) => (
-      <div className="min-w-[90px] max-w-[200px] truncate">{p.getValue()}</div>
+      <div className="truncate" style={{ width: p.column.getSize() - 16 }}>
+        {p.getValue()}
+      </div>
     ),
-    size: 360,
     meta: {
       className: 'justify-start',
     },
+    size: 400,
   }),
   ch.accessor('size', {
     id: 'size',
@@ -140,7 +142,8 @@ export const torsColumns = [
   ch.accessor('tracker', {
     id: 'tracker',
     header: 'Tracker',
-    cell: (p) => <div className="max-w-[500px] truncate">{p.getValue()}</div>,
+    cell: (p) => <div className="max-w-[300px] truncate">{p.getValue()}</div>,
+    size: 320,
   }),
   ch.accessor('dl_limit', {
     id: 'dl_limit',
@@ -158,7 +161,7 @@ export const torsColumns = [
     id: 'downloaded_session',
     header: 'Session Download',
     cell: (p) => formatBytes(p.getValue()),
-    size: 120,
+    size: 140,
   }),
   ch.accessor('uploaded_session', {
     id: 'uploaded_session',
@@ -186,7 +189,7 @@ export const torsColumns = [
           : fmActive
       },
       sortingFn: sortingFnWithField('time_active'),
-      size: 100,
+      size: 200,
     }
   ),
   ch.accessor('save_path', {

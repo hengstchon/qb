@@ -1,5 +1,5 @@
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { selectColumnDef } from '@/components/Table'
+import { selectColumnDef } from '@/components/DataTable/selectColumn'
 import { formatBytes, formatPercentage } from '@/lib/utils'
 import {
   ChevronDown,
