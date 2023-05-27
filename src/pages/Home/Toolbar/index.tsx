@@ -6,8 +6,8 @@ import {
   Moon,
   Rss,
   Settings,
-  SidebarCloseIcon,
-  SidebarOpenIcon,
+  SidebarClose,
+  SidebarOpen,
 } from 'lucide-react'
 import { useAtom, useSetAtom } from 'jotai'
 import { API } from '@/api/endpoints'
@@ -39,9 +39,9 @@ const Toolbar = () => {
           onClick={() => setOpenSidebar((v) => !v)}
         >
           {openSidebar ? (
-            <SidebarCloseIcon className="h-6 w-6" />
+            <SidebarClose className="h-6 w-6" />
           ) : (
-            <SidebarOpenIcon className="h-6 w-6" />
+            <SidebarOpen className="h-6 w-6" />
           )}
         </Button>
 
