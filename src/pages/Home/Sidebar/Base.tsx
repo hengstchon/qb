@@ -1,10 +1,10 @@
+import { ChevronDownIcon } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/ui/Collapsible'
-import { ChevronDownIcon } from 'lucide-react'
 
 const Item = ({ children }: { children: JSX.Element[] }) => {
   return (

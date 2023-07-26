@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from 'react'
 import { produce } from 'immer'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Badge } from '@/ui/Badge'
+import { Button } from '@/ui/Button'
 import {
   Command,
   CommandEmpty,
@@ -9,10 +11,8 @@ import {
   CommandItem,
   CommandList,
 } from '@/ui/Command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
-import { Badge } from '@/ui/Badge'
-import { Button } from '@/ui/Button'
 import { Label } from '@/ui/Label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
 
 type TagsSelectorProps = {
   tags: string[]
@@ -62,13 +62,13 @@ function TagsSelector({ tags, setTags, allTags }: TagsSelectorProps) {
                       setTags(
                         produce(tags, (draft) => {
                           return draft.filter((t) => t !== tag)
-                        })
+                        }),
                       )
                     } else {
                       setTags(
                         produce(tags, (draft) => {
                           draft.push(tag)
-                        })
+                        }),
                       )
                     }
                   }}
@@ -77,7 +77,7 @@ function TagsSelector({ tags, setTags, allTags }: TagsSelectorProps) {
                   <Check
                     className={cn(
                       'ml-auto h-4 w-4',
-                      tags.includes(tag) ? 'opacity-100' : 'opacity-0'
+                      tags.includes(tag) ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                 </CommandItem>

@@ -1,6 +1,6 @@
-import { Tracker } from '@/lib/types'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/DataTable/selectColumn'
+import { Tracker } from '@/lib/types'
 
 const ch = createColumnHelper<Tracker>()
 

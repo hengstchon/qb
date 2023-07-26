@@ -1,10 +1,10 @@
-import { Button } from '@/ui/Button'
 import {
   ClipboardCopyIcon,
   FileEditIcon,
   FilePlus2Icon,
   Trash2Icon,
 } from 'lucide-react'
+import { Button } from '@/ui/Button'
 
 const Actions = () => {
   return (

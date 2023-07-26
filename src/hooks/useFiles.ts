@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
-import { FileNode, FileType, Files } from '@/lib/types'
 import { API } from '@/api/endpoints'
-import { getCurrHashAtom } from '@/pages/Home/atoms'
 import { FilePriority } from '@/lib/constants'
+import { FileNode, Files, FileType } from '@/lib/types'
+import { getCurrHashAtom } from '@/pages/Home/atoms'
 
 const PathSeparator = '/'
 
@@ -63,7 +63,7 @@ export const useFiles = () => {
   const [currHash] = useAtom(getCurrHashAtom)
   const { data } = useSWR<Files>(
     currHash ? API.torrents.files(currHash) : null,
-    { refreshInterval: 5000, keepPreviousData: true, fallbackData: [] }
+    { refreshInterval: 5000, keepPreviousData: true, fallbackData: [] },
   )
 
   if (!data) return []

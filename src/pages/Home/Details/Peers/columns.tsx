@@ -1,8 +1,8 @@
-import { PeerType } from '@/lib/types'
+import ReactCountryFlag from 'react-country-flag'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/DataTable/selectColumn'
+import { PeerType } from '@/lib/types'
 import { formatBytes, formatPercentage, formatSpeed } from '@/lib/utils'
-import ReactCountryFlag from 'react-country-flag'
 
 const ch = createColumnHelper<PeerType>()
 

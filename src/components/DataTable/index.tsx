@@ -1,13 +1,11 @@
+import React, { SetStateAction } from 'react'
 import {
   ColumnOrderState,
-  Table as ReactTable,
   flexRender,
+  Table as ReactTable,
 } from '@tanstack/react-table'
-import { PrimitiveAtom, WritableAtom } from 'jotai'
-import React, { SetStateAction } from 'react'
-import HeaderColumn from './HeaderColumn'
-import Row from './Row'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { PrimitiveAtom, WritableAtom } from 'jotai'
 import {
   Table,
   TableBody,
@@ -16,6 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
+import HeaderColumn from './HeaderColumn'
+import Row from './Row'
 
 const DataTable = <T,>({
   table,
@@ -59,7 +59,7 @@ const DataTable = <T,>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 )

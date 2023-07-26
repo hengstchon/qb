@@ -1,8 +1,8 @@
 import { DndContext } from '@dnd-kit/core'
-import { getRound } from '@/lib/utils'
 import { useSetAtom } from 'jotai'
-import { sidebarWidthAtom } from './atoms'
 import { MIN_SIDEBAR_WIDTH } from '@/lib/constants'
+import { getRound } from '@/lib/utils'
+import { sidebarWidthAtom } from './atoms'
 
 const SidebarDndContext = ({ children }: { children: JSX.Element | false }) => {
   const setSidebarWidth = useSetAtom(sidebarWidthAtom)

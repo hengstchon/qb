@@ -2,14 +2,6 @@ import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/api/endpoints'
 import {
-  refreshIntervalAtom,
-  torrentsAtom,
-  trackersAtom,
-  categoriesAtom,
-  serverStateAtom,
-  tagsAtom,
-} from '@/pages/Home/atoms'
-import {
   Categories,
   ServerState,
   SyncData,
@@ -17,6 +9,14 @@ import {
   Torrents,
   Trackers,
 } from '@/lib/types'
+import {
+  categoriesAtom,
+  refreshIntervalAtom,
+  serverStateAtom,
+  tagsAtom,
+  torrentsAtom,
+  trackersAtom,
+} from '@/pages/Home/atoms'
 
 export const mainRidAtom = atom(0)
 
@@ -43,9 +43,9 @@ const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
           set(categoriesAtom, (prev) =>
             Object.fromEntries(
               Object.entries(prev).filter(
-                ([k]) => !val.categories_removed?.includes(k)
-              )
-            )
+                ([k]) => !val.categories_removed?.includes(k),
+              ),
+            ),
           )
           break
         case 'trackers':
@@ -55,9 +55,9 @@ const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
           set(trackersAtom, (prev) =>
             Object.fromEntries(
               Object.entries(prev).filter(
-                ([k]) => !val.trackers_removed?.includes(k)
-              )
-            )
+                ([k]) => !val.trackers_removed?.includes(k),
+              ),
+            ),
           )
           break
         case 'torrents': {
@@ -78,9 +78,9 @@ const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
           set(torrentsAtom, (prev) =>
             Object.fromEntries(
               Object.entries(prev).filter(
-                ([k]) => !val.torrents_removed?.includes(k)
-              )
-            )
+                ([k]) => !val.torrents_removed?.includes(k),
+              ),
+            ),
           )
           break
         case 'server_state':

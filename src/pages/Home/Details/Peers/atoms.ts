@@ -1,6 +1,6 @@
+import { produce } from 'immer'
 import { atom } from 'jotai'
 import { Peers, PeersData } from '@/lib/types'
-import { produce } from 'immer'
 
 export const peersRidAtom = atom(0)
 
@@ -26,8 +26,8 @@ export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
     if (val.peers_removed) {
       set(peersAtom, (prev) =>
         Object.fromEntries(
-          Object.entries(prev).filter(([k]) => !val.peers_removed?.includes(k))
-        )
+          Object.entries(prev).filter(([k]) => !val.peers_removed?.includes(k)),
+        ),
       )
     }
   }

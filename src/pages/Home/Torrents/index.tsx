@@ -1,5 +1,3 @@
-import { useAtom } from 'jotai'
-import { focusAtom } from 'jotai-optics'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -7,33 +5,35 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useAtom } from 'jotai'
+import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
-import Pagination from './Pagination'
-import { torsColumns } from './columns'
 import TorrentsActions from './Actions'
+import { torsColumns } from './columns'
+import Pagination from './Pagination'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('torrentsTable')
+  optic.prop('torrentsTable'),
 )
 const torsColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnOrder')
+  optic.prop('columnOrder'),
 )
 const torsColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnSizing')
+  optic.prop('columnSizing'),
 )
 const torsColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnVisibility')
+  optic.prop('columnVisibility'),
 )
 export const torsColFiltersAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnFilters')
+  optic.prop('columnFilters'),
 )
 const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('sorting')
+  optic.prop('sorting'),
 )
 const torsPagiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('pagination')
+  optic.prop('pagination'),
 )
 
 const Torrents = () => {

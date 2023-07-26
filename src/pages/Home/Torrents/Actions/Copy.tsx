@@ -1,3 +1,4 @@
+import { ClipboardCopy } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import {
   DropdownMenu,
@@ -7,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/DropdownMenu'
-import { ClipboardCopy } from 'lucide-react'
 
 export default function Copy() {
   return (

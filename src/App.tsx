@@ -1,9 +1,9 @@
-import { SWRConfig, SWRConfiguration } from 'swr'
 import { useAtom } from 'jotai'
+import { SWRConfig, SWRConfiguration } from 'swr'
 import './index.css'
 import client from '@/api/client'
-import { isAuthedAtom } from '@/pages/Home/atoms'
 import Home from '@/pages/Home'
+import { isAuthedAtom } from '@/pages/Home/atoms'
 import { Login } from '@/pages/Login'
 
 const App = () => {

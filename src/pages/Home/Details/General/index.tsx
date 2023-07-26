@@ -1,14 +1,14 @@
 import { useAtom } from 'jotai'
 import useSWR from 'swr'
+import { API } from '@/api/endpoints'
+import { MAX_ETA } from '@/lib/constants'
+import { Propperties } from '@/lib/types'
 import {
   formatBytes,
   formatDuration,
   formatSpeed,
   formatTimestamp,
 } from '@/lib/utils'
-import { API } from '@/api/endpoints'
-import { Propperties } from '@/lib/types'
-import { MAX_ETA } from '@/lib/constants'
 import { getCurrHashAtom } from '../../atoms'
 
 const General = () => {
@@ -16,7 +16,7 @@ const General = () => {
 
   const { data } = useSWR<Propperties>(
     currHash ? API.torrents.preperties(currHash) : null,
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   )
 
   const {
@@ -61,7 +61,7 @@ const General = () => {
   const timeActive =
     seeding_time! > 0
       ? `${formatDuration(time_elapsed!)} (seeded for ${formatDuration(
-          seeding_time!
+          seeding_time!,
         )})`
       : formatDuration(time_elapsed!)
 

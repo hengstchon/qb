@@ -1,6 +1,4 @@
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { selectColumnDef } from '@/components/DataTable/selectColumn'
-import { formatBytes, formatPercentage } from '@/lib/utils'
 import {
   ChevronDown,
   ChevronRight,
@@ -8,8 +6,10 @@ import {
   FolderClosedIcon,
   FolderOpenIcon,
 } from 'lucide-react'
-import { FileNode } from '@/lib/types'
+import { selectColumnDef } from '@/components/DataTable/selectColumn'
 import { FilePriority } from '@/lib/constants'
+import { FileNode } from '@/lib/types'
+import { formatBytes, formatPercentage } from '@/lib/utils'
 import { Button } from '@/ui/Button'
 
 const ch = createColumnHelper<FileNode>()

@@ -1,8 +1,8 @@
 import { SetStateAction } from 'react'
 import { ColumnOrderState, flexRender, Header } from '@tanstack/react-table'
+import { WritableAtom } from 'jotai'
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { WritableAtom } from 'jotai'
 
 const HeaderColumn = <T,>({
   header,
@@ -32,7 +32,7 @@ const HeaderColumn = <T,>({
       <div
         className={cn(
           'flex cursor-pointer select-none items-center justify-center gap-1 px-1 text-sm font-semibold',
-          className
+          className,
         )}
         onClick={header.column.getToggleSortingHandler()}
       >
@@ -48,7 +48,7 @@ const HeaderColumn = <T,>({
       {/* resizer */}
       <div
         className={cn(
-          'absolute right-0 top-0 flex h-full opacity-0 group-hover:opacity-100'
+          'absolute right-0 top-0 flex h-full opacity-0 group-hover:opacity-100',
         )}
       >
         {header.column.getCanResize() && (
@@ -57,7 +57,7 @@ const HeaderColumn = <T,>({
             onTouchStart={header.getResizeHandler()}
             className={cn(
               'w-[4px] cursor-col-resize touch-none select-none bg-gray-400',
-              header.column.getIsResizing() && 'bg-blue-500'
+              header.column.getIsResizing() && 'bg-blue-500',
             )}
           />
         )}

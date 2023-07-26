@@ -1,5 +1,5 @@
-import { Torrent } from '@/lib/types'
 import { useAtom } from 'jotai'
+import { Torrent } from '@/lib/types'
 import { torrentsAtom } from '../atoms'
 import { openSideStatusAtom } from './atoms'
 import { BaseCollapsible } from './Base'
@@ -10,7 +10,7 @@ const filterStatusMap: Record<string, (t: Torrent) => boolean> = {
     t.state === 'downloading' || t.state.indexOf('DL') !== -1,
   seeding: (t: Torrent) =>
     ['uploading', 'forcedUP', 'stalledUP', 'queuedUP', 'checkingUP'].includes(
-      t.state
+      t.state,
     ),
   completed: (t: Torrent) =>
     t.state === 'uploading' || t.state.indexOf('UP') !== -1,
@@ -69,7 +69,7 @@ const Status = () => {
 
   const getNumByStatus = (status: string) =>
     Object.values(torrents).filter(
-      filterStatusMap[status.toLowerCase().replace(' ', '_')]
+      filterStatusMap[status.toLowerCase().replace(' ', '_')],
     ).length
 
   return (

@@ -1,11 +1,12 @@
-import { clsx, ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { cx } from 'class-variance-authority'
+import { ClassValue } from 'class-variance-authority/dist/types'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { twMerge } from 'tailwind-merge'
 
 export const cn = (...inputs: ClassValue[]) => {
-  return twMerge(clsx(inputs))
+  return twMerge(cx(inputs))
 }
 
 export const formatBytes = (bytes: number, dp?: number) => {

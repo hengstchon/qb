@@ -1,6 +1,6 @@
-import { formatBytes, formatSpeed } from '@/lib/utils'
 import { useAtom } from 'jotai'
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from 'lucide-react'
+import { formatBytes, formatSpeed } from '@/lib/utils'
 import { serverStateAtom } from '../atoms'
 
 const StatusBar = () => {

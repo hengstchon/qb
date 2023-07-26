@@ -1,7 +1,7 @@
+import { TagsIcon } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Label } from '@/ui/Label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
-import { TagsIcon } from 'lucide-react'
 
 export default function SetTags() {
   return (

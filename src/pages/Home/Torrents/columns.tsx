@@ -1,4 +1,6 @@
 import { ColumnDef, createColumnHelper, SortingFn } from '@tanstack/react-table'
+import { selectColumnDef } from '@/components/DataTable/selectColumn'
+import { MAX_ETA } from '@/lib/constants'
 import { Torrent } from '@/lib/types'
 import {
   formatBytes,
@@ -7,8 +9,6 @@ import {
   formatSpeed,
   formatTimestamp,
 } from '@/lib/utils'
-import { MAX_ETA } from '@/lib/constants'
-import { selectColumnDef } from '@/components/DataTable/selectColumn'
 
 const sortingFnWithField =
   <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
@@ -91,7 +91,7 @@ export const torsColumns = [
       },
       sortingFn: sortingFnWithField('num_leechs'),
       size: 120,
-    }
+    },
   ),
   ch.accessor('dlspeed', {
     id: 'dlspeed',
@@ -190,7 +190,7 @@ export const torsColumns = [
       },
       sortingFn: sortingFnWithField('time_active'),
       size: 200,
-    }
+    },
   ),
   ch.accessor('save_path', {
     id: 'save_path',

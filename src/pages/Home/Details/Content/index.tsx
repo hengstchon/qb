@@ -5,27 +5,27 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { atom, useAtom } from 'jotai'
-import { filesColumns } from './columns'
+import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/DataTable'
 import { useFiles } from '@/hooks/useFiles'
 import { FileNode } from '@/lib/types'
-import { focusAtom } from 'jotai-optics'
 import { tablesAtom } from '@/pages/Home/atoms'
+import { filesColumns } from './columns'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('filesTable')
+  optic.prop('filesTable'),
 )
 const filesColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnOrder')
+  optic.prop('columnOrder'),
 )
 const filesColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnSizing')
+  optic.prop('columnSizing'),
 )
 const filesColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnVisibility')
+  optic.prop('columnVisibility'),
 )
 const filesSortAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('sorting')
+  optic.prop('sorting'),
 )
 
 const currRowAtom = atom(-1)

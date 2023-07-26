@@ -3,30 +3,30 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import useSWR from 'swr'
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import { Tracker } from '@/lib/types'
+import useSWR from 'swr'
 import { API } from '@/api/endpoints'
 import DataTable from '@/components/DataTable'
+import { Tracker } from '@/lib/types'
 import { getCurrHashAtom, tablesAtom } from '@/pages/Home/atoms'
 import Actions from './Actions'
 import { trksColumns } from './columns'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('trackersTable')
+  optic.prop('trackersTable'),
 )
 const trksColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnOrder')
+  optic.prop('columnOrder'),
 )
 const trksColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnSizing')
+  optic.prop('columnSizing'),
 )
 const trksColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnVisibility')
+  optic.prop('columnVisibility'),
 )
 const trksSortAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('sorting')
+  optic.prop('sorting'),
 )
 
 export const currTrkAtom = atom(-1)
@@ -37,7 +37,7 @@ const Trackers = () => {
 
   const { data } = useSWR<Tracker[]>(
     currHash ? API.torrents.trackers(currHash) : null,
-    { keepPreviousData: true, fallbackData: [] }
+    { keepPreviousData: true, fallbackData: [] },
   )
 
   const [columnOrder, onColumnOrderChange] = useAtom(trksColOrderAtom)

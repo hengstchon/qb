@@ -19,7 +19,7 @@ export const removeItem = (key: string) => {
 
 export const atomWithLocalStorage = <Value>(
   key: string,
-  initialValue: Value
+  initialValue: Value,
 ) => {
   const baseAtom = atom((getItem(key) ?? initialValue) as Value)
   return atom(
@@ -35,6 +35,6 @@ export const atomWithLocalStorage = <Value>(
       }
       set(baseAtom, nextValue)
       return setItem(key, nextValue as ValueType)
-    }
+    },
   )
 }

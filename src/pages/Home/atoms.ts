@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
+import { atomWithLocalStorage } from '@/lib/storage'
 import {
   Categories,
   ServerState,
@@ -9,11 +10,10 @@ import {
   Torrents,
   Trackers,
 } from '@/lib/types'
-import { atomWithLocalStorage } from '@/lib/storage'
-import { torsColumns } from './Torrents/columns'
-import { trksColumns } from './Details/Trackers/columns'
-import { peersColumns } from './Details/Peers/columns'
 import { filesColumns } from './Details/Content/columns'
+import { peersColumns } from './Details/Peers/columns'
+import { trksColumns } from './Details/Trackers/columns'
+import { torsColumns } from './Torrents/columns'
 
 export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
 
@@ -29,7 +29,7 @@ const defaultSettings = {
 }
 export const settingsAtom = atomWithLocalStorage<SettingsStorage>(
   'settings',
-  defaultSettings
+  defaultSettings,
 )
 
 const defaultTables = {
@@ -62,16 +62,16 @@ const defaultTables = {
 }
 export const tablesAtom = atomWithLocalStorage<TablesStorage>(
   'tables',
-  defaultTables
+  defaultTables,
 )
 
 export const refreshIntervalAtom = focusAtom(settingsAtom, (optic) =>
-  optic.prop('refreshInterval')
+  optic.prop('refreshInterval'),
 )
 
 export const torrentsAtom = atom<Torrents>({})
 export const getTorrentsAtom = atom((get) =>
-  Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash }))
+  Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash })),
 )
 
 export const trackersAtom = atom<Trackers>({})

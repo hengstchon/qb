@@ -1,12 +1,12 @@
 import { useAtom } from 'jotai'
 import { useUpdateMainSync } from '@/hooks/useMainSync'
-import Toolbar from './Toolbar'
-import Sidebar from './Sidebar'
-import Torrents from './Torrents'
-import StatusBar from './StatusBar'
-import { openSidebarAtom } from './Sidebar/atoms'
 import Details from './Details'
+import Sidebar from './Sidebar'
+import { openSidebarAtom } from './Sidebar/atoms'
 import SidebarDndContext from './Sidebar/SidebarDndContext'
+import StatusBar from './StatusBar'
+import Toolbar from './Toolbar'
+import Torrents from './Torrents'
 
 const HomePage = () => {
   useUpdateMainSync()

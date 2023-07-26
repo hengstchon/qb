@@ -1,4 +1,5 @@
-import { Button } from '@/ui/Button'
+import { useAtom, useSetAtom } from 'jotai'
+import { RESET } from 'jotai/utils'
 import {
   Info,
   Languages,
@@ -9,13 +10,11 @@ import {
   SidebarClose,
   SidebarOpen,
 } from 'lucide-react'
-import { useAtom, useSetAtom } from 'jotai'
+import client from '@/api/client'
 import { API } from '@/api/endpoints'
 import { isAuthedAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
-import client from '@/api/client'
-import { RESET } from 'jotai/utils'
-import { AddTorrent } from './AddTorrent'
+import { Button } from '@/ui/Button'
 import {
   Select,
   SelectContent,
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
+import { AddTorrent } from './AddTorrent'
 import FilterInput from './FilterInput'
 
 const Toolbar = () => {

@@ -1,8 +1,8 @@
+import { Gauge } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
-import { Gauge } from 'lucide-react'
 
 export default function SetLimits() {
   return (

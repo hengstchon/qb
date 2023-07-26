@@ -32,7 +32,7 @@ const ContextMenuSubTrigger = React.forwardRef<
     className={cn(
       'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm font-medium outline-none focus:bg-slate-100 data-[state=open]:bg-slate-100 dark:focus:bg-slate-700 dark:data-[state=open]:bg-slate-700',
       inset && 'pl-8',
-      className
+      className,
     )}
     {...props}
   >
@@ -54,7 +54,7 @@ const ContextMenuSubContent = React.forwardRef<
     ref={ref}
     className={cn(
       'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md animate-in slide-in-from-left-1',
-      className
+      className,
     )}
     {...props}
   />
@@ -72,7 +72,7 @@ const ContextMenuContent = React.forwardRef<
       ref={ref}
       className={cn(
         'z-50 max-h-[70vh] min-w-[8rem] overflow-y-auto rounded-md border bg-amber-50 p-1 shadow-md animate-in fade-in-80',
-        className
+        className,
       )}
       {...props}
     />
@@ -93,7 +93,7 @@ const ContextMenuItem = React.forwardRef<
     className={cn(
       'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm font-medium outline-none focus:bg-amber-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
-      className
+      className,
     )}
     {...props}
   />
@@ -112,7 +112,7 @@ const ContextMenuCheckboxItem = React.forwardRef<
     ref={ref}
     className={cn(
       'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-amber-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      className
+      className,
     )}
     checked={checked}
     {...props}
@@ -140,7 +140,7 @@ const ContextMenuRadioItem = React.forwardRef<
     ref={ref}
     className={cn(
       'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm font-medium outline-none focus:bg-slate-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-slate-700',
-      className
+      className,
     )}
     {...props}
   >
@@ -167,7 +167,7 @@ const ContextMenuLabel = React.forwardRef<
     className={cn(
       'px-2 py-1.5 text-sm font-semibold text-slate-900 dark:text-slate-300',
       inset && 'pl-8',
-      className
+      className,
     )}
     {...props}
   />
@@ -197,13 +197,13 @@ const ContextMenuShortcut = React.forwardRef<HTMLSpanElement, SpanProps>(
       <span
         className={cn(
           'ml-auto text-xs tracking-widest text-slate-500',
-          className
+          className,
         )}
         {...props}
         ref={ref}
       />
     )
-  }
+  },
 )
 ContextMenuShortcut.displayName = 'ContextMenuShortcut'
 

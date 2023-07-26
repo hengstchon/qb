@@ -1,35 +1,35 @@
-import { Button } from '@/ui/Button'
-import DeleteTorrent from './DeleteTorrent'
 import {
   CheckCheck,
   CheckCircle,
+  ClipboardCopy,
   FastForward,
+  Gauge,
+  LayoutList,
+  MapPin,
   Pause,
   PauseCircle,
   Play,
   PlayCircle,
-  Settings2,
-  Wrench,
   SatelliteDish,
-  ClipboardCopy,
-  MapPin,
-  Gauge,
-  LayoutList,
+  Settings2,
   TagsIcon,
+  Wrench,
 } from 'lucide-react'
+import { Button } from '@/ui/Button'
 import { Separator } from '@/ui/Separator'
-import SetLocation from './SetLocation'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/ui/Tooltip'
-import SetCategory from './SetCategory'
-import SetTags from './SetTags'
-import SetLimits from './SetLimits'
-import SetOthers from './SetOthers'
 import Copy from './Copy'
+import DeleteTorrent from './DeleteTorrent'
+import SetCategory from './SetCategory'
+import SetLimits from './SetLimits'
+import SetLocation from './SetLocation'
+import SetOthers from './SetOthers'
+import SetTags from './SetTags'
 
 function TorrentsActions() {
   return (

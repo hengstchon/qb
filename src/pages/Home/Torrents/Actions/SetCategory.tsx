@@ -1,7 +1,7 @@
+import { LayoutList } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Label } from '@/ui/Label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover'
-import { LayoutList } from 'lucide-react'
 
 export default function SetCategory() {
   return (

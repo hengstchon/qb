@@ -1,4 +1,19 @@
+import { Dispatch, useState } from 'react'
+import { SetStateAction, useAtom } from 'jotai'
+import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
+import FormDataAddon from 'wretch/addons/formData'
+import client from '@/api/client'
+import { API } from '@/api/endpoints'
+import { AddTorrentPayload } from '@/lib/types'
+import { cn } from '@/lib/utils'
+import { categoriesAtom, tagsAtom } from '@/pages/Home/atoms'
 import { Button } from '@/ui/Button'
+import { Checkbox } from '@/ui/Checkbox'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/ui/Collapsible'
 import {
   Dialog,
   DialogContent,
@@ -9,16 +24,7 @@ import {
 } from '@/ui/Dialog'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
-import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Textarea } from '@/ui/Textarea'
 import { RadioGroup, RadioGroupItem } from '@/ui/RadioGroup'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/ui/Collapsible'
 import {
   Select,
   SelectContent,
@@ -26,15 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
-import { API } from '@/api/endpoints'
-import { AddTorrentPayload } from '@/lib/types'
-import { Checkbox } from '@/ui/Checkbox'
-import { Dispatch, useState } from 'react'
-import { SetStateAction, useAtom } from 'jotai'
-import client from '@/api/client'
-import FormDataAddon from 'wretch/addons/formData'
-import { tagsAtom } from '@/pages/Home/atoms'
-import { categoriesAtom } from '@/pages/Home/atoms'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
+import { Textarea } from '@/ui/Textarea'
 import TagsSelector from './TagsSelector'
 
 type FromLocalTabType = {

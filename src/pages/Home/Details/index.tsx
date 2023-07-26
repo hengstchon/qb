@@ -1,18 +1,18 @@
+import { useAtom } from 'jotai'
+import { focusAtom } from 'jotai-optics'
+import { ChevronsDownIcon, ChevronsUpIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
-import { cn } from '@/lib/utils'
-import { useAtom } from 'jotai'
-import { ChevronsDownIcon, ChevronsUpIcon } from 'lucide-react'
+import { settingsAtom } from '../atoms'
 import Content from './Content'
 import General from './General'
 import HTTPSources from './HTTPSources'
 import Peers from './Peers'
 import Trackers from './Trackers'
-import { settingsAtom } from '../atoms'
-import { focusAtom } from 'jotai-optics'
 
 const openDetailsAtom = focusAtom(settingsAtom, (optic) =>
-  optic.prop('openDetails')
+  optic.prop('openDetails'),
 )
 
 const tabs = [

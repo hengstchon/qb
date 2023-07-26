@@ -1,5 +1,5 @@
-import { Checkbox } from '@/ui/Checkbox'
 import { createColumnHelper } from '@tanstack/react-table'
+import { Checkbox } from '@/ui/Checkbox'
 
 const ch = createColumnHelper()
 

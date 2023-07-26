@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
+import client from '@/api/client'
+import { API } from '@/api/endpoints'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
-import { API } from '@/api/endpoints'
-import client from '@/api/client'
 import { isAuthedAtom } from '../Home/atoms'
 
 type PayloadType = {

@@ -5,28 +5,28 @@ import {
 } from '@tanstack/react-table'
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import { PeerType } from '@/lib/types'
 import DataTable from '@/components/DataTable'
 import { useTorPeers } from '@/hooks/useTorPeers'
+import { PeerType } from '@/lib/types'
 import { tablesAtom } from '@/pages/Home/atoms'
 import { peersColumns } from './columns'
 
 const currRowAtom = atom(-1)
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('peersTable')
+  optic.prop('peersTable'),
 )
 const peersColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnOrder')
+  optic.prop('columnOrder'),
 )
 const peersColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnSizing')
+  optic.prop('columnSizing'),
 )
 const peersColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('columnVisibility')
+  optic.prop('columnVisibility'),
 )
 const peersSortAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('sorting')
+  optic.prop('sorting'),
 )
 
 const Peers = () => {
