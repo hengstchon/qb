@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/api/endpoints'
@@ -19,6 +20,8 @@ import {
 } from '@/pages/Home/atoms'
 
 export const mainRidAtom = atom(0)
+
+const curTimeoutIdAtom = atom<ReturnType<typeof setTimeout> | null>(null)
 
 const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
   if (val.full_update) {
@@ -95,6 +98,14 @@ export const useUpdateMainSync = () => {
   const [rid, setRid] = useAtom(mainRidAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
   const setUpdateMainData = useSetAtom(updateMainDataAtom)
+  const [curTimeoutId, setCurTimeoutId] = useAtom(curTimeoutIdAtom)
+
+  useEffect(() => {
+    if (curTimeoutId) {
+      clearTimeout(curTimeoutId)
+      setRid(rid + 1)
+    }
+  }, [refreshInterval])
 
   useSWRImmutable(API.sync.maindata(rid), {
     onSuccess: (data) => {
@@ -103,17 +114,21 @@ export const useUpdateMainSync = () => {
 
       setUpdateMainData(data)
       if (data.rid) {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           setRid(data.rid)
         }, refreshInterval)
+        console.log(timeoutId)
+        console.log(typeof timeoutId)
+        setCurTimeoutId(timeoutId)
       }
     },
     onErrorRetry: (error, key, _, revalidate, opts) => {
       console.log('onErryrRetry:', error, key, opts)
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         console.log('revalidate: ', opts)
         revalidate(opts)
       }, refreshInterval)
+      setCurTimeoutId(timeoutId)
     },
   })
 }
