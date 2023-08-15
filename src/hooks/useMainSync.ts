@@ -117,13 +117,12 @@ export const useUpdateMainSync = () => {
         const timeoutId = setTimeout(() => {
           setRid(data.rid)
         }, refreshInterval)
-        console.log(timeoutId)
-        console.log(typeof timeoutId)
         setCurTimeoutId(timeoutId)
       }
     },
     onErrorRetry: (error, key, _, revalidate, opts) => {
       console.log('onErryrRetry:', error, key, opts)
+      // console.log(error.name == 'AbortError')
       const timeoutId = setTimeout(() => {
         console.log('revalidate: ', opts)
         revalidate(opts)
