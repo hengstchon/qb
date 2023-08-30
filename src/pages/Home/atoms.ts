@@ -39,7 +39,6 @@ const defaultTables = {
     columnVisibility: {},
     columnFilters: [{ id: 'name', value: '' }],
     sorting: [],
-    pagination: { pageIndex: 0, pageSize: 20 },
   },
   trackersTable: {
     columnOrder: trksColumns.map((c) => c.id!),

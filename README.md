@@ -10,7 +10,6 @@ Customization of headers:
 - Filter on name column
 - Sorting(asc, desc, and none)
 - Row Selection
-- Pagination
 
 
 

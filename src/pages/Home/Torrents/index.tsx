@@ -1,18 +1,28 @@
+import React from 'react'
 import {
+  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
+  Row,
   useReactTable,
 } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/ui/Table'
 import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
 import TorrentsActions from './Actions'
 import { torsColumns } from './columns'
-import Pagination from './Pagination'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable'),
@@ -32,9 +42,6 @@ export const torsColFiltersAtom = focusAtom(torrentsTableAtom, (optic) =>
 const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
   optic.prop('sorting'),
 )
-const torsPagiAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('pagination'),
-)
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -42,7 +49,6 @@ const Torrents = () => {
   const [columnVisibility, onColumnVisibilityChange] = useAtom(torsColVisiAtom)
   const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
   const [sorting, onSortingChange] = useAtom(torsSortAtom)
-  const [pagination, onPaginationChange] = useAtom(torsPagiAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
@@ -56,34 +62,95 @@ const Torrents = () => {
       columnVisibility,
       columnFilters,
       sorting,
-      pagination,
     },
     onColumnOrderChange,
     onColumnSizingChange,
     onColumnVisibilityChange,
     onColumnFiltersChange,
     onSortingChange,
-    onPaginationChange,
     autoResetPageIndex: false,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     // debugAll: true,
   })
 
+  const parentRef = React.useRef<HTMLDivElement>(null)
+  const { rows } = table.getRowModel()
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 34,
+    overscan: 20,
+    // debug: true,
+  })
   return (
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       <TorrentsActions />
-      <div className="flex-1 overflow-auto">
-        <DataTable<Torrent>
-          table={table}
-          colOrderAtom={torsColOrderAtom}
-          currRowAtom={currTorAtom}
-        />
+      <div ref={parentRef} className="flex-1 overflow-auto">
+        <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
+          {/* table */}
+          <Table style={{ width: table.getTotalSize() }}>
+            {/* thead */}
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                // tr
+                <TableRow key={headerGroup.id} className="">
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      // th
+                      <TableHead
+                        key={header.id}
+                        style={{ width: header.getSize() }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            {/* tbody */}
+            <TableBody>
+              {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
+                const row = rows[virtualRow.index]
+                return (
+                  // tr
+                  <TableRow
+                    key={row.id}
+                    className=""
+                    style={{
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${
+                        virtualRow.start - index * virtualRow.size
+                      }px)`,
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      // td
+                      <TableCell
+                        key={cell.id}
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-      <Pagination table={table} />
     </div>
   )
 }

@@ -24,7 +24,6 @@ export type TablesStorage = {
     columnVisibility: VisibilityState
     columnFilters: ColumnFiltersState
     sorting: SortingState
-    pagination: PaginationState
   }
   trackersTable: {
     columnOrder: ColumnOrderState
