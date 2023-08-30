@@ -21,7 +21,6 @@ const sortingFnWithField =
 const ch = createColumnHelper<Torrent>()
 
 export const torsColumns = [
-  selectColumnDef as ColumnDef<Torrent>,
   ch.accessor('name', {
     id: 'name',
     header: 'Name',

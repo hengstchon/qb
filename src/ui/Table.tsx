@@ -17,7 +17,11 @@ interface TableHeaderProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   ({ className, ...props }, ref) => (
-    <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
+    <thead
+      ref={ref}
+      className={cn('select-none [&_tr]:border-b', className)}
+      {...props}
+    />
   ),
 )
 TableHeader.displayName = 'TableHeader'
@@ -53,7 +57,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     <tr
       ref={ref}
       className={cn(
-        'flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+        'flex select-none border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
         className,
       )}
       {...props}

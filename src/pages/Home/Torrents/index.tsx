@@ -12,6 +12,7 @@ import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
+import { cn } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -78,6 +79,7 @@ const Torrents = () => {
 
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
+  console.log(rows.slice(0, 5))
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
@@ -85,6 +87,23 @@ const Torrents = () => {
     overscan: 20,
     // debug: true,
   })
+
+  function handleClickRow(
+    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    row: Row<Torrent>,
+  ) {
+    // console.log(e)
+    if (e.ctrlKey || e.metaKey) {
+      row.toggleSelected()
+    } else if (e.shiftKey) {
+      const selectedRows = table.getSelectedRowModel()
+      console.log(selectedRows)
+    } else {
+      table.resetRowSelection()
+      row.toggleSelected()
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       <TorrentsActions />
@@ -119,18 +138,19 @@ const Torrents = () => {
             {/* tbody */}
             <TableBody>
               {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-                const row = rows[virtualRow.index]
+                const row = rows[virtualRow.index] as Row<Torrent>
                 return (
                   // tr
                   <TableRow
                     key={row.id}
-                    className=""
+                    data-state={row.getIsSelected() && 'selected'}
                     style={{
                       height: `${virtualRow.size}px`,
                       transform: `translateY(${
                         virtualRow.start - index * virtualRow.size
                       }px)`,
                     }}
+                    onClick={(e) => handleClickRow(e, row)}
                   >
                     {row.getVisibleCells().map((cell) => (
                       // td
