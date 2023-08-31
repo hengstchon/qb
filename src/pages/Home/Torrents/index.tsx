@@ -5,6 +5,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   Row,
+  RowSelectionState,
   useReactTable,
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -79,7 +80,6 @@ const Torrents = () => {
 
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
-  console.log(rows.slice(0, 5))
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
@@ -92,12 +92,32 @@ const Torrents = () => {
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     row: Row<Torrent>,
   ) {
-    // console.log(e)
     if (e.ctrlKey || e.metaKey) {
       row.toggleSelected()
     } else if (e.shiftKey) {
-      const selectedRows = table.getSelectedRowModel()
-      console.log(selectedRows)
+      const selectedRowModel = table.getSelectedRowModel()
+      const selectedRows = selectedRowModel.rows
+      if (selectedRows.length < 1) {
+        row.toggleSelected()
+      } else if (selectedRows.length == 1) {
+        const selectedId = selectedRows[0].id
+        const selectedIndex = rows.findIndex((row) => row.id == selectedId)
+        const clickId = row.id
+        const clickIndex = rows.findIndex((row) => row.id == clickId)
+        const minIndex = Math.min(selectedIndex, clickIndex)
+        const maxIndex = Math.max(selectedIndex, clickIndex)
+        const newSelectionIndices = rows
+          .slice(minIndex, maxIndex + 1)
+          .map((row) => row.id)
+        const newSelection = newSelectionIndices.reduce((res, item) => {
+          res[item] = true
+          return res
+        }, {} as RowSelectionState)
+        table.setRowSelection(newSelection)
+      } else {
+        table.resetRowSelection()
+        row.toggleSelected()
+      }
     } else {
       table.resetRowSelection()
       row.toggleSelected()
