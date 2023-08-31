@@ -15,6 +15,11 @@ import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuTrigger,
+} from '@/ui/ContextMenu'
+import {
   Table,
   TableBody,
   TableCell,
@@ -160,31 +165,58 @@ const Torrents = () => {
               {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
                 const row = rows[virtualRow.index] as Row<Torrent>
                 return (
-                  // tr
-                  <TableRow
+                  <ContextMenu
                     key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                    style={{
-                      height: `${virtualRow.size}px`,
-                      transform: `translateY(${
-                        virtualRow.start - index * virtualRow.size
-                      }px)`,
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen) return
+                      // console.log(table.getSelectedRowModel().rows)
+                      const selectedRows = table.getSelectedRowModel().rows
+                      if (selectedRows.length) {
+                        const selectedIds = selectedRows.map((row) => row.id)
+                        const isCurRowInSelected = selectedIds.includes(row.id)
+                        if (!isCurRowInSelected) {
+                          table.resetRowSelection()
+                          row.toggleSelected()
+                        }
+                      } else {
+                        row.toggleSelected()
+                      }
                     }}
-                    onClick={(e) => handleClickRow(e, row)}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      // td
-                      <TableCell
-                        key={cell.id}
-                        style={{ width: cell.column.getSize() }}
+                    <ContextMenuTrigger asChild>
+                      {/* tr */}
+                      <TableRow
+                        data-state={row.getIsSelected() && 'selected'}
+                        style={{
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${
+                            virtualRow.start - index * virtualRow.size
+                          }px)`,
+                        }}
+                        onClick={(e) => handleClickRow(e, row)}
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                        {row.getVisibleCells().map((cell) => (
+                          // td
+                          <TableCell
+                            key={cell.id}
+                            style={{ width: cell.column.getSize() }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      {JSON.stringify(
+                        table
+                          .getSelectedRowModel()
+                          .rows.map((row) => row.original.name),
+                      )}
+                    </ContextMenuContent>
+                  </ContextMenu>
                 )
               })}
             </TableBody>
