@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {}
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, ...props }, ref) => (
-    <table
+    <div
       ref={ref}
       className={cn('w-full caption-bottom text-sm', className)}
       {...props}
@@ -17,7 +17,7 @@ interface TableHeaderProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   ({ className, ...props }, ref) => (
-    <thead
+    <div
       ref={ref}
       className={cn('select-none [&_tr]:border-b', className)}
       {...props}
@@ -30,7 +30,7 @@ interface TableBodyProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, ...props }, ref) => (
-    <tbody ref={ref} className={className} {...props} />
+    <div ref={ref} className={className} {...props} />
   ),
 )
 TableBody.displayName = 'TableBody'
@@ -39,7 +39,7 @@ interface TableBodyProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableFooter = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, ...props }, ref) => (
-    <tfoot
+    <div
       ref={ref}
       className={cn(
         'bg-primary font-medium text-primary-foreground',
@@ -54,7 +54,7 @@ TableFooter.displayName = 'TableFooter'
 interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {}
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, ...props }, ref) => (
-    <tr
+    <div
       ref={ref}
       className={cn(
         'flex select-none border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
@@ -69,7 +69,7 @@ TableRow.displayName = 'TableRow'
 interface TableHeadProps extends React.HTMLAttributes<HTMLTableCellElement> {}
 const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
   ({ className, ...props }, ref) => (
-    <th
+    <div
       ref={ref}
       className={cn(
         'h-8 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
@@ -84,7 +84,7 @@ TableHead.displayName = 'TableHead'
 interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {}
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
   ({ className, ...props }, ref) => (
-    <td
+    <div
       ref={ref}
       className={cn(
         'p-2 align-middle [&:has([role=checkbox])]:pr-0',
