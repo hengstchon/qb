@@ -7,6 +7,7 @@ declare module '@tanstack/react-table' {
 }
 
 export type SettingsStorage = {
+  themeMode: 'light' | 'dark'
   openDetails: boolean
   refreshInterval: number
   sidebarWidth: number

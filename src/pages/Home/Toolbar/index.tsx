@@ -9,9 +9,11 @@ import {
   Settings,
   SidebarClose,
   SidebarOpen,
+  Sun,
 } from 'lucide-react'
 import client from '@/api/client'
 import { API } from '@/api/endpoints'
+import { useTheme } from '@/hooks/useTheme'
 import { isAuthedAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import { Button } from '@/ui/Button'
@@ -29,9 +31,10 @@ const Toolbar = () => {
   const setIsAuthed = useSetAtom(isAuthedAtom)
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
+  const { isDark, toggleMode } = useTheme()
 
   return (
-    <div className="flex h-12 items-center justify-between bg-red-50 p-2">
+    <div className="flex h-12 items-center justify-between bg-secondary p-2">
       <div className="flex">
         <Button
           variant="ghost"
@@ -76,8 +79,14 @@ const Toolbar = () => {
           </SelectContent>
         </Select>
 
-        <Button variant="ghost" size="sm">
-          <Moon />
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            toggleMode()
+          }}
+        >
+          {isDark ? <Sun /> : <Moon />}
         </Button>
 
         <Button variant="ghost" size="sm">

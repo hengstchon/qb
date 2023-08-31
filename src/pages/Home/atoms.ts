@@ -17,7 +17,8 @@ import { torsColumns } from './Torrents/columns'
 
 export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
 
-const defaultSettings = {
+const defaultSettings: SettingsStorage = {
+  themeMode: 'light',
   openDetails: false,
   refreshInterval: 5000,
   sidebarWidth: 300,
@@ -110,3 +111,7 @@ export const getCurrHashAtom = atom((get) => {
   const torrents = get(getTorrentsAtom)
   return currTor === -1 ? null : torrents[currTor].hash
 })
+
+export const themeModeAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('themeMode'),
+)
