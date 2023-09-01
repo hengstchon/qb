@@ -135,9 +135,12 @@ const Torrents = () => {
       <div ref={parentRef} className="flex-1 overflow-auto rounded-md border">
         <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
           {/* table */}
-          <Table style={{ width: table.getTotalSize() }}>
+          <Table
+            className="relative h-full"
+            style={{ width: table.getTotalSize() }}
+          >
             {/* thead */}
-            <TableHeader className="select-none">
+            <TableHeader className="sticky top-0 z-10 select-none bg-background">
               {table.getHeaderGroups().map((headerGroup) => (
                 // tr
                 <TableRow key={headerGroup.id} className="select-none">
