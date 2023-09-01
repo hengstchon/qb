@@ -34,7 +34,7 @@ const Toolbar = () => {
   const { isDark, toggleMode } = useTheme()
 
   return (
-    <div className="flex h-12 items-center justify-between bg-secondary p-2">
+    <div className="flex h-12 items-center justify-between bg-background p-2">
       <div className="flex">
         <Button
           variant="ghost"

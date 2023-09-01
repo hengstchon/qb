@@ -88,7 +88,7 @@ const Torrents = () => {
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 34,
+    estimateSize: () => 36,
     overscan: 20,
     // debug: true,
   })
@@ -132,15 +132,15 @@ const Torrents = () => {
   return (
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       <TorrentsActions />
-      <div ref={parentRef} className="flex-1 overflow-auto">
+      <div ref={parentRef} className="flex-1 overflow-auto rounded-md border">
         <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
           {/* table */}
           <Table style={{ width: table.getTotalSize() }}>
             {/* thead */}
-            <TableHeader>
+            <TableHeader className="select-none">
               {table.getHeaderGroups().map((headerGroup) => (
                 // tr
-                <TableRow key={headerGroup.id} className="">
+                <TableRow key={headerGroup.id} className="select-none">
                   {headerGroup.headers.map((header) => {
                     return (
                       // th

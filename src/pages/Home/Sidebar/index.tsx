@@ -18,11 +18,7 @@ const Sidebar = () => {
 
   return (
     <div className="relative flex flex-none" style={{ width: width + 'px' }}>
-      <div
-        className={
-          'flex h-full w-full flex-col gap-2 overflow-y-auto bg-blue-50 p-4'
-        }
-      >
+      <div className={'flex h-full w-full flex-col gap-2 overflow-y-auto p-4'}>
         <Status />
         <Categories />
         <Tags />
@@ -30,7 +26,7 @@ const Sidebar = () => {
       </div>
 
       <div
-        className="absolute right-0 h-full w-1 bg-gray-100 hover:cursor-col-resize hover:bg-gray-500"
+        className="absolute right-0 h-full w-1 bg-border hover:cursor-col-resize hover:bg-primary/50"
         ref={dragRef}
         {...attributes}
         {...listeners}

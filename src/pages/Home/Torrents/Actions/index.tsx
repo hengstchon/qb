@@ -33,7 +33,7 @@ import SetTags from './SetTags'
 
 function TorrentsActions() {
   return (
-    <div className="flex h-8 items-center border px-2">
+    <div className="flex h-8 items-center rounded-md border px-2">
       <TooltipProvider delayDuration={300}>
         {/* resume */}
         <Tooltip>

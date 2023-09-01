@@ -28,7 +28,7 @@ const Details = () => {
 
   return (
     <Tabs
-      className={cn('flex flex-col bg-pink-50', openDetails && 'h-96')}
+      className={cn('flex flex-col', openDetails && 'h-96')}
       defaultValue={tabs[2].name}
     >
       <TabsList className="flex justify-between">

@@ -1,8 +1,9 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
 
-interface TableProps extends React.HTMLAttributes<HTMLTableElement> {}
-const Table = React.forwardRef<HTMLTableElement, TableProps>(
+interface DivProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Table = React.forwardRef<HTMLDivElement, DivProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
@@ -17,11 +18,7 @@ interface TableHeaderProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('select-none [&_tr]:border-b', className)}
-      {...props}
-    />
+    <div ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
   ),
 )
 TableHeader.displayName = 'TableHeader'
@@ -30,7 +27,11 @@ interface TableBodyProps
   extends React.HTMLAttributes<HTMLTableSectionElement> {}
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={className} {...props} />
+    <div
+      ref={ref}
+      className={cn('[&_tr:last-child]:border-0', className)}
+      {...props}
+    />
   ),
 )
 TableBody.displayName = 'TableBody'
@@ -57,7 +58,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     <div
       ref={ref}
       className={cn(
-        'flex select-none border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+        'flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
         className,
       )}
       {...props}
@@ -72,7 +73,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <div
       ref={ref}
       className={cn(
-        'h-8 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
+        'flex h-8 items-center px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
         className,
       )}
       {...props}
