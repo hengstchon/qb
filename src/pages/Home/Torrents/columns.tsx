@@ -1,4 +1,16 @@
-import { ColumnDef, createColumnHelper, SortingFn } from '@tanstack/react-table'
+import {
+  Column,
+  ColumnDef,
+  createColumnHelper,
+  SortingFn,
+} from '@tanstack/react-table'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronsUpDownIcon,
+  MoveDownIcon,
+  MoveUpIcon,
+} from 'lucide-react'
 import { selectColumnDef } from '@/components/DataTable/selectColumn'
 import { MAX_ETA } from '@/lib/constants'
 import { Torrent } from '@/lib/types'
@@ -9,6 +21,7 @@ import {
   formatSpeed,
   formatTimestamp,
 } from '@/lib/utils'
+import { Button } from '@/ui/Button'
 
 const sortingFnWithField =
   <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
@@ -20,10 +33,56 @@ const sortingFnWithField =
 
 const ch = createColumnHelper<Torrent>()
 
+// <div
+//   className={cn(
+//     'flex cursor-pointer select-none items-center justify-center gap-1 px-1 text-sm font-semibold',
+//     className
+//   )}
+//   onClick={header.column.getToggleSortingHandler()}
+// >
+//   <div className="flex items-center truncate">
+//     {flexRender(header.column.columnDef.header, header.getContext())}
+//   </div>
+//   {{
+//     asc: <ArrowUpIcon className="h-4 w-4 flex-none" />,
+//     desc: <ArrowDownIcon className="h-4 w-4 flex-none" />,
+//   }[header.column.getIsSorted() as string] ?? null}
+// </div>
+
+interface TableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>
+  title: string
+}
+
+function TableColumnHeader<TData, TValue>({
+  column,
+  title,
+}: TableColumnHeaderProps<TData, TValue>) {
+  if (!column.getCanSort()) {
+    return <div className="">{title}</div>
+  }
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="-ml-3 h-6 data-[state=open]:bg-accent"
+      onClick={column.getToggleSortingHandler()}
+    >
+      <span>{title}</span>
+      {column.getIsSorted() === 'desc' ? (
+        <MoveDownIcon className="ml-1 h-3 w-3" />
+      ) : column.getIsSorted() === 'asc' ? (
+        <MoveUpIcon className="ml-1 h-3 w-3" />
+      ) : null}
+    </Button>
+  )
+}
+
 export const torsColumns = [
   ch.accessor('name', {
     id: 'name',
-    header: 'Name',
+    header: ({ column }) => <TableColumnHeader column={column} title="Name" />,
     cell: (p) => (
       <div className="truncate" style={{ width: p.column.getSize() - 16 }}>
         {p.getValue()}
@@ -36,31 +95,37 @@ export const torsColumns = [
   }),
   ch.accessor('size', {
     id: 'size',
-    header: 'Size',
+    header: ({ column }) => <TableColumnHeader column={column} title="Size" />,
     cell: (p) => <div className="w-[100px]">{formatBytes(p.getValue())}</div>,
     size: 120,
   }),
   ch.accessor('total_size', {
     id: 'total_size',
-    header: () => <div className="min-w-[90px]">Total Size</div>,
+    header: ({ column }) => (
+      <TableColumnHeader column={column} title="Total Size" />
+    ),
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('progress', {
     id: 'progress',
-    header: 'Done',
+    header: ({ column }) => <TableColumnHeader column={column} title="Done" />,
     cell: (p) => formatPercentage(p.getValue()),
     size: 120,
   }),
   ch.accessor('downloaded', {
     id: 'downloaded',
-    header: 'Downloaded',
+    header: ({ column }) => (
+      <TableColumnHeader column={column} title="Downloaded" />
+    ),
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
   ch.accessor('uploaded', {
     id: 'uploaded',
-    header: 'Uploaded',
+    header: ({ column }) => (
+      <TableColumnHeader column={column} title="Uploaded" />
+    ),
     cell: (p) => formatBytes(p.getValue()),
     size: 120,
   }),
