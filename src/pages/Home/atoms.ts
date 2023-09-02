@@ -69,6 +69,8 @@ export const refreshIntervalAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('refreshInterval'),
 )
 
+export const isHeaderEditingAtom = atom(false)
+
 export const torrentsAtom = atom<Torrents>({})
 export const getTorrentsAtom = atom((get) =>
   Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash })),
