@@ -5,14 +5,15 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  Header,
   Row,
   RowSelectionState,
   useReactTable,
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from 'lucide-react'
 import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -30,7 +31,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
-import { currTorAtom, getTorrentsAtom, tablesAtom } from '../atoms'
+import {
+  currTorAtom,
+  getTorrentsAtom,
+  isHeaderEditingAtom,
+  tablesAtom,
+} from '../atoms'
 import TorrentsActions from './Actions'
 import { torsColumns } from './columns'
 
@@ -55,14 +61,30 @@ const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
 
 interface TableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>
   title: string
+  header: Header<TData, TValue>
 }
 
 function TableColumnHeader<TData, TValue>({
-  column,
   title,
+  header,
 }: TableColumnHeaderProps<TData, TValue>) {
+  const column = header.column
+  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
+
+  if (isHeaderEditing) {
+    return (
+      <div className="relative flex h-full w-full items-center px-1">
+        <GripVerticalIcon className="h-4 w-4 cursor-move" />
+        {title}
+        <div
+          onMouseDown={header.getResizeHandler()}
+          className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
+        ></div>
+      </div>
+    )
+  }
+
   if (!column.getCanSort()) {
     return <div className="">{title}</div>
   }
@@ -89,6 +111,8 @@ const Torrents = () => {
   const [columnVisibility, onColumnVisibilityChange] = useAtom(torsColVisiAtom)
   const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
   const [sorting, onSortingChange] = useAtom(torsSortAtom)
+
+  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
@@ -183,10 +207,11 @@ const Torrents = () => {
                       <TableHead
                         key={header.id}
                         style={{ width: header.getSize() }}
+                        className={isHeaderEditing ? 'px-0' : ''}
                       >
                         {header.isPlaceholder ? null : (
                           <TableColumnHeader
-                            column={header.column}
+                            header={header}
                             title={
                               flexRender(
                                 header.column.columnDef.header,

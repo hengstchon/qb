@@ -7,10 +7,10 @@ import {
   Moon,
   Rss,
   Settings,
+  Settings2Icon,
   SidebarClose,
   SidebarOpen,
   Sun,
-  WrenchIcon,
 } from 'lucide-react'
 import client from '@/api/client'
 import { API } from '@/api/endpoints'
@@ -104,7 +104,7 @@ const Toolbar = () => {
           size="sm"
           onClick={() => setIsHeaderEditing(!isHeaderEditing)}
         >
-          <WrenchIcon />
+          <Settings2Icon />
         </Button>
 
         <Button variant="ghost" size="sm">
