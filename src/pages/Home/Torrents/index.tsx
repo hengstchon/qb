@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Column,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -11,9 +12,11 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
+import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { Button } from '@/ui/Button'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -49,6 +52,36 @@ export const torsColFiltersAtom = focusAtom(torrentsTableAtom, (optic) =>
 const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
   optic.prop('sorting'),
 )
+
+interface TableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>
+  title: string
+}
+
+function TableColumnHeader<TData, TValue>({
+  column,
+  title,
+}: TableColumnHeaderProps<TData, TValue>) {
+  if (!column.getCanSort()) {
+    return <div className="">{title}</div>
+  }
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="-ml-2 h-6 px-2 data-[state=open]:bg-accent"
+      onClick={column.getToggleSortingHandler()}
+    >
+      <span>{title}</span>
+      {column.getIsSorted() === 'desc' ? (
+        <ArrowDownIcon className="ml-1 h-4 w-4" />
+      ) : column.getIsSorted() === 'asc' ? (
+        <ArrowUpIcon className="ml-1 h-4 w-4" />
+      ) : null}
+    </Button>
+  )
+}
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -151,12 +184,17 @@ const Torrents = () => {
                         key={header.id}
                         style={{ width: header.getSize() }}
                       >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
+                        {header.isPlaceholder ? null : (
+                          <TableColumnHeader
+                            column={header.column}
+                            title={
+                              flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              ) as string
+                            }
+                          />
+                        )}
                       </TableHead>
                     )
                   })}

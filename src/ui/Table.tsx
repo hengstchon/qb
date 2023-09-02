@@ -58,7 +58,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     <div
       ref={ref}
       className={cn(
-        'flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+        'flex select-none truncate border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
         className,
       )}
       {...props}
