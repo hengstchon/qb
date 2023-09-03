@@ -8,6 +8,7 @@ import {
   Header,
   Row,
   RowSelectionState,
+  Table as TableType,
   useReactTable,
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -105,14 +106,47 @@ function TableColumnHeader<TData, TValue>({
   )
 }
 
+function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
+  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
+  return (
+    <TableHeader className="sticky top-0 z-10 select-none bg-background">
+      {table.getHeaderGroups().map((headerGroup) => (
+        // tr
+        <TableRow key={headerGroup.id} className="select-none">
+          {headerGroup.headers.map((header) => {
+            return (
+              // th
+              <TableHead
+                key={header.id}
+                style={{ width: header.getSize() }}
+                className={isHeaderEditing ? 'px-0' : ''}
+              >
+                {header.isPlaceholder ? null : (
+                  <TableColumnHeader
+                    header={header}
+                    title={
+                      flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      ) as string
+                    }
+                  />
+                )}
+              </TableHead>
+            )
+          })}
+        </TableRow>
+      ))}
+    </TableHeader>
+  )
+}
+
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(torsColSizingAtom)
   const [columnVisibility, onColumnVisibilityChange] = useAtom(torsColVisiAtom)
   const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
   const [sorting, onSortingChange] = useAtom(torsSortAtom)
-
-  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
 
   const [torrents] = useAtom(getTorrentsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
@@ -197,35 +231,7 @@ const Torrents = () => {
             style={{ width: table.getTotalSize() }}
           >
             {/* thead */}
-            <TableHeader className="sticky top-0 z-10 select-none bg-background">
-              {table.getHeaderGroups().map((headerGroup) => (
-                // tr
-                <TableRow key={headerGroup.id} className="select-none">
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      // th
-                      <TableHead
-                        key={header.id}
-                        style={{ width: header.getSize() }}
-                        className={isHeaderEditing ? 'px-0' : ''}
-                      >
-                        {header.isPlaceholder ? null : (
-                          <TableColumnHeader
-                            header={header}
-                            title={
-                              flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              ) as string
-                            }
-                          />
-                        )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
+            <TorrentsTableHeader table={table} />
             {/* tbody */}
             <TableBody>
               {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
