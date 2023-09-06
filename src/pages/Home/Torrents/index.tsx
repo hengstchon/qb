@@ -66,48 +66,48 @@ interface TableColumnHeaderProps<TData, TValue>
   header: Header<TData, TValue>
 }
 
-function TableColumnHeader<TData, TValue>({
-  title,
-  header,
-}: TableColumnHeaderProps<TData, TValue>) {
-  const column = header.column
-  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
-
-  if (isHeaderEditing) {
-    return (
-      <div className="relative flex h-full w-full items-center px-1">
-        <GripVerticalIcon className="h-4 w-4 cursor-move" />
-        {title}
-        <div
-          onMouseDown={header.getResizeHandler()}
-          className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
-        ></div>
-      </div>
-    )
-  }
-
-  if (!column.getCanSort()) {
-    return <div className="">{title}</div>
-  }
+function NormalTableHeader({ table }: { table: TableType<Torrent> }) {
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="-ml-2 h-6 px-2 data-[state=open]:bg-accent"
-      onClick={column.getToggleSortingHandler()}
-    >
-      <span>{title}</span>
-      {column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon className="ml-1 h-4 w-4" />
-      ) : column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon className="ml-1 h-4 w-4" />
-      ) : null}
-    </Button>
+    <TableHeader className="sticky top-0 z-10 select-none bg-background">
+      {table.getHeaderGroups().map((headerGroup) => (
+        // tr
+        <TableRow key={headerGroup.id} className="select-none">
+          {headerGroup.headers.map((header) => {
+            const column = header.column
+            return (
+              // th
+              <TableHead key={header.id} style={{ width: header.getSize() }}>
+                {header.isPlaceholder ? null : (
+                  <Button
+                    key={header.id}
+                    variant="ghost"
+                    size="sm"
+                    className="-ml-2 h-6 px-2 data-[state=open]:bg-accent"
+                    onClick={column.getToggleSortingHandler()}
+                  >
+                    <span>
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                    </span>
+                    {column.getIsSorted() === 'desc' ? (
+                      <ArrowDownIcon className="ml-1 h-4 w-4" />
+                    ) : column.getIsSorted() === 'asc' ? (
+                      <ArrowUpIcon className="ml-1 h-4 w-4" />
+                    ) : null}
+                  </Button>
+                )}
+              </TableHead>
+            )
+          })}
+        </TableRow>
+      ))}
+    </TableHeader>
   )
 }
 
-function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
-  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
+function EditTableHeader({ table }: { table: TableType<Torrent> }) {
   return (
     <TableHeader className="sticky top-0 z-10 select-none bg-background">
       {table.getHeaderGroups().map((headerGroup) => (
@@ -118,19 +118,21 @@ function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
               // th
               <TableHead
                 key={header.id}
+                className="px-0"
                 style={{ width: header.getSize() }}
-                className={isHeaderEditing ? 'px-0' : ''}
               >
                 {header.isPlaceholder ? null : (
-                  <TableColumnHeader
-                    header={header}
-                    title={
-                      flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      ) as string
-                    }
-                  />
+                  <div className="relative flex h-full w-full items-center px-1">
+                    <GripVerticalIcon className="h-4 w-4 cursor-move" />
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                    <div
+                      onMouseDown={header.getResizeHandler()}
+                      className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
+                    />
+                  </div>
                 )}
               </TableHead>
             )
@@ -138,6 +140,15 @@ function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
         </TableRow>
       ))}
     </TableHeader>
+  )
+}
+
+function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
+  const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
+  return isHeaderEditing ? (
+    <EditTableHeader table={table} />
+  ) : (
+    <NormalTableHeader table={table} />
   )
 }
 
