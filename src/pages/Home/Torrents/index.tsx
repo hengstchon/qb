@@ -1,4 +1,5 @@
 import React from 'react'
+import { DndContext, pointerWithin } from '@dnd-kit/core'
 import {
   Column,
   flexRender,
@@ -107,39 +108,45 @@ function NormalTableHeader({ table }: { table: TableType<Torrent> }) {
   )
 }
 
+function TableHeaderDndContext({ children }: { children: JSX.Element }) {
+  return <DndContext collisionDetection={pointerWithin}>{children}</DndContext>
+}
+
 function EditTableHeader({ table }: { table: TableType<Torrent> }) {
   return (
-    <TableHeader className="sticky top-0 z-10 select-none bg-background">
-      {table.getHeaderGroups().map((headerGroup) => (
-        // tr
-        <TableRow key={headerGroup.id} className="select-none">
-          {headerGroup.headers.map((header) => {
-            return (
-              // th
-              <TableHead
-                key={header.id}
-                className="px-0"
-                style={{ width: header.getSize() }}
-              >
-                {header.isPlaceholder ? null : (
-                  <div className="relative flex h-full w-full items-center px-1">
-                    <GripVerticalIcon className="h-4 w-4 cursor-move" />
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    <div
-                      onMouseDown={header.getResizeHandler()}
-                      className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
-                    />
-                  </div>
-                )}
-              </TableHead>
-            )
-          })}
-        </TableRow>
-      ))}
-    </TableHeader>
+    <TableHeaderDndContext>
+      <TableHeader className="sticky top-0 z-10 select-none bg-background">
+        {table.getHeaderGroups().map((headerGroup) => (
+          // tr
+          <TableRow key={headerGroup.id} className="select-none">
+            {headerGroup.headers.map((header) => {
+              return (
+                // th
+                <TableHead
+                  key={header.id}
+                  className="px-0"
+                  style={{ width: header.getSize() }}
+                >
+                  {header.isPlaceholder ? null : (
+                    <div className="relative flex h-full w-full items-center px-1">
+                      <GripVerticalIcon className="h-4 w-4 cursor-move" />
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                      <div
+                        onMouseDown={header.getResizeHandler()}
+                        className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
+                      />
+                    </div>
+                  )}
+                </TableHead>
+              )
+            })}
+          </TableRow>
+        ))}
+      </TableHeader>
+    </TableHeaderDndContext>
   )
 }
 
