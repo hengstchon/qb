@@ -7,7 +7,6 @@ import {
   Moon,
   Rss,
   Settings,
-  Settings2Icon,
   SidebarClose,
   SidebarOpen,
   Sun,
@@ -15,11 +14,7 @@ import {
 import client from '@/api/client'
 import { API } from '@/api/endpoints'
 import { useTheme } from '@/hooks/useTheme'
-import {
-  isAuthedAtom,
-  isHeaderEditingAtom,
-  refreshIntervalAtom,
-} from '@/pages/Home/atoms'
+import { isAuthedAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
 import { openSidebarAtom } from '@/pages/Home/Sidebar/atoms'
 import { Button } from '@/ui/Button'
 import {
@@ -29,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/Select'
-import { AddTorrent } from './AddTorrent'
 import FilterInput from './FilterInput'
 
 const Toolbar = () => {
@@ -37,7 +31,6 @@ const Toolbar = () => {
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
   const { isDark, toggleMode } = useTheme()
-  const [isHeaderEditing, setIsHeaderEditing] = useAtom(isHeaderEditingAtom)
 
   return (
     <div className="flex h-12 items-center justify-between bg-background p-2">
@@ -61,8 +54,6 @@ const Toolbar = () => {
         <Button variant="ghost" size="sm">
           <Rss />
         </Button>
-
-        <AddTorrent />
       </div>
 
       <FilterInput />
@@ -97,14 +88,6 @@ const Toolbar = () => {
 
         <Button variant="ghost" size="sm">
           <Languages />
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsHeaderEditing(!isHeaderEditing)}
-        >
-          <Settings2Icon />
         </Button>
 
         <Button variant="ghost" size="sm">

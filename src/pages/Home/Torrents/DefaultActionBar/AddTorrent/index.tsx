@@ -178,8 +178,9 @@ export function AddTorrent() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <PlusCircleIcon className="h-6 w-6" />
+        <Button variant="outline" size="sm">
+          <PlusCircleIcon className="mr-2 h-4 w-4" />
+          Add Torrents
         </Button>
       </DialogTrigger>
 
