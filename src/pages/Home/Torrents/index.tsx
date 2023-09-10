@@ -7,7 +7,6 @@ import {
   useDroppable,
 } from '@dnd-kit/core'
 import {
-  Column,
   ColumnOrderState,
   flexRender,
   getCoreRowModel,
@@ -23,7 +22,6 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAtom, useAtomValue } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from 'lucide-react'
-import DataTable from '@/components/DataTable'
 import { Torrent } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/ui/Button'
@@ -40,14 +38,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
-import {
-  currTorAtom,
-  getTorrentsAtom,
-  isHeaderEditingAtom,
-  tablesAtom,
-} from '../atoms'
-import TorrentsActions from './Actions'
+import { getTorrentsAtom, isHeaderEditingAtom, tablesAtom } from '../atoms'
 import { torsColumns } from './columns'
+import DefaultActionBar from './DefaultActionBar'
+import RowsSelectedActionBar from './RowsSelectedActionBar'
 
 const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable'),
@@ -67,12 +61,6 @@ export const torsColFiltersAtom = focusAtom(torrentsTableAtom, (optic) =>
 const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
   optic.prop('sorting'),
 )
-
-interface TableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  title: string
-  header: Header<TData, TValue>
-}
 
 function NormalTableHeader({ table }: { table: TableType<Torrent> }) {
   return (
@@ -260,6 +248,8 @@ const Torrents = () => {
     // debugAll: true,
   })
 
+  const isSomeRowsSelected = table.getIsSomeRowsSelected()
+
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
   const rowVirtualizer = useVirtualizer({
@@ -308,7 +298,9 @@ const Torrents = () => {
 
   return (
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
-      <TorrentsActions />
+      {/* Action Bar */}
+      {isSomeRowsSelected ? <DefaultActionBar /> : <RowsSelectedActionBar />}
+
       <div ref={parentRef} className="flex-1 overflow-auto rounded-md border">
         <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
           {/* table */}

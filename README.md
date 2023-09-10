@@ -11,64 +11,67 @@ Customization of headers:
 - Sorting(asc, desc, and none)
 - Row Selection
 
-
-
 ## Design
 
 ### Toolbar
 
 - left
-    - open sidebar
-    - add torrent
-    - settings
+  - open/close sidebar
+  - settings
+  - rss
 - right
-    - theme
-    - lang
-    - logout
-    - about
-    - refresh time
+  - refresh time
+  - theme
+  - lang
+  - about
+  - logout
 
-### Torrents table actions
+### Action bar
+
+#### all torrents actions
 
 - add torrents
+- resume all
+- pause all
+- adjust torrents table header
+
+#### some torrents actions
 
 - single torrent
-    - rename (in General tab?)
+  - rename (in General tab?)
 - multiple torrents
-    - (main btn)resume torrents
-    - (main btn)pause torrents
-    - (main btn)delete torrents
 
-    Popover:
-    - (btn)force resume torrents
-    - (btn)force recheck
-    - (btn)force reannounce
-    - (btn)copy
-        - name
-        - hash
-        - magnet link
-    - (input)set location
-    - (input)limit download rate
-    - (input)limit upload rate
-    - (input)limit share ratio
-    - (select)category
-        - new
-        - reset
-        - select category
-    - (multi select)tags
-        - add
-        - remove all
-        - select tags
-    - (switch)autoTMM
-    - (switch)super seeding mode(only in seeding status)
-    - (switch)download in sequential order
-    - (switch)download first and last pieces first
+  - (main btn)resume torrents
+  - (main btn)pause torrents
+  - (main btn)delete torrents
 
+  Popover:
+
+  - (btn)force resume torrents
+  - (btn)force recheck
+  - (btn)force reannounce
+  - (btn)copy
+    - name
+    - hash
+    - magnet link
+  - (input)set location
+  - (input)limit download rate
+  - (input)limit upload rate
+  - (input)limit share ratio
+  - (select)category
+    - new
+    - reset
+    - select category
+  - (multi select)tags
+    - add
+    - remove all
+    - select tags
+  - (switch)autoTMM
+  - (switch)super seeding mode(only in seeding status)
+  - (switch)download in sequential order
+  - (switch)download first and last pieces first
 
 ### Torrents table
-
-
-
 
 ## Development
 
