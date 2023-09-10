@@ -1,7 +1,14 @@
 import React from 'react'
-import { DndContext, pointerWithin } from '@dnd-kit/core'
+import {
+  DndContext,
+  DragEndEvent,
+  pointerWithin,
+  useDraggable,
+  useDroppable,
+} from '@dnd-kit/core'
 import {
   Column,
+  ColumnOrderState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -109,7 +116,88 @@ function NormalTableHeader({ table }: { table: TableType<Torrent> }) {
 }
 
 function TableHeaderDndContext({ children }: { children: JSX.Element }) {
-  return <DndContext collisionDetection={pointerWithin}>{children}</DndContext>
+  const [columnOrder, setColumnOrder] = useAtom(torsColOrderAtom)
+
+  const reorderColumn = (
+    draggedColumnId: string,
+    targetColumnId: string,
+    columnOrder: string[],
+  ): ColumnOrderState => {
+    columnOrder.splice(
+      columnOrder.indexOf(targetColumnId),
+      0,
+      columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string,
+    )
+    return [...columnOrder]
+  }
+
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const activeId = active.id
+    const overId = over?.id
+    if (!overId || activeId === overId) return
+
+    setColumnOrder(
+      reorderColumn(
+        activeId as string,
+        overId as string,
+        columnOrder as string[],
+      ),
+    )
+  }
+
+  return (
+    <DndContext collisionDetection={pointerWithin} onDragEnd={handleDragEnd}>
+      {children}
+    </DndContext>
+  )
+}
+
+function EditTableColumnHeader({
+  header,
+}: {
+  header: Header<Torrent, string>
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef: dragRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: header.id,
+  })
+
+  const { isOver, setNodeRef: dropRef } = useDroppable({
+    id: header.id,
+  })
+
+  return (
+    <TableHead
+      ref={dropRef}
+      className={cn(
+        'relative px-0',
+        isDragging && 'opacity-50',
+        isOver && !isDragging && 'border border-primary',
+      )}
+      style={{
+        width: header.getSize(),
+        transform: transform
+          ? `translate3d(${transform.x}px, 0, 0)`
+          : undefined,
+      }}
+    >
+      <div ref={dragRef} {...listeners} {...attributes}>
+        <GripVerticalIcon className="h-4 w-4 cursor-move" />
+      </div>
+      {flexRender(header.column.columnDef.header, header.getContext())}
+      {!isDragging && !isOver && (
+        <div
+          onMouseDown={header.getResizeHandler()}
+          className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
+        />
+      )}
+    </TableHead>
+  )
 }
 
 function EditTableHeader({ table }: { table: TableType<Torrent> }) {
@@ -120,28 +208,8 @@ function EditTableHeader({ table }: { table: TableType<Torrent> }) {
           // tr
           <TableRow key={headerGroup.id} className="select-none">
             {headerGroup.headers.map((header) => {
-              return (
-                // th
-                <TableHead
-                  key={header.id}
-                  className="px-0"
-                  style={{ width: header.getSize() }}
-                >
-                  {header.isPlaceholder ? null : (
-                    <div className="relative flex h-full w-full items-center px-1">
-                      <GripVerticalIcon className="h-4 w-4 cursor-move" />
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      <div
-                        onMouseDown={header.getResizeHandler()}
-                        className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
-                      />
-                    </div>
-                  )}
-                </TableHead>
-              )
+              // th
+              return <EditTableColumnHeader key={header.id} header={header} />
             })}
           </TableRow>
         ))}
