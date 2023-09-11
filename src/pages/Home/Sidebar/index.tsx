@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useAtom } from 'jotai'
+import { ScrollArea } from '@/ui/ScrollArea'
 import { sidebarWidthAtom } from './atoms'
 import Categories from './Categories'
 import Status from './Status'
@@ -18,12 +19,14 @@ const Sidebar = () => {
 
   return (
     <div className="relative flex flex-none" style={{ width: width + 'px' }}>
-      <div className={'flex h-full w-full flex-col gap-2 overflow-y-auto p-4'}>
+      <ScrollArea className="h-full px-1">
+        {/* <div className={'flex h-full w-full flex-col gap-2 p-4'}> */}
         <Status />
         <Categories />
         <Tags />
         <Trackers />
-      </div>
+        {/* </div> */}
+      </ScrollArea>
 
       <div
         className="absolute right-0 h-full w-1 bg-border hover:cursor-col-resize hover:bg-primary/50"

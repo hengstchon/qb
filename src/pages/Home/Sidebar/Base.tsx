@@ -6,20 +6,6 @@ import {
   CollapsibleTrigger,
 } from '@/ui/Collapsible'
 
-const Item = ({ children }: { children: JSX.Element[] }) => {
-  return (
-    <li>
-      <Button
-        className="flex h-8 w-full justify-between rounded-md px-2 py-[2px] hover:bg-accent hover:text-accent-foreground"
-        variant="ghost"
-        size="sm"
-      >
-        {children}
-      </Button>
-    </li>
-  )
-}
-
 type Props = {
   title: string
   open: boolean
@@ -35,22 +21,22 @@ export const BaseCollapsible = ({
   itemList,
   getNum,
 }: Props) => (
-  <div className="rounded-md border">
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="group flex w-full items-center justify-between gap-1 px-2">
-        <span>{title}</span>
-        <ChevronDownIcon className="h-5 w-5 transform duration-300 ease-in-out group-data-[state=closed]:rotate-90" />
-      </CollapsibleTrigger>
-      <CollapsibleContent>
-        <ul className="flex flex-col p-2 text-sm">
-          {itemList.map((item) => (
-            <Item key={item}>
-              <span className="truncate">{item}</span>
-              <span>({getNum(item)})</span>
-            </Item>
-          ))}
-        </ul>
-      </CollapsibleContent>
-    </Collapsible>
-  </div>
+  <Collapsible open={open} onOpenChange={setOpen}>
+    <CollapsibleTrigger className="group flex w-full items-center justify-between gap-1 px-4 py-2">
+      <h2 className="font-semibold">{title}</h2>
+      <ChevronDownIcon className="h-5 w-5 transform duration-300 ease-in-out group-data-[state=closed]:rotate-90" />
+    </CollapsibleTrigger>
+    <CollapsibleContent>
+      {itemList.map((item) => (
+        <Button
+          key={item}
+          variant="ghost"
+          className="flex h-8 w-full justify-between font-normal"
+        >
+          <span className="truncate">{item}</span>
+          <span>({getNum(item)})</span>
+        </Button>
+      ))}
+    </CollapsibleContent>
+  </Collapsible>
 )
