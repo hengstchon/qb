@@ -4,9 +4,6 @@ import { settingsAtom } from '../atoms'
 export const openSidebarAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('openSidebar'),
 )
-export const sidebarWidthAtom = focusAtom(settingsAtom, (optic) =>
-  optic.prop('sidebarWidth'),
-)
 export const openSideStatusAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('openSidebarStatus'),
 )

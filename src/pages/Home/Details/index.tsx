@@ -31,7 +31,7 @@ const Details = () => {
       className={cn('flex flex-col', openDetails && 'h-96')}
       defaultValue={tabs[2].name}
     >
-      <TabsList className="flex justify-between">
+      <TabsList className="flex justify-between rounded-b-none">
         <div>
           {tabs.map(({ name }) => (
             <TabsTrigger key={name} value={name}>

@@ -14,7 +14,7 @@ const StatusBar = () => {
   } = serverState
 
   return (
-    <div className="flex h-8 items-center justify-end gap-8 px-2 text-sm">
+    <div className="flex h-8 items-center justify-end gap-8 border-t px-2 text-sm">
       <span>Free space: {formatBytes(free_space_on_disk)}</span>
       <span className="flex items-center gap-1">
         <ArrowDownCircleIcon className="h-4 w-4" />
