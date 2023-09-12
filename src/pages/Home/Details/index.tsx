@@ -28,7 +28,7 @@ const Details = () => {
 
   return (
     <Tabs
-      className={cn('flex flex-col', openDetails && 'h-96')}
+      className={cn('flex flex-col px-4', openDetails && 'h-96')}
       defaultValue={tabs[2].name}
     >
       <TabsList className="flex justify-between rounded-b-none">
@@ -53,7 +53,7 @@ const Details = () => {
           <TabsContent
             key={name}
             value={name}
-            className="flex-1 overflow-auto px-2"
+            className="mt-0 flex-1 overflow-auto border-l border-r px-2"
           >
             {content}
           </TabsContent>
