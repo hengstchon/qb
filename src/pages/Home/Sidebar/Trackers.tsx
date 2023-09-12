@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { torrentsAtom, trackersAtom } from '../atoms'
 import { openSideTrackersAtom } from './atoms'
-import { BaseCollapsible } from './Base'
+import { List, ListItem } from './BaseList'
 
 const Trackers = () => {
   const [openTrackers, setOpenTrackers] = useAtom(openSideTrackersAtom)
@@ -19,14 +19,19 @@ const Trackers = () => {
     }
   }
 
+  const trackersList = ['All', 'Trackerless', ...Object.keys(trackers)]
+
   return (
-    <BaseCollapsible
-      title="Trackers"
-      open={openTrackers}
-      setOpen={setOpenTrackers}
-      itemList={['All', 'Trackerless', ...Object.keys(trackers)]}
-      getNum={getNumByTracker}
-    />
+    <List title="Trackers" open={openTrackers} setOpen={setOpenTrackers}>
+      {trackersList.map((tracker) => {
+        return (
+          <ListItem key={tracker}>
+            <span className="truncate">{tracker}</span>
+            <span>({getNumByTracker(tracker)})</span>
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }
 

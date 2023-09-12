@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { categoriesAtom, torrentsAtom } from '../atoms'
 import { openSideCatAtom } from './atoms'
-import { BaseCollapsible } from './Base'
+import { List, ListItem } from './BaseList'
 
 const Categories = () => {
   const [openCategories, setOpenCategories] = useAtom(openSideCatAtom)
@@ -19,14 +19,19 @@ const Categories = () => {
     }
   }
 
+  const categoriesList = ['All', 'Uncategorized', ...Object.keys(categories)]
+
   return (
-    <BaseCollapsible
-      title="Categories"
-      open={openCategories}
-      setOpen={setOpenCategories}
-      itemList={['All', 'Uncategorized', ...Object.keys(categories)]}
-      getNum={getNumByCategory}
-    />
+    <List title="Categories" open={openCategories} setOpen={setOpenCategories}>
+      {categoriesList.map((category) => {
+        return (
+          <ListItem key={category}>
+            <span className="truncate">{category}</span>
+            <span>({getNumByCategory(category)})</span>
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }
 

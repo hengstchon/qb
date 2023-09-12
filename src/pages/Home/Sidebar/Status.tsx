@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { Torrent } from '@/lib/types'
 import { torrentsAtom } from '../atoms'
 import { openSideStatusAtom } from './atoms'
-import { BaseCollapsible } from './Base'
+import { List, ListItem } from './BaseList'
 
 const filterStatusMap: Record<string, (t: Torrent) => boolean> = {
   all: () => true,
@@ -73,13 +73,16 @@ const Status = () => {
     ).length
 
   return (
-    <BaseCollapsible
-      title="Status"
-      open={openStatus}
-      setOpen={setOpenStatus}
-      itemList={statusList}
-      getNum={getNumByStatus}
-    />
+    <List title="Status" open={openStatus} setOpen={setOpenStatus}>
+      {statusList.map((status) => {
+        return (
+          <ListItem key={status}>
+            <span className="truncate">{status}</span>
+            <span>({getNumByStatus(status)})</span>
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }
 

@@ -10,16 +10,15 @@ const Sidebar = () => {
   const [width] = useAtom(sidebarWidthAtom)
 
   return (
-    <div className="flex flex-none" style={{ width: width + 'px' }}>
-      <ScrollArea className="h-full px-1">
-        {/* <div className={'flex h-full w-full flex-col gap-2 p-4'}> */}
-        <Status />
-        <Categories />
-        <Tags />
-        <Trackers />
-        {/* </div> */}
-      </ScrollArea>
-    </div>
+    <ScrollArea
+      className="h-full px-2 py-4 [&>div>div]:!block"
+      style={{ width: width + 'px' }}
+    >
+      <Status />
+      <Categories />
+      <Tags />
+      <Trackers />
+    </ScrollArea>
   )
 }
 

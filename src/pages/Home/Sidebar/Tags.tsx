@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { tagsAtom, torrentsAtom } from '../atoms'
 import { openSideTagsAtom } from './atoms'
-import { BaseCollapsible } from './Base'
+import { List, ListItem } from './BaseList'
 
 const Tags = () => {
   const [openTags, setOpenTags] = useAtom(openSideTagsAtom)
@@ -19,14 +19,19 @@ const Tags = () => {
     }
   }
 
+  const tagsList = ['All', 'Untagged', ...tags]
+
   return (
-    <BaseCollapsible
-      title="Tags"
-      open={openTags}
-      setOpen={setOpenTags}
-      itemList={['All', 'Untagged', ...tags]}
-      getNum={getNumByTag}
-    />
+    <List title="Tags" open={openTags} setOpen={setOpenTags}>
+      {tagsList.map((tag) => {
+        return (
+          <ListItem key={tag}>
+            <span className="truncate">{tag}</span>
+            <span>({getNumByTag(tag)})</span>
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }
 
