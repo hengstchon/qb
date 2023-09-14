@@ -6,9 +6,19 @@ import {
   CollapsibleTrigger,
 } from '@/ui/Collapsible'
 
-export function ListItem({ children }: { children: JSX.Element[] }) {
+export function ListItem({
+  onClick,
+  children,
+}: {
+  onClick: React.MouseEventHandler<HTMLButtonElement>
+  children: JSX.Element[]
+}) {
   return (
-    <Button variant="ghost" className="h-8 w-full justify-between font-normal">
+    <Button
+      variant="ghost"
+      className="h-8 w-full justify-between font-normal"
+      onClick={onClick}
+    >
       {children}
     </Button>
   )

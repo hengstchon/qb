@@ -1,4 +1,10 @@
-import '@tanstack/react-table'
+import {
+  ColumnFiltersState,
+  ColumnOrderState,
+  ColumnSizingState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table'
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {

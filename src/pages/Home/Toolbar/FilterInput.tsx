@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
+import { focusAtom } from 'jotai-optics'
 import { torsColFiltersAtom } from '@/pages/Home/Torrents'
 import { Input } from '@/ui/Input'
 
-const nameFilterAtom = atom(
-  (get) => get(torsColFiltersAtom)[0].value,
-  (_, set, newValue) =>
-    set(torsColFiltersAtom, () => [{ id: 'name', value: newValue }]),
+const nameFilterAtom = focusAtom(torsColFiltersAtom, (optic) =>
+  optic.find((x) => x.id == 'name').prop('value'),
 )
 
 const FilterInput = () => {
   const [filter, setFilter] = useAtom(nameFilterAtom)
+
   const [value, setValue] = useState<string>(filter as string)
 
   useEffect(() => {

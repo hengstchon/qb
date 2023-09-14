@@ -38,7 +38,10 @@ const defaultTables = {
     columnOrder: torsColumns.map((c) => c.id!),
     columnSizing: {},
     columnVisibility: {},
-    columnFilters: [{ id: 'name', value: '' }],
+    columnFilters: [
+      { id: 'name', value: '' },
+      { id: 'category', value: '' },
+    ],
     sorting: [],
   },
   trackersTable: {
