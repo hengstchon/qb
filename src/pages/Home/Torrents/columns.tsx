@@ -133,6 +133,15 @@ export const torsColumns = [
     id: 'tags',
     header: 'Tags',
     size: 120,
+    filterFn: (row, columnId, filterValue: string | null, addMeta) => {
+      if (filterValue === null) {
+        return true
+      } else if (filterValue === '') {
+        return filterFns.equalsString(row, columnId, filterValue, addMeta)
+      } else {
+        return filterFns.includesString(row, columnId, filterValue, addMeta)
+      }
+    },
   }),
   ch.accessor('added_on', {
     id: 'added_on',

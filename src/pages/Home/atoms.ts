@@ -40,7 +40,10 @@ const defaultTables = {
     columnVisibility: {},
     columnFilters: [
       { id: 'name', value: '' },
+      // { id: 'status', value: null },
       { id: 'category', value: null },
+      { id: 'tags', value: null },
+      // { id: 'tracker', value: null },
     ],
     sorting: [],
   },
