@@ -1,4 +1,5 @@
 import { ChevronDownIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/ui/Button'
 import {
   Collapsible,
@@ -7,16 +8,21 @@ import {
 } from '@/ui/Collapsible'
 
 export function ListItem({
+  selected,
   onClick,
   children,
 }: {
+  selected: boolean
   onClick: React.MouseEventHandler<HTMLButtonElement>
   children: JSX.Element[]
 }) {
   return (
     <Button
       variant="ghost"
-      className="h-8 w-full justify-between font-normal"
+      className={cn(
+        'h-8 w-full justify-between font-normal',
+        selected && 'bg-accent text-accent-foreground',
+      )}
       onClick={onClick}
     >
       {children}

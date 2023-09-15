@@ -17,7 +17,7 @@ export enum TriState {
   Partial = 2,
 }
 
-export const FIX_CATEGORY_FILTERS = {
-  All: null,
-  Uncategorized: '' as const,
-}
+export const FIX_CATEGORIES = [
+  { name: 'All', filterValue: null },
+  { name: 'Uncategorized', filterValue: '' },
+] as const

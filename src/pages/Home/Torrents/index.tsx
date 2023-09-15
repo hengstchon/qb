@@ -299,7 +299,11 @@ const Torrents = () => {
   return (
     <div className="flex flex-1 flex-col space-y-4 overflow-y-hidden p-4">
       {/* Action Bar */}
-      {isSomeRowsSelected ? <RowsSelectedActionBar /> : <DefaultActionBar />}
+      {isSomeRowsSelected ? (
+        <RowsSelectedActionBar />
+      ) : (
+        <DefaultActionBar rowNum={rows.length} />
+      )}
 
       <div ref={parentRef} className="flex-1 overflow-auto rounded-md border">
         <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
@@ -339,8 +343,9 @@ const Torrents = () => {
                         data-state={row.getIsSelected() && 'selected'}
                         style={{
                           height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start - index * virtualRow.size
-                            }px)`,
+                          transform: `translateY(${
+                            virtualRow.start - index * virtualRow.size
+                          }px)`,
                         }}
                         onClick={(e) => handleClickRow(e, row)}
                       >

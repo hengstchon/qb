@@ -4,7 +4,7 @@ import { Button } from '@/ui/Button'
 import { isHeaderEditingAtom } from '../../atoms'
 import { AddTorrent } from './AddTorrent'
 
-export default function RowActionBar() {
+export default function RowActionBar({ rowNum }: { rowNum: number }) {
   const [isHeaderEditing, setIsHeaderEditing] = useAtom(isHeaderEditingAtom)
 
   return (
@@ -26,6 +26,7 @@ export default function RowActionBar() {
         <Settings2Icon className="mr-2 h-4 w-4" />
         Adjust Headers
       </Button>
+      <span className="ml-auto text-sm">{rowNum} Rows</span>
     </div>
   )
 }
