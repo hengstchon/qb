@@ -12,8 +12,8 @@ export function ListItem({
   onClick,
   children,
 }: {
-  selected: boolean
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  selected?: boolean
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   children: JSX.Element[]
 }) {
   return (

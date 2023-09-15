@@ -21,3 +21,8 @@ export const FIX_CATEGORIES = [
   { name: 'All', filterValue: null },
   { name: 'Uncategorized', filterValue: '' },
 ] as const
+
+export const FIX_TAGS = [
+  { name: 'All', filterValue: null },
+  { name: 'Untagged', filterValue: '' },
+] as const

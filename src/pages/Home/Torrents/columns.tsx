@@ -1,4 +1,4 @@
-import { createColumnHelper, SortingFn } from '@tanstack/react-table'
+import { createColumnHelper, filterFns, SortingFn } from '@tanstack/react-table'
 import { MAX_ETA } from '@/lib/constants'
 import { Torrent } from '@/lib/types'
 import {
@@ -121,14 +121,11 @@ export const torsColumns = [
     id: 'category',
     header: 'Category',
     size: 120,
-    filterFn: (row, columnId, filterValue: string | null) => {
+    filterFn: (row, columnId, filterValue: string | null, addMeta) => {
       if (filterValue === null) {
         return true
       } else {
-        return (
-          row.getValue<string | null>(columnId)?.toString()?.toLowerCase() ===
-          filterValue?.toLowerCase()
-        )
+        return filterFns.equalsString(row, columnId, filterValue, addMeta)
       }
     },
   }),

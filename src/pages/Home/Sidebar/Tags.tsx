@@ -6,7 +6,11 @@ import { List, ListItem } from './BaseList'
 const Tags = () => {
   const [openTags, setOpenTags] = useAtom(openSideTagsAtom)
   const [tags] = useAtom(tagsAtom)
+  // console.log(tags)
   const [torrents] = useAtom(torrentsAtom)
+  // console.log(
+  //   Object.values(torrents).length ? Object.values(torrents)[0].tags : null,
+  // )
 
   const getNumByTag = (tag: string) => {
     const torsArr = Object.values(torrents)
