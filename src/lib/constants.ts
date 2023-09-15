@@ -16,3 +16,8 @@ export enum TriState {
   Checked = 1,
   Partial = 2,
 }
+
+export const FIX_CATEGORY_FILTERS = {
+  All: null,
+  Uncategorized: '' as const,
+}

@@ -121,6 +121,16 @@ export const torsColumns = [
     id: 'category',
     header: 'Category',
     size: 120,
+    filterFn: (row, columnId, filterValue: string | null) => {
+      if (filterValue === null) {
+        return true
+      } else {
+        return (
+          row.getValue<string | null>(columnId)?.toString()?.toLowerCase() ===
+          filterValue?.toLowerCase()
+        )
+      }
+    },
   }),
   ch.accessor('tags', {
     id: 'tags',

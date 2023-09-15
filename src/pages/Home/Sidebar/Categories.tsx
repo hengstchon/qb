@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
+import { FIX_CATEGORY_FILTERS } from '@/lib/constants'
 import { categoriesAtom, torrentsAtom } from '../atoms'
 import { torsColFiltersAtom } from '../Torrents'
 import { openSideCatAtom } from './atoms'
@@ -9,7 +10,7 @@ const categoryFilterAtom = focusAtom(torsColFiltersAtom, (optic) =>
   optic.find((x) => x.id == 'category').prop('value'),
 )
 
-const FIX_CATEGORIES = ['All', 'Uncategorized']
+const FIX_CATEGORIES = Object.keys(FIX_CATEGORY_FILTERS)
 
 const Categories = () => {
   const [openCategories, setOpenCategories] = useAtom(openSideCatAtom)
@@ -33,15 +34,12 @@ const Categories = () => {
   const categoriesList = [...FIX_CATEGORIES, ...Object.keys(categories)]
 
   function handleClick(cat: string) {
-    console.log(cat)
     if (FIX_CATEGORIES.includes(cat)) {
-      if (filter != '') {
-        setFilter('')
-      }
+      const filterValue =
+        FIX_CATEGORY_FILTERS[cat as keyof typeof FIX_CATEGORY_FILTERS]
+      filter !== filterValue && setFilter(filterValue)
     } else {
-      if (filter != cat) {
-        setFilter(cat)
-      }
+      filter !== cat && setFilter(cat)
     }
   }
 

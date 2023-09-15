@@ -40,7 +40,7 @@ const defaultTables = {
     columnVisibility: {},
     columnFilters: [
       { id: 'name', value: '' },
-      { id: 'category', value: '' },
+      { id: 'category', value: null },
     ],
     sorting: [],
   },
