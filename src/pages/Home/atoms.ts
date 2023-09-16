@@ -46,6 +46,7 @@ const defaultTables = {
       // { id: 'tracker', value: null },
     ],
     sorting: [],
+    trackerFilter: null,
   },
   trackersTable: {
     columnOrder: trksColumns.map((c) => c.id!),
@@ -80,6 +81,9 @@ export const isHeaderEditingAtom = atom(false)
 export const torrentsAtom = atom<Torrents>({})
 export const getTorrentsAtom = atom((get) =>
   Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash })),
+)
+export const trackerFilterAtom = focusAtom(tablesAtom, (optic) =>
+  optic.prop('torrentsTable').prop('trackerFilter'),
 )
 
 export const trackersAtom = atom<Trackers>({})
