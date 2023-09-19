@@ -1,11 +1,13 @@
 import { useAtom } from 'jotai'
-import { torrentsAtom, trackersAtom } from '../atoms'
+import { FIX_TRACKERS } from '@/lib/constants'
+import { torrentsAtom, trackerFilterAtom, trackersAtom } from '../atoms'
 import { openSideTrackersAtom } from './atoms'
 import { List, ListItem } from './BaseList'
 
 const Trackers = () => {
   const [openTrackers, setOpenTrackers] = useAtom(openSideTrackersAtom)
   const [trackers] = useAtom(trackersAtom)
+  const [currentFilter, setCurrentFilter] = useAtom(trackerFilterAtom)
   const [torrents] = useAtom(torrentsAtom)
 
   const getNumByTracker = (tracker: string) => {
@@ -19,15 +21,24 @@ const Trackers = () => {
     }
   }
 
-  const trackersList = ['All', 'Trackerless', ...Object.keys(trackers)]
+  const trackersList = [
+    ...FIX_TRACKERS,
+    ...Object.keys(trackers).map((t) => ({ name: t, filterValue: t })),
+  ]
 
   return (
     <List title="Trackers" open={openTrackers} setOpen={setOpenTrackers}>
-      {trackersList.map((tracker) => {
+      {trackersList.map(({ name, filterValue }) => {
         return (
-          <ListItem key={tracker}>
-            <span className="truncate">{tracker}</span>
-            <span>({getNumByTracker(tracker)})</span>
+          <ListItem
+            key={name}
+            selected={currentFilter === filterValue}
+            onClick={() => {
+              currentFilter !== filterValue && setCurrentFilter(filterValue)
+            }}
+          >
+            <span className="truncate">{name}</span>
+            <span>({getNumByTracker(name)})</span>
           </ListItem>
         )
       })}

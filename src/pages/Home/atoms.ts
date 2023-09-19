@@ -85,6 +85,18 @@ export const getTorrentsAtom = atom((get) =>
 export const trackerFilterAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable').prop('trackerFilter'),
 )
+export const getFilteredTorsAtom = atom((get) => {
+  const trackerFilter = get(trackerFilterAtom)
+  if (trackerFilter === null) {
+    return get(getTorrentsAtom)
+  } else if (trackerFilter === '') {
+    return get(getTorrentsAtom).filter((tor) => tor.trackers_count == 0)
+  } else {
+    const trackers = get(trackersAtom)
+    const hashes = trackers[trackerFilter]
+    return get(getTorrentsAtom).filter((tor) => hashes.includes(tor.hash))
+  }
+})
 
 export const trackersAtom = atom<Trackers>({})
 export const categoriesAtom = atom<Categories>({})

@@ -38,7 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
-import { getTorrentsAtom, isHeaderEditingAtom, tablesAtom } from '../atoms'
+import { getFilteredTorsAtom, isHeaderEditingAtom, tablesAtom } from '../atoms'
 import { torsColumns } from './columns'
 import DefaultActionBar from './DefaultActionBar'
 import RowsSelectedActionBar from './RowsSelectedActionBar'
@@ -222,7 +222,7 @@ const Torrents = () => {
   const [columnFilters, onColumnFiltersChange] = useAtom(torsColFiltersAtom)
   const [sorting, onSortingChange] = useAtom(torsSortAtom)
 
-  const [torrents] = useAtom(getTorrentsAtom)
+  const [torrents] = useAtom(getFilteredTorsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
 
   const table = useReactTable({

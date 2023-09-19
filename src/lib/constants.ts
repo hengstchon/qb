@@ -26,3 +26,8 @@ export const FIX_TAGS = [
   { name: 'All', filterValue: null },
   { name: 'Untagged', filterValue: '' },
 ] as const
+
+export const FIX_TRACKERS = [
+  { name: 'All', filterValue: null },
+  { name: 'Trackerless', filterValue: '' },
+] as const
