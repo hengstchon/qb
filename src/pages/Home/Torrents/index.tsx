@@ -30,6 +30,7 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from '@/ui/ContextMenu'
+import { ScrollArea } from '@/ui/ScrollArea'
 import {
   Table,
   TableBody,
@@ -305,8 +306,15 @@ const Torrents = () => {
         <DefaultActionBar rowNum={rows.length} />
       )}
 
-      <div ref={parentRef} className="flex-1 overflow-auto rounded-md border">
-        <div style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
+      <ScrollArea
+        type="always"
+        orientation="full"
+        className="flex-1 rounded border"
+      >
+        <div
+          ref={parentRef}
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        >
           {/* table */}
           <Table
             className="relative h-full"
@@ -376,7 +384,7 @@ const Torrents = () => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   )
 }
