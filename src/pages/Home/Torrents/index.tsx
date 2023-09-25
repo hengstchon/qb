@@ -307,83 +307,82 @@ const Torrents = () => {
       )}
 
       <ScrollArea
+        ref={parentRef}
         type="always"
         orientation="full"
         className="flex-1 rounded border"
       >
-        <div
-          ref={parentRef}
-          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        {/* table */}
+        <Table
+          className="relative h-full"
+          style={{
+            width: table.getTotalSize(),
+            height: `${rowVirtualizer.getTotalSize()}px`,
+          }}
         >
-          {/* table */}
-          <Table
-            className="relative h-full"
-            style={{ width: table.getTotalSize() }}
-          >
-            {/* thead */}
-            <TorrentsTableHeader table={table} />
-            {/* tbody */}
-            <TableBody>
-              {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-                const row = rows[virtualRow.index] as Row<Torrent>
-                return (
-                  <ContextMenu
-                    key={row.id}
-                    onOpenChange={(isOpen) => {
-                      if (!isOpen) return
-                      // console.log(table.getSelectedRowModel().rows)
-                      const selectedRows = table.getSelectedRowModel().rows
-                      if (selectedRows.length) {
-                        const selectedIds = selectedRows.map((row) => row.id)
-                        const isCurRowInSelected = selectedIds.includes(row.id)
-                        if (!isCurRowInSelected) {
-                          table.resetRowSelection()
-                          row.toggleSelected()
-                        }
-                      } else {
+          {/* thead */}
+          <TorrentsTableHeader table={table} />
+          {/* tbody */}
+          <TableBody>
+            {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
+              const row = rows[virtualRow.index] as Row<Torrent>
+              return (
+                <ContextMenu
+                  key={row.id}
+                  onOpenChange={(isOpen) => {
+                    if (!isOpen) return
+                    // console.log(table.getSelectedRowModel().rows)
+                    const selectedRows = table.getSelectedRowModel().rows
+                    if (selectedRows.length) {
+                      const selectedIds = selectedRows.map((row) => row.id)
+                      const isCurRowInSelected = selectedIds.includes(row.id)
+                      if (!isCurRowInSelected) {
+                        table.resetRowSelection()
                         row.toggleSelected()
                       }
-                    }}
-                  >
-                    <ContextMenuTrigger asChild>
-                      {/* tr */}
-                      <TableRow
-                        data-state={row.getIsSelected() && 'selected'}
-                        style={{
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${
-                            virtualRow.start - index * virtualRow.size
-                          }px)`,
-                        }}
-                        onClick={(e) => handleClickRow(e, row)}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          // td
-                          <TableCell
-                            key={cell.id}
-                            style={{ width: cell.column.getSize() }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent>
-                      {JSON.stringify(
-                        table
-                          .getSelectedRowModel()
-                          .rows.map((row) => row.original.name),
-                      )}
-                    </ContextMenuContent>
-                  </ContextMenu>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </div>
+                    } else {
+                      row.toggleSelected()
+                    }
+                  }}
+                >
+                  <ContextMenuTrigger asChild>
+                    {/* tr */}
+                    <TableRow
+                      data-state={row.getIsSelected() && 'selected'}
+                      style={{
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${
+                          virtualRow.start - index * virtualRow.size
+                        }px)`,
+                      }}
+                      onClick={(e) => handleClickRow(e, row)}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        // td
+                        <TableCell
+                          key={cell.id}
+                          style={{ width: cell.column.getSize() }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    {JSON.stringify(
+                      table
+                        .getSelectedRowModel()
+                        .rows.map((row) => row.original.name),
+                    )}
+                  </ContextMenuContent>
+                </ContextMenu>
+              )
+            })}
+          </TableBody>
+        </Table>
       </ScrollArea>
     </div>
   )
