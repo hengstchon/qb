@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   DndContext,
   DragEndEvent,
@@ -6,6 +6,7 @@ import {
   useDraggable,
   useDroppable,
 } from '@dnd-kit/core'
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 import {
   ColumnOrderState,
   flexRender,
@@ -13,15 +14,15 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   Header,
+  HeaderGroup,
   Row,
   RowSelectionState,
-  Table as TableType,
   useReactTable,
 } from '@tanstack/react-table'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from 'lucide-react'
+import { CustomViewportComponentProps, VList } from 'virtua'
 import { Torrent } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/ui/Button'
@@ -30,7 +31,7 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from '@/ui/ContextMenu'
-import { ScrollArea } from '@/ui/ScrollArea'
+import { ScrollBar } from '@/ui/ScrollArea'
 import {
   Table,
   TableBody,
@@ -63,10 +64,11 @@ const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
   optic.prop('sorting'),
 )
 
-function NormalTableHeader({ table }: { table: TableType<Torrent> }) {
+function NormalTableHeader() {
+  const headerGroups = useAtomValue(headerGroupsAtom)
   return (
     <TableHeader className="sticky top-0 z-10 select-none bg-background">
-      {table.getHeaderGroups().map((headerGroup) => (
+      {headerGroups.map((headerGroup) => (
         // tr
         <TableRow key={headerGroup.id} className="select-none">
           {headerGroup.headers.map((header) => {
@@ -189,11 +191,12 @@ function EditTableColumnHeader({
   )
 }
 
-function EditTableHeader({ table }: { table: TableType<Torrent> }) {
+function EditTableHeader() {
+  const headerGroups = useAtomValue(headerGroupsAtom)
   return (
     <TableHeaderDndContext>
       <TableHeader className="sticky top-0 z-10 select-none bg-background">
-        {table.getHeaderGroups().map((headerGroup) => (
+        {headerGroups.map((headerGroup) => (
           // tr
           <TableRow key={headerGroup.id} className="select-none">
             {headerGroup.headers.map((header) => {
@@ -207,14 +210,12 @@ function EditTableHeader({ table }: { table: TableType<Torrent> }) {
   )
 }
 
-function TorrentsTableHeader({ table }: { table: TableType<Torrent> }) {
+function TorrentsTableHeader() {
   const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
-  return isHeaderEditing ? (
-    <EditTableHeader table={table} />
-  ) : (
-    <NormalTableHeader table={table} />
-  )
+  return isHeaderEditing ? <EditTableHeader /> : <NormalTableHeader />
 }
+
+const headerGroupsAtom = atom<HeaderGroup<Torrent>[]>([])
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -249,17 +250,15 @@ const Torrents = () => {
     // debugAll: true,
   })
 
+  const setHeaderGroups = useSetAtom(headerGroupsAtom)
+  const hg = table.getHeaderGroups()
+  useEffect(() => {
+    setHeaderGroups(hg)
+  }, [hg])
+
   const isSomeRowsSelected = table.getIsSomeRowsSelected()
 
-  const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 36,
-    overscan: 20,
-    // debug: true,
-  })
 
   function handleClickRow(
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
@@ -306,86 +305,92 @@ const Torrents = () => {
         <DefaultActionBar rowNum={rows.length} />
       )}
 
-      <ScrollArea
-        ref={parentRef}
-        type="always"
-        orientation="full"
-        className="flex-1 rounded border"
+      <ScrollAreaPrimitive.Root
+        className={cn('relative flex-1 overflow-hidden rounded border')}
       >
-        {/* table */}
-        <Table
-          className="relative h-full"
-          style={{
-            width: table.getTotalSize(),
-            height: `${rowVirtualizer.getTotalSize()}px`,
-          }}
-        >
-          {/* thead */}
-          <TorrentsTableHeader table={table} />
-          {/* tbody */}
-          <TableBody>
-            {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-              const row = rows[virtualRow.index] as Row<Torrent>
-              return (
-                <ContextMenu
-                  key={row.id}
-                  onOpenChange={(isOpen) => {
-                    if (!isOpen) return
-                    // console.log(table.getSelectedRowModel().rows)
-                    const selectedRows = table.getSelectedRowModel().rows
-                    if (selectedRows.length) {
-                      const selectedIds = selectedRows.map((row) => row.id)
-                      const isCurRowInSelected = selectedIds.includes(row.id)
-                      if (!isCurRowInSelected) {
-                        table.resetRowSelection()
-                        row.toggleSelected()
-                      }
-                    } else {
+        <VList components={{ Root: VListViewport }}>
+          {rows.map((row) => {
+            return (
+              <ContextMenu
+                key={row.id}
+                onOpenChange={(isOpen) => {
+                  if (!isOpen) return
+                  // console.log(table.getSelectedRowModel().rows)
+                  const selectedRows = table.getSelectedRowModel().rows
+                  if (selectedRows.length) {
+                    const selectedIds = selectedRows.map((row) => row.id)
+                    const isCurRowInSelected = selectedIds.includes(row.id)
+                    if (!isCurRowInSelected) {
+                      table.resetRowSelection()
                       row.toggleSelected()
                     }
-                  }}
-                >
-                  <ContextMenuTrigger asChild>
-                    {/* tr */}
-                    <TableRow
-                      data-state={row.getIsSelected() && 'selected'}
-                      style={{
-                        height: `${virtualRow.size}px`,
-                        transform: `translateY(${
-                          virtualRow.start - index * virtualRow.size
-                        }px)`,
-                      }}
-                      onClick={(e) => handleClickRow(e, row)}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        // td
-                        <TableCell
-                          key={cell.id}
-                          style={{ width: cell.column.getSize() }}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </ContextMenuTrigger>
-                  <ContextMenuContent>
-                    {JSON.stringify(
-                      table
-                        .getSelectedRowModel()
-                        .rows.map((row) => row.original.name),
-                    )}
-                  </ContextMenuContent>
-                </ContextMenu>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </ScrollArea>
+                  } else {
+                    row.toggleSelected()
+                  }
+                }}
+              >
+                <ContextMenuTrigger asChild>
+                  {/* tr */}
+                  <TableRow
+                    data-state={row.getIsSelected() && 'selected'}
+                    className="h-[36px]"
+                    onClick={(e) => handleClickRow(e, row)}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      // td
+                      <TableCell
+                        key={cell.id}
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                  {JSON.stringify(
+                    table
+                      .getSelectedRowModel()
+                      .rows.map((row) => row.original.name),
+                  )}
+                </ContextMenuContent>
+              </ContextMenu>
+            )
+          })}
+        </VList>
+        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="vertical" />
+        <ScrollAreaPrimitive.Corner />
+      </ScrollAreaPrimitive.Root>
     </div>
   )
 }
+
+const VListViewport = React.forwardRef<
+  HTMLDivElement,
+  CustomViewportComponentProps
+>(({ children, height }, ref) => {
+  return (
+    <ScrollAreaPrimitive.Viewport
+      ref={ref}
+      className="ScrollAreaViewport h-full w-full"
+    >
+      <Table
+        style={{
+          height,
+        }}
+      >
+        {/* thead */}
+        <TorrentsTableHeader />
+        {/* tbody */}
+        <TableBody className="relative">{children}</TableBody>
+      </Table>
+    </ScrollAreaPrimitive.Viewport>
+  )
+})
+VListViewport.displayName = 'VListViewport'
 
 export default Torrents
