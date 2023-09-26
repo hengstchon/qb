@@ -4,7 +4,6 @@ import {
   flexRender,
   Table as ReactTable,
 } from '@tanstack/react-table'
-import { useVirtualizer } from '@tanstack/react-virtual'
 import { PrimitiveAtom, WritableAtom } from 'jotai'
 import {
   Table,
@@ -21,7 +20,6 @@ const DataTable = <T,>({
   table,
   colOrderAtom,
   currRowAtom,
-  virtualize,
 }: {
   table: ReactTable<T>
   colOrderAtom: WritableAtom<
@@ -30,18 +28,9 @@ const DataTable = <T,>({
     void
   >
   currRowAtom: PrimitiveAtom<number>
-  virtualize?: boolean
 }) => {
   const parentRef = React.useRef<HTMLDivElement>(null)
   const { rows } = table.getRowModel()
-
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 24,
-    // overscan: 10,
-    // debug: true,
-  })
 
   return (
     <div className="rounded-md">
