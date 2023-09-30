@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
+import { statusList } from '@/lib/constants'
 import { atomWithLocalStorage } from '@/lib/storage'
 import {
   Categories,
@@ -47,6 +48,7 @@ const defaultTables = {
     ],
     sorting: [],
     trackerFilter: null,
+    statusFilter: null,
   },
   trackersTable: {
     columnOrder: trksColumns.map((c) => c.id!),
@@ -85,17 +87,29 @@ export const getTorrentsAtom = atom((get) =>
 export const trackerFilterAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable').prop('trackerFilter'),
 )
+export const statusFilterAtom = focusAtom(tablesAtom, (optic) =>
+  optic.prop('torrentsTable').prop('statusFilter'),
+)
 export const getFilteredTorsAtom = atom((get) => {
+  let torrents
+
   const trackerFilter = get(trackerFilterAtom)
   if (trackerFilter === null) {
-    return get(getTorrentsAtom)
+    torrents = get(getTorrentsAtom)
   } else if (trackerFilter === '') {
-    return get(getTorrentsAtom).filter((tor) => tor.trackers_count == 0)
+    torrents = get(getTorrentsAtom).filter((tor) => tor.trackers_count == 0)
   } else {
     const trackers = get(trackersAtom)
     const hashes = trackers[trackerFilter]
-    return get(getTorrentsAtom).filter((tor) => hashes.includes(tor.hash))
+    torrents = get(getTorrentsAtom).filter((tor) => hashes.includes(tor.hash))
   }
+
+  const statusFilter = get(statusFilterAtom)
+  const status = statusList.find((v) => v.filterValue === statusFilter)
+  if (status) {
+    torrents = torrents.filter(status.filterFn)
+  }
+  return torrents
 })
 
 export const trackersAtom = atom<Trackers>({})

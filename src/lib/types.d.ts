@@ -32,6 +32,7 @@ export type TablesStorage = {
     columnFilters: ColumnFiltersState
     sorting: SortingState
     trackerFilter: string | null
+    statusFilter: string | null
   }
   trackersTable: {
     columnOrder: ColumnOrderState
