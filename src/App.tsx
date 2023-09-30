@@ -15,7 +15,7 @@ const App = () => {
       client
         .addon(AbortAddon())
         .get(url)
-        .setTimeout(2000)
+        .setTimeout(5000)
         .json((res) => res),
     onError: (err) => {
       if (err.status == 403) {
