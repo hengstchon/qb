@@ -14,9 +14,9 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   Header,
-  HeaderGroup,
   Row,
   RowSelectionState,
+  Table as TableType,
   useReactTable,
 } from '@tanstack/react-table'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
@@ -65,10 +65,10 @@ const torsSortAtom = focusAtom(torrentsTableAtom, (optic) =>
 )
 
 function NormalTableHeader() {
-  const headerGroups = useAtomValue(headerGroupsAtom)
+  const torsTable = useAtomValue(torsTableAtom)
   return (
-    <TableHeader className="sticky top-0 z-10 select-none bg-background">
-      {headerGroups.map((headerGroup) => (
+    <TableHeader className="sticky top-0 z-10 h-8 select-none bg-background">
+      {torsTable?.getHeaderGroups().map((headerGroup) => (
         // tr
         <TableRow key={headerGroup.id} className="select-none">
           {headerGroup.headers.map((header) => {
@@ -192,11 +192,11 @@ function EditTableColumnHeader({
 }
 
 function EditTableHeader() {
-  const headerGroups = useAtomValue(headerGroupsAtom)
+  const torsTable = useAtomValue(torsTableAtom)
   return (
     <TableHeaderDndContext>
-      <TableHeader className="sticky top-0 z-10 select-none bg-background">
-        {headerGroups.map((headerGroup) => (
+      <TableHeader className="sticky top-0 z-10 h-8 select-none bg-background">
+        {torsTable?.getHeaderGroups().map((headerGroup) => (
           // tr
           <TableRow key={headerGroup.id} className="select-none">
             {headerGroup.headers.map((header) => {
@@ -215,7 +215,7 @@ function TorrentsTableHeader() {
   return isHeaderEditing ? <EditTableHeader /> : <NormalTableHeader />
 }
 
-const headerGroupsAtom = atom<HeaderGroup<Torrent>[]>([])
+const torsTableAtom = atom<TableType<Torrent> | null>(null)
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
@@ -250,11 +250,10 @@ const Torrents = () => {
     // debugAll: true,
   })
 
-  const setHeaderGroups = useSetAtom(headerGroupsAtom)
-  const hg = table.getHeaderGroups()
+  const setTorsTable = useSetAtom(torsTableAtom)
   useEffect(() => {
-    setHeaderGroups(hg)
-  }, [hg])
+    setTorsTable(table)
+  }, [table, setTorsTable])
 
   const isSomeRowsSelected = table.getIsSomeRowsSelected()
 
