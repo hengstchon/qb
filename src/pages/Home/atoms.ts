@@ -91,24 +91,25 @@ export const statusFilterAtom = focusAtom(tablesAtom, (optic) =>
   optic.prop('torrentsTable').prop('statusFilter'),
 )
 export const getFilteredTorsAtom = atom((get) => {
-  let torrents
+  let torrents = get(getTorrentsAtom)
 
-  const trackerFilter = get(trackerFilterAtom)
-  if (trackerFilter === null) {
-    torrents = get(getTorrentsAtom)
-  } else if (trackerFilter === '') {
-    torrents = get(getTorrentsAtom).filter((tor) => tor.trackers_count == 0)
-  } else {
-    const trackers = get(trackersAtom)
-    const hashes = trackers[trackerFilter]
-    torrents = get(getTorrentsAtom).filter((tor) => hashes.includes(tor.hash))
-  }
-
+  // status filter
   const statusFilter = get(statusFilterAtom)
   const status = statusList.find((v) => v.filterValue === statusFilter)
   if (status) {
     torrents = torrents.filter(status.filterFn)
   }
+
+  // tracker filter
+  const trackerFilter = get(trackerFilterAtom)
+  if (trackerFilter === '') {
+    torrents = torrents.filter((tor) => tor.trackers_count == 0)
+  } else if (trackerFilter !== null) {
+    const trackers = get(trackersAtom)
+    const hashes = trackers[trackerFilter]
+    torrents = torrents.filter((tor) => hashes.includes(tor.hash))
+  }
+
   return torrents
 })
 
