@@ -1,3 +1,4 @@
+import { Table } from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { statusList } from '@/lib/constants'
@@ -8,6 +9,7 @@ import {
   SettingsStorage,
   TablesStorage,
   Tags,
+  Torrent,
   Torrents,
   Trackers,
 } from '@/lib/types'
@@ -145,7 +147,13 @@ export const serverStateAtom = atom<ServerState>({
 
 export const currTorAtom = atom(-1)
 
+export const torsTableAtom = atom<Table<Torrent> | null>(null)
+
 export const getCurrHashAtom = atom((get) => {
+  const torsTable = get(torsTableAtom)
+  const selectedRows = torsTable?.getSelectedRowModel().rows
+  return selectedRows?.length == 1 ? selectedRows[0].original.hash : null
+
   const currTor = get(currTorAtom)
   const torrents = get(getTorrentsAtom)
   return currTor === -1 ? null : torrents[currTor].hash

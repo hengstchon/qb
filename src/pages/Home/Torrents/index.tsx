@@ -16,10 +16,9 @@ import {
   Header,
   Row,
   RowSelectionState,
-  Table as TableType,
   useReactTable,
 } from '@tanstack/react-table'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from 'lucide-react'
 import { CustomViewportComponentProps, VList } from 'virtua'
@@ -40,7 +39,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
-import { getFilteredTorsAtom, isHeaderEditingAtom, tablesAtom } from '../atoms'
+import {
+  getFilteredTorsAtom,
+  isHeaderEditingAtom,
+  tablesAtom,
+  torsTableAtom,
+} from '../atoms'
 import { torsColumns } from './columns'
 import DefaultActionBar from './DefaultActionBar'
 import RowsSelectedActionBar from './RowsSelectedActionBar'
@@ -214,8 +218,6 @@ function TorrentsTableHeader() {
   const isHeaderEditing = useAtomValue(isHeaderEditingAtom)
   return isHeaderEditing ? <EditTableHeader /> : <NormalTableHeader />
 }
-
-const torsTableAtom = atom<TableType<Torrent> | null>(null)
 
 const Torrents = () => {
   const [columnOrder, onColumnOrderChange] = useAtom(torsColOrderAtom)
