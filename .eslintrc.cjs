@@ -11,7 +11,15 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:prettier/recommended', // last
   ],
-  overrides: [],
+  overrides: [
+    {
+      files: ['**/src/ui/*.tsx'],
+      rules: {
+        'react/prop-types': [2, { ignore: ['className'] }],
+        // 'react-refresh/only-export-components': 'off',
+      },
+    },
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

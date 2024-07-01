@@ -119,3 +119,11 @@ docker start qbittorrent
 
 - Set `Ban client after consecutive failures` to 0
 - Uncheck `Enable Cross-Site Request Forgery (CSRF) protection`
+
+## FAQ
+
+1. 'className' is missing in props validation
+
+Temporary solution: https://github.com/shadcn-ui/ui/issues/120#issuecomment-1828081539
+
+But eslint-plugin-react fixed in [this](https://github.com/jsx-eslint/eslint-plugin-react/pull/3749) pull request, will be fixed in versions > 7.34.3
