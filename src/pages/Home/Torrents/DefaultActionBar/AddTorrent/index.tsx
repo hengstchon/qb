@@ -184,7 +184,10 @@ export function AddTorrent() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
+      <DialogContent
+        className="max-h-screen overflow-y-auto sm:max-w-[600px]"
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Upload Torrents</DialogTitle>
         </DialogHeader>
