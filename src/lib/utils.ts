@@ -1,5 +1,5 @@
 import { cx } from 'class-variance-authority'
-import { ClassValue } from 'class-variance-authority/dist/types'
+import { type ClassValue } from 'clsx'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
