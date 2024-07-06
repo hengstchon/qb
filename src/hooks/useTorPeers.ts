@@ -1,13 +1,14 @@
 import { useMemo } from 'react'
 import { useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
-import { API } from '@/api/endpoints'
-import { getCurrHashAtom, refreshIntervalAtom } from '@/pages/Home/atoms'
+import { API } from '@/services'
 import {
+  getCurrHashAtom,
   peersAtom,
   peersRidAtom,
+  refreshIntervalAtom,
   updatePeersAtom,
-} from '@/pages/Home/Details/Peers/atoms'
+} from '@/store'
 
 export const useTorPeers = () => {
   const [rid, setRid] = useAtom(peersRidAtom)

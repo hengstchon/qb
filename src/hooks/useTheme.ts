@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { useAtom } from 'jotai'
-import { themeModeAtom } from '@/pages/Home/atoms'
+import { themeModeAtom } from '@/store'
 
 export const useTheme = () => {
   const [themeMode, setThemeMode] = useAtom(themeModeAtom)

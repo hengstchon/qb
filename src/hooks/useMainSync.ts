@@ -1,15 +1,7 @@
 import { useEffect } from 'react'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
-import { API } from '@/api/endpoints'
-import {
-  Categories,
-  ServerState,
-  SyncData,
-  Tags,
-  Torrents,
-  Trackers,
-} from '@/lib/types'
+import { API } from '@/services'
 import {
   categoriesAtom,
   refreshIntervalAtom,
@@ -17,7 +9,15 @@ import {
   tagsAtom,
   torrentsAtom,
   trackersAtom,
-} from '@/pages/Home/atoms'
+} from '@/store'
+import {
+  Categories,
+  ServerState,
+  SyncData,
+  Tags,
+  Torrents,
+  Trackers,
+} from '@/types'
 
 export const mainRidAtom = atom(0)
 

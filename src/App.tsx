@@ -2,10 +2,10 @@ import { useAtom } from 'jotai'
 import { SWRConfig, SWRConfiguration } from 'swr'
 import './index.css'
 import AbortAddon from 'wretch/addons/abort'
-import client from '@/api/client'
 import Home from '@/pages/Home'
-import { isAuthedAtom } from '@/pages/Home/atoms'
-import { Login } from '@/pages/Login'
+import Login from '@/pages/Login'
+import { client } from '@/services'
+import { isAuthedAtom } from '@/store'
 
 const App = () => {
   const [isAuthed, setIsAuthed] = useAtom(isAuthedAtom)
