@@ -11,9 +11,10 @@ import {
   SidebarOpen,
   Sun,
 } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import { API, client } from '@/services'
-import { isAuthedAtom, openSidebarAtom, refreshIntervalAtom } from '@/store'
+import { authAtom, openSidebarAtom, refreshIntervalAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import {
   Select,
@@ -25,7 +26,8 @@ import {
 import FilterInput from './FilterInput'
 
 const Toolbar = () => {
-  const setIsAuthed = useSetAtom(isAuthedAtom)
+  const setIsAuthed = useSetAtom(authAtom)
+  const { logout } = useAuth()
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
   const { isDark, toggleMode } = useTheme()
@@ -92,18 +94,7 @@ const Toolbar = () => {
           <Info />
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => {
-            client
-              .url(API.logout)
-              .post()
-              .res((res) => {
-                if (res.status == 200) setIsAuthed(RESET)
-              })
-          }}
-        >
+        <Button variant="ghost" size="sm" onClick={logout}>
           <LogOutIcon />
         </Button>
       </div>

@@ -20,7 +20,7 @@ import {
 } from '@/types'
 import { atomWithLocalStorage } from '@/utils'
 
-export const isAuthedAtom = atomWithLocalStorage('isAuthed', false)
+export const authAtom = atomWithLocalStorage('auth', false)
 
 const defaultSettings: SettingsStorage = {
   themeMode: 'light',

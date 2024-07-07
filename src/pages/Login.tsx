@@ -1,30 +1,16 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 import { API, client } from '@/services'
-import { isAuthedAtom } from '@/store'
+import { authAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { Label } from '@/ui/Label'
 
-type PayloadType = {
-  username: string
-  password: string
-}
-
-const login = (payload: PayloadType) => {
-  const { username, password } = payload
-  return client
-    .url(API.login)
-    .headers({
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    })
-    .post(`username=${username}&password=${password}`)
-    .res((res) => res)
-}
-
 const Login = () => {
-  const setIsAuthed = useSetAtom(isAuthedAtom)
+  const setIsAuthed = useSetAtom(authAtom)
+  const { login } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -36,16 +22,8 @@ const Login = () => {
       username,
       password,
     }
-    const res = await login(payload)
-
+    await login(payload)
     setIsLoading(false)
-    if (res.status == 200) {
-      const resText = await res.text()
-
-      if (resText == 'Ok.') {
-        setIsAuthed(true)
-      }
-    }
   }
 
   return (
