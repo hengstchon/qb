@@ -1,5 +1,4 @@
-import { useAtom, useSetAtom } from 'jotai'
-import { RESET } from 'jotai/utils'
+import { useAtom } from 'jotai'
 import {
   Info,
   Languages,
@@ -13,8 +12,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
-import { API, client } from '@/services'
-import { authAtom, openSidebarAtom, refreshIntervalAtom } from '@/store'
+import { openSidebarAtom, refreshIntervalAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import {
   Select,
@@ -26,11 +24,10 @@ import {
 import FilterInput from './FilterInput'
 
 const Toolbar = () => {
-  const setIsAuthed = useSetAtom(authAtom)
   const { logout } = useAuth()
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
-  const { isDark, toggleMode } = useTheme()
+  const { theme, toggleMode } = useTheme()
 
   return (
     <div className="flex h-12 items-center justify-between border-b bg-background p-2">
@@ -83,7 +80,7 @@ const Toolbar = () => {
             toggleMode()
           }}
         >
-          {isDark ? <Sun /> : <Moon />}
+          {theme === 'dark' ? <Sun /> : <Moon />}
         </Button>
 
         <Button variant="ghost" size="sm">

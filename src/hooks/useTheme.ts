@@ -1,26 +1,27 @@
 import { useCallback, useEffect } from 'react'
 import { useAtom } from 'jotai'
-import { themeModeAtom } from '@/store'
+import { themeAtom } from '@/store'
 
 export const useTheme = () => {
-  const [themeMode, setThemeMode] = useAtom(themeModeAtom)
-  const isDark = themeMode === 'dark'
+  const [theme, setTheme] = useAtom(themeAtom)
 
   const toggleMode = useCallback(() => {
-    if (isDark) {
-      setThemeMode('light')
+    if (theme === 'dark') {
+      setTheme('light')
     } else {
-      setThemeMode('dark')
+      setTheme('dark')
     }
-  }, [isDark])
+  }, [theme])
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDark])
+    const root = window.document.documentElement
 
-  return { isDark, toggleMode }
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+  }, [theme])
+
+  return { theme, toggleMode }
 }

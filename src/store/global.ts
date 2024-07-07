@@ -161,6 +161,6 @@ export const getCurrHashAtom = atom((get) => {
   return currTor === -1 ? null : torrents[currTor].hash
 })
 
-export const themeModeAtom = focusAtom(settingsAtom, (optic) =>
+export const themeAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('themeMode'),
 )
