@@ -6,6 +6,8 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(cx(inputs))
 }
 
+export const getRound = (n: number, d = 1) => parseFloat(n.toFixed(d))
+
 export function getStatusValue(state: string) {
   let status
   switch (state) {

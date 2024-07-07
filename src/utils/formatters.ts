@@ -17,8 +17,6 @@ export const formatSpeed = (bytes: number, dp?: number) =>
 export const formatPercentage = (data: number) =>
   `${Math.round(data * 10000) / 100}% `
 
-export const getRound = (n: number, d = 1) => parseFloat(n.toFixed(d))
-
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 export function formatTimestamp(timestamp: number | null) {
