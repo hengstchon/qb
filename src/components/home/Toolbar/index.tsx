@@ -57,12 +57,13 @@ const Toolbar = () => {
 
       <div className="flex">
         <Select
+          value={String(refreshInterval)}
           onValueChange={(value) => {
             setRefreshInterval(Number(value))
           }}
         >
           <SelectTrigger className="h-8 w-32">
-            <SelectValue>{refreshInterval}</SelectValue>
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {[1000, 3000, 5000, 10000000].map((val) => (
