@@ -21,8 +21,6 @@ import {
 
 export const mainRidAtom = atom(0)
 
-const curTimeoutIdAtom = atom<ReturnType<typeof setTimeout> | null>(null)
-
 const updateMainDataAtom = atom(null, (_, set, val: SyncData) => {
   if (val.full_update) {
     set(torrentsAtom, val.torrents as Torrents)
@@ -98,36 +96,20 @@ export const useUpdateMainSync = () => {
   const [rid, setRid] = useAtom(mainRidAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
   const setUpdateMainData = useSetAtom(updateMainDataAtom)
-  const [curTimeoutId, setCurTimeoutId] = useAtom(curTimeoutIdAtom)
+
+  const { data } = useSWRImmutable(API.sync.maindata(rid))
 
   useEffect(() => {
-    if (curTimeoutId) {
-      clearTimeout(curTimeoutId)
-      setRid(rid + 1)
-    }
-  }, [refreshInterval])
-
-  useSWRImmutable(API.sync.maindata(rid), {
-    onSuccess: (data) => {
-      // console.log('data.rid: ', data.rid)
-      // console.log('refreshInterval:', refreshInterval)
-
+    if (data) {
       setUpdateMainData(data)
       if (data.rid) {
         const timeoutId = setTimeout(() => {
           setRid(data.rid)
         }, refreshInterval)
-        setCurTimeoutId(timeoutId)
+        return () => {
+          clearTimeout(timeoutId)
+        }
       }
-    },
-    onErrorRetry: (error, key, _, revalidate, opts) => {
-      console.log('onErryrRetry:', error, key, opts)
-      // console.log(error.name == 'AbortError')
-      const timeoutId = setTimeout(() => {
-        console.log('revalidate: ', opts)
-        revalidate(opts)
-      }, refreshInterval)
-      setCurTimeoutId(timeoutId)
-    },
-  })
+    }
+  }, [data, refreshInterval])
 }
