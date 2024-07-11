@@ -5,11 +5,11 @@ import SidebarResizer from '@/components/home/SidebarResizer'
 import StatusBar from '@/components/home/StatusBar'
 import Toolbar from '@/components/home/Toolbar'
 import Torrents from '@/components/home/Torrents'
-import { useUpdateMainSync } from '@/hooks'
+import { useSyncMainData } from '@/hooks'
 import { openSidebarAtom } from '@/store'
 
 const HomePage = () => {
-  useUpdateMainSync()
+  useSyncMainData()
   const [isOpened] = useAtom(openSidebarAtom)
 
   return (

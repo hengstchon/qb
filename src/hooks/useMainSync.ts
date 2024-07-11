@@ -76,7 +76,7 @@ const updateMainDataAtom = atom(null, (_, set, newData: SyncData) => {
   }
 })
 
-export const useUpdateMainSync = () => {
+export const useSyncMainData = () => {
   const [rid, setRid] = useAtom(mainRidAtom)
   const [refreshInterval] = useAtom(refreshIntervalAtom)
   const setUpdateMainData = useSetAtom(updateMainDataAtom)
