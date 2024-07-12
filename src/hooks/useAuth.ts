@@ -49,5 +49,5 @@ export const useAuth = () => {
     }
   }
 
-  return { isAuthed, checkAuth, login, logout }
+  return { isAuthed, setIsAuthed, checkAuth, login, logout }
 }
