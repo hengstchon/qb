@@ -31,11 +31,6 @@ import {
 import { Torrent } from '@/types'
 import { Button } from '@/ui/Button'
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuTrigger,
-} from '@/ui/ContextMenu'
-import {
   Table,
   TableBody,
   TableCell,
@@ -312,53 +307,25 @@ const Torrents = () => {
             <VList>
               {rows.map((row) => {
                 return (
-                  <ContextMenu
+                  <TableRow
                     key={row.id}
-                    onOpenChange={(isOpen) => {
-                      if (!isOpen) return
-                      // console.log(table.getSelectedRowModel().rows)
-                      const selectedRows = table.getSelectedRowModel().rows
-                      if (selectedRows.length) {
-                        const selectedIds = selectedRows.map((row) => row.id)
-                        const isCurRowInSelected = selectedIds.includes(row.id)
-                        if (!isCurRowInSelected) {
-                          table.resetRowSelection()
-                          row.toggleSelected()
-                        }
-                      } else {
-                        row.toggleSelected()
-                      }
-                    }}
+                    data-state={row.getIsSelected() && 'selected'}
+                    className="h-[36px]"
+                    onClick={(e) => handleClickRow(e, row)}
                   >
-                    <ContextMenuTrigger asChild>
-                      {/* tr */}
-                      <TableRow
-                        data-state={row.getIsSelected() && 'selected'}
-                        className="h-[36px]"
-                        onClick={(e) => handleClickRow(e, row)}
+                    {row.getVisibleCells().map((cell) => (
+                      // td
+                      <TableCell
+                        key={cell.id}
+                        style={{ width: cell.column.getSize() }}
                       >
-                        {row.getVisibleCells().map((cell) => (
-                          // td
-                          <TableCell
-                            key={cell.id}
-                            style={{ width: cell.column.getSize() }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent>
-                      {JSON.stringify(
-                        table
-                          .getSelectedRowModel()
-                          .rows.map((row) => row.original.name),
-                      )}
-                    </ContextMenuContent>
-                  </ContextMenu>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 )
               })}
             </VList>
