@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { KeyboardEvent, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/ui/Button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/ui/card'
@@ -9,6 +9,12 @@ const Login = () => {
   const { login } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit()
+    }
+  }
 
   const handleSubmit = async () => {
     await login({ username, password })
@@ -27,6 +33,7 @@ const Login = () => {
               id="username"
               required
               onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="grid gap-2">
@@ -36,6 +43,7 @@ const Login = () => {
               type="password"
               required
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </CardContent>
