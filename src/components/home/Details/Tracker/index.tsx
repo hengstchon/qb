@@ -9,23 +9,20 @@ import useSWR from 'swr'
 import DataTable from '@/components/common/DataTable'
 import { trksColumns } from '@/config/columns'
 import { API } from '@/services'
-import { getCurrHashAtom, tablesAtom } from '@/store/global'
+import { getCurrHashAtom, trackerTableAtom } from '@/store/global'
 import { Tracker } from '@/types'
 import Actions from './Actions'
 
-const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('trackersTable'),
-)
-const trksColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
+const trksColOrderAtom = focusAtom(trackerTableAtom, (optic) =>
   optic.prop('columnOrder'),
 )
-const trksColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
+const trksColSizingAtom = focusAtom(trackerTableAtom, (optic) =>
   optic.prop('columnSizing'),
 )
-const trksColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
+const trksColVisiAtom = focusAtom(trackerTableAtom, (optic) =>
   optic.prop('columnVisibility'),
 )
-const trksSortAtom = focusAtom(torrentsTableAtom, (optic) =>
+const trksSortAtom = focusAtom(trackerTableAtom, (optic) =>
   optic.prop('sorting'),
 )
 

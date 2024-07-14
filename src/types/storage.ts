@@ -18,32 +18,21 @@ export type SettingsStorage = {
   openSidebarTrackers: boolean
 }
 
-export type TablesStorage = {
-  torrentsTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    columnFilters: ColumnFiltersState
-    sorting: SortingState
-    trackerFilter: string | null
-    statusFilter: string | null
-  }
-  trackersTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
-  peersTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
-  filesTable: {
-    columnOrder: ColumnOrderState
-    columnSizing: ColumnSizingState
-    columnVisibility: VisibilityState
-    sorting: SortingState
-  }
+interface BaseTableSettings {
+  columnOrder: ColumnOrderState
+  columnSizing: ColumnSizingState
+  columnVisibility: VisibilityState
+  sorting: SortingState
 }
+
+export interface TorrentTableSettings extends BaseTableSettings {
+  columnFilters: ColumnFiltersState
+  trackerFilter: string | null
+  statusFilter: string | null
+}
+
+export type TrackerTableSettings = BaseTableSettings
+
+export type PeerTableSettings = BaseTableSettings
+
+export type FilesTableSettings = BaseTableSettings

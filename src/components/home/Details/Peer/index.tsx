@@ -8,26 +8,21 @@ import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/common/DataTable'
 import { peersColumns } from '@/config/columns'
 import { useTorPeers } from '@/hooks/useTorPeers'
-import { tablesAtom } from '@/store/global'
+import { peerTableAtom } from '@/store/global'
 import { PeerType } from '@/types'
 
 const currRowAtom = atom(-1)
 
-const torrentsTableAtom = focusAtom(tablesAtom, (optic) =>
-  optic.prop('peersTable'),
-)
-const peersColOrderAtom = focusAtom(torrentsTableAtom, (optic) =>
+const peersColOrderAtom = focusAtom(peerTableAtom, (optic) =>
   optic.prop('columnOrder'),
 )
-const peersColSizingAtom = focusAtom(torrentsTableAtom, (optic) =>
+const peersColSizingAtom = focusAtom(peerTableAtom, (optic) =>
   optic.prop('columnSizing'),
 )
-const peersColVisiAtom = focusAtom(torrentsTableAtom, (optic) =>
+const peersColVisiAtom = focusAtom(peerTableAtom, (optic) =>
   optic.prop('columnVisibility'),
 )
-const peersSortAtom = focusAtom(torrentsTableAtom, (optic) =>
-  optic.prop('sorting'),
-)
+const peersSortAtom = focusAtom(peerTableAtom, (optic) => optic.prop('sorting'))
 
 const Peers = () => {
   const data = useTorPeers()
