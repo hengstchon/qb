@@ -10,7 +10,6 @@ export type SettingsStorage = {
   themeMode: 'light' | 'dark'
   openDetails: boolean
   refreshInterval: number
-  sidebarWidth: number
   openSidebar: boolean
   openSidebarStatus: boolean
   openSidebarCategories: boolean

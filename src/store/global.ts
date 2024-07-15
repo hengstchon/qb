@@ -29,7 +29,6 @@ const defaultSettings: SettingsStorage = {
   themeMode: 'light',
   openDetails: false,
   refreshInterval: 5000,
-  sidebarWidth: 300,
   openSidebar: true,
   openSidebarStatus: true,
   openSidebarCategories: true,

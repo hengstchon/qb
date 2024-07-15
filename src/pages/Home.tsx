@@ -1,12 +1,16 @@
 import { useAtom } from 'jotai'
 import Details from '@/components/home/Details'
 import Sidebar from '@/components/home/Sidebar'
-import SidebarResizer from '@/components/home/SidebarResizer'
 import StatusBar from '@/components/home/StatusBar'
 import Toolbar from '@/components/home/Toolbar'
 import Torrents from '@/components/home/Torrents'
 import { useSyncMainData } from '@/hooks'
 import { openSidebarAtom } from '@/store'
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/ui/resizable'
 
 const HomePage = () => {
   useSyncMainData()
@@ -16,19 +20,22 @@ const HomePage = () => {
     <div className="flex h-screen flex-col">
       <Toolbar />
 
-      <div className="flex flex-1 overflow-hidden">
+      <ResizablePanelGroup direction="horizontal" autoSaveId="main">
         {isOpened && (
           <>
-            <Sidebar />
-            <SidebarResizer />
+            <ResizablePanel order={1} minSize={5} defaultSize={15}>
+              <Sidebar />
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
           </>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <ResizablePanel className="flex flex-col" order={2} minSize={5}>
           <Torrents />
           <Details />
-        </div>
-      </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
 
       <StatusBar />
     </div>
