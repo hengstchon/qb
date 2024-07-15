@@ -4,7 +4,7 @@ import { FIX_CATEGORIES } from '@/config/constants'
 import { categoriesAtom, torrentsAtom } from '@/store/global'
 import { openSideCatAtom } from '@/store/sidebar'
 import { torsColFiltersAtom } from '../Torrents'
-import { List, ListItem } from './BaseList'
+import { SideBlock, SideBlockItem } from './SideBlock'
 
 const categoryFilterAtom = focusAtom(torsColFiltersAtom, (optic) =>
   optic.find((x) => x.id == 'category').prop('value'),
@@ -35,10 +35,14 @@ const Categories = () => {
   ]
 
   return (
-    <List title="Categories" open={openCategories} setOpen={setOpenCategories}>
+    <SideBlock
+      title="Categories"
+      open={openCategories}
+      setOpen={setOpenCategories}
+    >
       {categoriesList.map(({ name, filterValue }) => {
         return (
-          <ListItem
+          <SideBlockItem
             key={name}
             selected={currentFilter === filterValue}
             onClick={() => {
@@ -47,10 +51,10 @@ const Categories = () => {
           >
             <span className="truncate">{name}</span>
             <span>({getNumByCategory(name)})</span>
-          </ListItem>
+          </SideBlockItem>
         )
       })}
-    </List>
+    </SideBlock>
   )
 }
 

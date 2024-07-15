@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { statusList } from '@/config/constants'
 import { statusFilterAtom, torrentsAtom } from '@/store/global'
 import { openSideStatusAtom } from '@/store/sidebar'
-import { List, ListItem } from './BaseList'
+import { SideBlock, SideBlockItem } from './SideBlock'
 
 const Status = () => {
   const [openStatus, setOpenStatus] = useAtom(openSideStatusAtom)
@@ -10,10 +10,10 @@ const Status = () => {
   const [torrents] = useAtom(torrentsAtom)
 
   return (
-    <List title="Status" open={openStatus} setOpen={setOpenStatus}>
+    <SideBlock title="Status" open={openStatus} setOpen={setOpenStatus}>
       {statusList.map(({ name, filterValue, filterFn }) => {
         return (
-          <ListItem
+          <SideBlockItem
             key={name}
             selected={currentFilter === filterValue}
             onClick={() => {
@@ -22,10 +22,10 @@ const Status = () => {
           >
             <span className="truncate">{name}</span>
             <span>({Object.values(torrents).filter(filterFn).length})</span>
-          </ListItem>
+          </SideBlockItem>
         )
       })}
-    </List>
+    </SideBlock>
   )
 }
 

@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { FIX_TRACKERS } from '@/config/constants'
 import { torrentsAtom, trackerFilterAtom, trackersAtom } from '@/store/global'
 import { openSideTrackersAtom } from '@/store/sidebar'
-import { List, ListItem } from './BaseList'
+import { SideBlock, SideBlockItem } from './SideBlock'
 
 const Trackers = () => {
   const [openTrackers, setOpenTrackers] = useAtom(openSideTrackersAtom)
@@ -27,10 +27,10 @@ const Trackers = () => {
   ]
 
   return (
-    <List title="Trackers" open={openTrackers} setOpen={setOpenTrackers}>
+    <SideBlock title="Trackers" open={openTrackers} setOpen={setOpenTrackers}>
       {trackersList.map(({ name, filterValue }) => {
         return (
-          <ListItem
+          <SideBlockItem
             key={name}
             selected={currentFilter === filterValue}
             onClick={() => {
@@ -39,10 +39,10 @@ const Trackers = () => {
           >
             <span className="truncate">{name}</span>
             <span>({getNumByTracker(name)})</span>
-          </ListItem>
+          </SideBlockItem>
         )
       })}
-    </List>
+    </SideBlock>
   )
 }
 

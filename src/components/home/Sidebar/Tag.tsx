@@ -4,7 +4,7 @@ import { FIX_TAGS } from '@/config/constants'
 import { tagsAtom, torrentsAtom } from '@/store/global'
 import { openSideTagsAtom } from '@/store/sidebar'
 import { torsColFiltersAtom } from '../Torrents'
-import { List, ListItem } from './BaseList'
+import { SideBlock, SideBlockItem } from './SideBlock'
 
 const tagFilterAtom = focusAtom(torsColFiltersAtom, (optic) =>
   optic.find((x) => x.id == 'tags').prop('value'),
@@ -33,10 +33,10 @@ const Tags = () => {
   ]
 
   return (
-    <List title="Tags" open={openTags} setOpen={setOpenTags}>
+    <SideBlock title="Tags" open={openTags} setOpen={setOpenTags}>
       {tagsList.map(({ name, filterValue }) => {
         return (
-          <ListItem
+          <SideBlockItem
             key={name}
             selected={currentFilter === filterValue}
             onClick={() => {
@@ -45,10 +45,10 @@ const Tags = () => {
           >
             <span className="truncate">{name}</span>
             <span>({getNumByTag(name)})</span>
-          </ListItem>
+          </SideBlockItem>
         )
       })}
-    </List>
+    </SideBlock>
   )
 }
 
