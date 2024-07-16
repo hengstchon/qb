@@ -26,7 +26,6 @@ import { atomWithLocalStorage } from '@/utils'
 export const authAtom = atomWithLocalStorage('auth', false)
 
 const defaultSettings: SettingsStorage = {
-  themeMode: 'light',
   openDetails: false,
   refreshInterval: 5000,
   openSidebar: true,
@@ -179,7 +178,3 @@ export const getCurrHashAtom = atom((get) => {
   const torrents = get(getTorrentsAtom)
   return currTor === -1 ? null : torrents[currTor].hash
 })
-
-export const themeAtom = focusAtom(settingsAtom, (optic) =>
-  optic.prop('themeMode'),
-)

@@ -1,5 +1,6 @@
 import { SWRConfig } from 'swr'
 import './index.css'
+import { ThemeProvider } from 'next-themes'
 import { useAuth } from '@/hooks/useAuth'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
@@ -10,7 +11,9 @@ const App = () => {
   const { swrConfig } = useSwrConfig()
 
   return (
-    <SWRConfig value={swrConfig}>{isAuthed ? <Home /> : <Login />}</SWRConfig>
+    <ThemeProvider attribute="class" disableTransitionOnChange>
+      <SWRConfig value={swrConfig}>{isAuthed ? <Home /> : <Login />}</SWRConfig>
+    </ThemeProvider>
   )
 }
 

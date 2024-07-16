@@ -10,8 +10,8 @@ import {
   SidebarOpen,
   Sun,
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/hooks/useTheme'
 import { openSidebarAtom, refreshIntervalAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import {
@@ -27,7 +27,7 @@ const Toolbar = () => {
   const { logout } = useAuth()
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
-  const { theme, toggleMode } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   return (
     <div className="flex h-12 items-center justify-between border-b bg-background p-2">
@@ -78,7 +78,7 @@ const Toolbar = () => {
           variant="ghost"
           size="sm"
           onClick={() => {
-            toggleMode()
+            setTheme(theme === 'dark' ? 'light' : 'dark')
           }}
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
