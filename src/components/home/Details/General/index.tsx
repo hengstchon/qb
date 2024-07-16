@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import useSWR from 'swr'
 import { MAX_ETA } from '@/config/constants'
 import { API } from '@/services'
-import { getCurrHashAtom } from '@/store/global'
+import { getCurrHashAtom } from '@/store'
 import { Propperties } from '@/types'
 import {
   formatBytes,

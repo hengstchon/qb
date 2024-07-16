@@ -1,8 +1,7 @@
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { FIX_CATEGORIES } from '@/config/constants'
-import { categoriesAtom, torrentsAtom } from '@/store/global'
-import { openSideCatAtom } from '@/store/sidebar'
+import { categoriesAtom, openSideCatAtom, torrentsAtom } from '@/store'
 import { torsColFiltersAtom } from '../Torrents'
 import { SideBlock, SideBlockItem } from './SideBlock'
 

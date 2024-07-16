@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { statusList } from '@/config/constants'
+import { openSideStatusAtom } from '@/store'
 import { statusFilterAtom, torrentsAtom } from '@/store/global'
-import { openSideStatusAtom } from '@/store/sidebar'
 import { SideBlock, SideBlockItem } from './SideBlock'
 
 const Status = () => {

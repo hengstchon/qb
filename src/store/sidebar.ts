@@ -1,5 +1,5 @@
 import { focusAtom } from 'jotai-optics'
-import { settingsAtom } from './global'
+import { settingsAtom } from './storage'
 
 export const openSidebarAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('openSidebar'),

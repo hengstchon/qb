@@ -9,19 +9,21 @@ import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/common/DataTable'
 import { filesColumns } from '@/config/columns'
 import { useFiles } from '@/hooks/useFiles'
-import { fileTableAtom } from '@/store/global'
+import { fileTableStateAtom } from '@/store'
 import { FileNode } from '@/types'
 
-const filesColOrderAtom = focusAtom(fileTableAtom, (optic) =>
+const filesColOrderAtom = focusAtom(fileTableStateAtom, (optic) =>
   optic.prop('columnOrder'),
 )
-const filesColSizingAtom = focusAtom(fileTableAtom, (optic) =>
+const filesColSizingAtom = focusAtom(fileTableStateAtom, (optic) =>
   optic.prop('columnSizing'),
 )
-const filesColVisiAtom = focusAtom(fileTableAtom, (optic) =>
+const filesColVisiAtom = focusAtom(fileTableStateAtom, (optic) =>
   optic.prop('columnVisibility'),
 )
-const filesSortAtom = focusAtom(fileTableAtom, (optic) => optic.prop('sorting'))
+const filesSortAtom = focusAtom(fileTableStateAtom, (optic) =>
+  optic.prop('sorting'),
+)
 
 const currRowAtom = atom(-1)
 

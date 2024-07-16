@@ -1,7 +1,11 @@
 import { useAtom } from 'jotai'
 import { FIX_TRACKERS } from '@/config/constants'
-import { torrentsAtom, trackerFilterAtom, trackersAtom } from '@/store/global'
-import { openSideTrackersAtom } from '@/store/sidebar'
+import {
+  openSideTrackersAtom,
+  torrentsAtom,
+  trackerFilterAtom,
+  trackersAtom,
+} from '@/store'
 import { SideBlock, SideBlockItem } from './SideBlock'
 
 const Trackers = () => {

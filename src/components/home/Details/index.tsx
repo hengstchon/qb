@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ChevronsDownIcon, ChevronsUpIcon } from 'lucide-react'
-import { settingsAtom } from '@/store/global'
+import { settingsAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
 import { cn } from '@/utils'

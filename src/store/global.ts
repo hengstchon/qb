@@ -1,100 +1,16 @@
 import { Table } from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
-import {
-  filesColumns,
-  peersColumns,
-  torsColumns,
-  trksColumns,
-} from '@/config/columns'
 import { statusList } from '@/config/constants'
 import {
   Categories,
-  FilesTableSettings,
-  PeerTableSettings,
   ServerState,
-  SettingsStorage,
   Tags,
   Torrent,
   Torrents,
-  TorrentTableSettings,
   Trackers,
-  TrackerTableSettings,
 } from '@/types'
-import { atomWithLocalStorage } from '@/utils'
-
-export const authAtom = atomWithLocalStorage('auth', false)
-
-const defaultSettings: SettingsStorage = {
-  openDetails: false,
-  refreshInterval: 5000,
-  openSidebar: true,
-  openSidebarStatus: true,
-  openSidebarCategories: true,
-  openSidebarTags: true,
-  openSidebarTrackers: true,
-}
-export const settingsAtom = atomWithLocalStorage<SettingsStorage>(
-  'settings',
-  defaultSettings,
-)
-
-const defaultTorrentTable = {
-  columnOrder: torsColumns.map((c) => c.id!),
-  columnSizing: {},
-  columnVisibility: {},
-  columnFilters: [
-    { id: 'name', value: '' },
-    // { id: 'status', value: null },
-    { id: 'category', value: null },
-    { id: 'tags', value: null },
-    // { id: 'tracker', value: null },
-  ],
-  sorting: [],
-  trackerFilter: null,
-  statusFilter: null,
-}
-
-export const torrentTableAtom = atomWithLocalStorage<TorrentTableSettings>(
-  'torrentTable',
-  defaultTorrentTable,
-)
-
-const defaultTrackerTable = {
-  columnOrder: trksColumns.map((c) => c.id!),
-  columnSizing: {},
-  columnVisibility: {},
-  sorting: [],
-}
-
-export const trackerTableAtom = atomWithLocalStorage<TrackerTableSettings>(
-  'trackerTable',
-  defaultTrackerTable,
-)
-
-const defaultPeerTable = {
-  columnOrder: peersColumns.map((c) => c.id!),
-  columnSizing: {},
-  columnVisibility: {},
-  sorting: [],
-}
-
-export const peerTableAtom = atomWithLocalStorage<PeerTableSettings>(
-  'peerTable',
-  defaultPeerTable,
-)
-
-const defaultFileTable = {
-  columnOrder: filesColumns.map((c) => c.id!),
-  columnSizing: {},
-  columnVisibility: {},
-  sorting: [],
-}
-
-export const fileTableAtom = atomWithLocalStorage<FilesTableSettings>(
-  'fileTable',
-  defaultFileTable,
-)
+import { settingsAtom, torrentTableStateAtom } from './storage'
 
 export const refreshIntervalAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('refreshInterval'),
@@ -106,10 +22,10 @@ export const torrentsAtom = atom<Torrents>({})
 export const getTorrentsAtom = atom((get) =>
   Object.entries(get(torrentsAtom)).map(([hash, tor]) => ({ ...tor, hash })),
 )
-export const trackerFilterAtom = focusAtom(torrentTableAtom, (optic) =>
+export const trackerFilterAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('trackerFilter'),
 )
-export const statusFilterAtom = focusAtom(torrentTableAtom, (optic) =>
+export const statusFilterAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('statusFilter'),
 )
 export const getFilteredTorsAtom = atom((get) => {

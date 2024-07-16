@@ -25,7 +25,7 @@ import { torsColumns } from '@/config/columns'
 import {
   getFilteredTorsAtom,
   isHeaderEditingAtom,
-  torrentTableAtom,
+  torrentTableStateAtom,
   torsTableAtom,
 } from '@/store'
 import { Torrent } from '@/types'
@@ -42,19 +42,19 @@ import { cn } from '@/utils'
 import DefaultActionBar from './DefaultActionBar'
 import RowsSelectedActionBar from './RowsSelectedActionBar'
 
-const torsColOrderAtom = focusAtom(torrentTableAtom, (optic) =>
+const torsColOrderAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('columnOrder'),
 )
-const torsColSizingAtom = focusAtom(torrentTableAtom, (optic) =>
+const torsColSizingAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('columnSizing'),
 )
-const torsColVisiAtom = focusAtom(torrentTableAtom, (optic) =>
+const torsColVisiAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('columnVisibility'),
 )
-export const torsColFiltersAtom = focusAtom(torrentTableAtom, (optic) =>
+export const torsColFiltersAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('columnFilters'),
 )
-const torsSortAtom = focusAtom(torrentTableAtom, (optic) =>
+const torsSortAtom = focusAtom(torrentTableStateAtom, (optic) =>
   optic.prop('sorting'),
 )
 

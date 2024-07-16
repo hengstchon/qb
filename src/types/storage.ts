@@ -16,21 +16,21 @@ export type SettingsStorage = {
   openSidebarTrackers: boolean
 }
 
-interface BaseTableSettings {
+interface BaseTableState {
   columnOrder: ColumnOrderState
   columnSizing: ColumnSizingState
   columnVisibility: VisibilityState
   sorting: SortingState
 }
 
-export interface TorrentTableSettings extends BaseTableSettings {
+export interface TorrentTableState extends BaseTableState {
   columnFilters: ColumnFiltersState
   trackerFilter: string | null
   statusFilter: string | null
 }
 
-export type TrackerTableSettings = BaseTableSettings
+export type TrackerTableState = BaseTableState
 
-export type PeerTableSettings = BaseTableSettings
+export type PeerTableState = BaseTableState
 
-export type FilesTableSettings = BaseTableSettings
+export type FilesTableState = BaseTableState
