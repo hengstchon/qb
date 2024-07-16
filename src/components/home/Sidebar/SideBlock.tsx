@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import {
   Collapsible,
@@ -20,12 +20,9 @@ export function SideBlockItem({
 }: SideBlockItemProps) {
   return (
     <Button
-      variant="ghost"
+      variant={selected ? 'secondary' : 'ghost'}
       size="sm"
-      className={cn(
-        'h-8 w-full justify-between font-normal',
-        selected && 'bg-accent text-accent-foreground',
-      )}
+      className={cn('h-8 w-full justify-between font-normal')}
       onClick={onClick}
     >
       {children}
