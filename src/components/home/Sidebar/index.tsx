@@ -7,7 +7,7 @@ import Trackers from './Tracker'
 
 const Sidebar = () => {
   return (
-    <ScrollArea className="h-full [&>div>div]:!block">
+    <ScrollArea className="h-full">
       <Status />
 
       <Separator />
