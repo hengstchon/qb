@@ -207,3 +207,25 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (47 tests)
 - `pnpm run build`
+
+## P1.10 — Reliable incremental sync controllers
+
+Completed:
+
+- Replaced changing SWR keys for `sync/maindata` and `sync/torrentPeers` with a
+  dedicated `SyncController` that owns rid, one timer, and one active request.
+- Abort in-flight requests on unmount, torrent-detail changes, page hiding, and
+  network loss; cancelled requests cannot publish stale data.
+- Pause polling while hidden and synchronize immediately when the page becomes
+  visible again.
+- Added capped exponential retry backoff and immediate online recovery.
+- Route authentication failures from main sync back to the session-expired UI.
+- Clear peer snapshots when switching torrent details before starting the new
+  controller.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (53 tests, including a fake-timer 30-minute run)
+- `pnpm run build`

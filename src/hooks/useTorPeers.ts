@@ -1,37 +1,35 @@
-import { useMemo } from 'react'
-import { useAtom, useSetAtom } from 'jotai'
-import useSWRImmutable from 'swr/immutable'
-import { API } from '@/services'
+import { useEffect, useMemo } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { API, qbApi } from '@/services'
+import { SyncController } from '@/services/syncController'
 import {
   getCurrHashAtom,
   peersAtom,
-  peersRidAtom,
   refreshIntervalAtom,
   updatePeersAtom,
 } from '@/store'
+import type { PeersData } from '@/types'
 
 export const useTorPeers = () => {
-  const [rid, setRid] = useAtom(peersRidAtom)
-  // console.log('rid: ', rid)
+  const refreshInterval = useAtomValue(refreshIntervalAtom)
+  const updatePeers = useSetAtom(updatePeersAtom)
+  const setPeers = useSetAtom(peersAtom)
+  const peers = useAtomValue(peersAtom)
+  const currHash = useAtomValue(getCurrHashAtom)
 
-  const [refreshInterval] = useAtom(refreshIntervalAtom)
-  const setUpdatePeers = useSetAtom(updatePeersAtom)
-  const [peers] = useAtom(peersAtom)
-  const [currHash] = useAtom(getCurrHashAtom)
+  useEffect(() => {
+    setPeers({})
+    if (!currHash) return
 
-  useSWRImmutable(currHash ? API.sync.torrentPeers(currHash, rid) : null, {
-    // keepPreviousData: true,
-    onSuccess: (data) => {
-      setUpdatePeers(data)
-      if (data.rid) {
-        setTimeout(() => {
-          setRid(data.rid)
-        }, refreshInterval)
-      }
-    },
-  })
+    const controller = new SyncController<PeersData>({
+      fetch: (rid, signal) =>
+        qbApi.getJson(API.sync.torrentPeers(currHash, rid), signal),
+      onData: updatePeers,
+      interval: () => refreshInterval,
+    })
+    controller.start()
+    return () => controller.stop()
+  }, [currHash, refreshInterval, setPeers, updatePeers])
 
-  // console.log('peers: ', Object.values(peers))
-  const peersArr = useMemo(() => Object.values(peers), [peers])
-  return peersArr
+  return useMemo(() => Object.values(peers), [peers])
 }

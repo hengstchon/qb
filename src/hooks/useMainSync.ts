@@ -1,10 +1,13 @@
 import { useEffect } from 'react'
-import { atom, useAtom, useSetAtom } from 'jotai'
-import useSWRImmutable from 'swr/immutable'
-import { API } from '@/services'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
+import { API, qbApi, QbApiError } from '@/services'
 import { mergeMainData } from '@/services/mainData'
+import { SyncController } from '@/services/syncController'
 import {
+  authAtom,
+  authErrorAtom,
   categoriesAtom,
+  connectionInfoAtom,
   refreshIntervalAtom,
   serverStateAtom,
   tagsAtom,
@@ -12,8 +15,6 @@ import {
   trackersAtom,
 } from '@/store'
 import { SyncData } from '@/types'
-
-export const mainRidAtom = atom(0)
 
 const updateMainDataAtom = atom(null, (get, set, newData: SyncData) => {
   const next = mergeMainData(
@@ -35,23 +36,37 @@ const updateMainDataAtom = atom(null, (get, set, newData: SyncData) => {
 })
 
 export const useSyncMainData = () => {
-  const [rid, setRid] = useAtom(mainRidAtom)
-  const [refreshInterval] = useAtom(refreshIntervalAtom)
-  const setUpdateMainData = useSetAtom(updateMainDataAtom)
-
-  const { data } = useSWRImmutable(API.sync.maindata(rid))
+  const refreshInterval = useAtomValue(refreshIntervalAtom)
+  const updateMainData = useSetAtom(updateMainDataAtom)
+  const setIsAuthed = useSetAtom(authAtom)
+  const setAuthError = useSetAtom(authErrorAtom)
+  const setConnectionInfo = useSetAtom(connectionInfoAtom)
 
   useEffect(() => {
-    if (data) {
-      setUpdateMainData(data)
-      if (data.rid) {
-        const timeoutId = setTimeout(() => {
-          setRid(data.rid)
-        }, refreshInterval)
-        return () => {
-          clearTimeout(timeoutId)
+    const controller = new SyncController<SyncData>({
+      fetch: (rid, signal) => qbApi.getJson(API.sync.maindata(rid), signal),
+      onData: updateMainData,
+      onError: (error) => {
+        if (
+          error instanceof QbApiError &&
+          [401, 403].includes(error.status ?? 0)
+        ) {
+          setConnectionInfo(null)
+          setIsAuthed(false)
+          setAuthError(
+            'Your qBittorrent session expired. Please sign in again.',
+          )
         }
-      }
-    }
-  }, [data, refreshInterval, setRid, setUpdateMainData])
+      },
+      interval: () => refreshInterval,
+    })
+    controller.start()
+    return () => controller.stop()
+  }, [
+    refreshInterval,
+    setAuthError,
+    setConnectionInfo,
+    setIsAuthed,
+    updateMainData,
+  ])
 }
