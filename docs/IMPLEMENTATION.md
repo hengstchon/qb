@@ -184,3 +184,26 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (43 tests)
 - `pnpm run build`
+
+## P0.9 — qBittorrent 5.x response types
+
+Completed:
+
+- Added optional `i2p_dest` peer support and made IP/port optional; the peer
+  table displays the I2P destination when no IP address exists.
+- Accepted `null` category `downloadPath` values and preserved them through
+  full and incremental main-data merges.
+- Added tracker status 5 (Tracker error) and 6 (Unreachable), announce timing,
+  and endpoint types and columns.
+- Added current optional torrent and server-state fields used by newer WebAPI
+  responses.
+- Added lightweight peer and tracker runtime normalizers that default or drop
+  malformed values rather than crashing detail views.
+- Updated table formatters to tolerate omitted optional peer/tracker fields.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (47 tests)
+- `pnpm run build`

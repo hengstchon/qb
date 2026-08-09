@@ -9,6 +9,7 @@ import useSWR from 'swr'
 import DataTable from '@/components/common/DataTable'
 import { trksColumns } from '@/config/columns'
 import { API } from '@/services'
+import { normalizeTrackers } from '@/services/normalizers'
 import { getCurrHashAtom, trackerTableStateAtom } from '@/store'
 import { Tracker } from '@/types'
 import Actions from './Actions'
@@ -32,10 +33,11 @@ const Trackers = () => {
   const [currHash] = useAtom(getCurrHashAtom)
   // console.log(currHash)
 
-  const { data } = useSWR<Tracker[]>(
+  const { data } = useSWR<unknown>(
     currHash ? API.torrents.trackers(currHash) : null,
     { keepPreviousData: true, fallbackData: [] },
   )
+  const trackers = normalizeTrackers(data)
 
   const [columnOrder, onColumnOrderChange] = useAtom(trksColOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(trksColSizingAtom)
@@ -43,7 +45,7 @@ const Trackers = () => {
   const [sorting, onSortingChange] = useAtom(trksSortAtom)
 
   const table = useReactTable({
-    data: data!,
+    data: trackers,
     columns: trksColumns,
     state: {
       columnOrder,

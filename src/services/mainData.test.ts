@@ -75,4 +75,16 @@ describe('mergeMainData', () => {
     expect(result.trackers).toEqual({ keep: ['abc'] })
     expect(result.tags).toEqual(['keep'])
   })
+
+  it('preserves a null category download path from 5.x', () => {
+    const result = mergeMainData(emptyMainData(), {
+      rid: 4,
+      full_update: true,
+      categories: {
+        media: { name: 'media', savePath: '/downloads', downloadPath: null },
+      },
+    })
+
+    expect(result.categories.media.downloadPath).toBeNull()
+  })
 })

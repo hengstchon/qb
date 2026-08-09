@@ -28,6 +28,8 @@ export type ServerState = {
   up_rate_limit: number
   use_alt_speed_limits: boolean
   write_cache_overload: string
+  request_latency?: number
+  queued_tracker_announces?: number
 }
 
 export interface MainData {

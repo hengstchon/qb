@@ -1,14 +1,16 @@
 import { produce } from 'immer'
 import { atom } from 'jotai'
+import { normalizePeersData } from '@/services/normalizers'
 import { Peers, PeersData } from '@/types'
 
 export const peersRidAtom = atom(0)
 
 export const peersAtom = atom<Peers>({})
 
-export const updatePeersAtom = atom(null, (_, set, val: PeersData) => {
+export const updatePeersAtom = atom(null, (_, set, value: unknown) => {
+  const val: PeersData = normalizePeersData(value)
   if (val.full_update) {
-    set(peersAtom, val.peers as Peers)
+    set(peersAtom, (val.peers ?? {}) as Peers)
   } else {
     if (val.peers) {
       set(peersAtom, (prev) => {

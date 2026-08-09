@@ -47,6 +47,11 @@ export type Torrent = {
   uploaded: number
   uploaded_session: number
   upspeed: number
+  download_path?: string
+  has_tracker_warning?: boolean
+  has_tracker_error?: boolean
+  has_other_announce_error?: boolean
+  share_limit_action?: string
 }
 
 export type Torrents = Record<string, Torrent>

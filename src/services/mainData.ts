@@ -17,6 +17,23 @@ const normalizeTorrents = (torrents: SyncData['torrents'] = {}) =>
     ]),
   ) as Torrents
 
+const normalizeCategories = (categories: SyncData['categories'] = {}) =>
+  Object.fromEntries(
+    Object.entries(categories).map(([key, category]) => [
+      key,
+      {
+        name: typeof category?.name === 'string' ? category.name : key,
+        savePath:
+          typeof category?.savePath === 'string' ? category.savePath : '',
+        downloadPath:
+          category?.downloadPath === null ||
+          typeof category?.downloadPath === 'string'
+            ? category.downloadPath
+            : undefined,
+      },
+    ]),
+  )
+
 export const emptyServerState = (): ServerState => ({
   alltime_dl: 0,
   alltime_ul: 0,
@@ -59,7 +76,7 @@ export const mergeMainData = (
   if (update.full_update) {
     return {
       torrents: normalizeTorrents(update.torrents),
-      categories: update.categories ?? {},
+      categories: normalizeCategories(update.categories),
       tags: update.tags ?? [],
       trackers: update.trackers ?? {},
       server_state: { ...emptyServerState(), ...update.server_state },
@@ -77,7 +94,10 @@ export const mergeMainData = (
   }
   for (const hash of update.torrents_removed ?? []) delete torrents[hash]
 
-  const categories = { ...previous.categories, ...update.categories }
+  const categories = {
+    ...previous.categories,
+    ...normalizeCategories(update.categories),
+  }
   for (const name of update.categories_removed ?? []) delete categories[name]
 
   const trackers = { ...previous.trackers, ...update.trackers }
