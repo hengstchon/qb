@@ -1,3 +1,5 @@
+import type { TorrentState } from '@/domain/torrentState'
+
 export type Torrent = {
   added_on: number
   amount_left: number
@@ -34,7 +36,7 @@ export type Torrent = {
   seen_complete: number
   seq_dl: boolean
   size: number
-  state: string
+  state: TorrentState
   super_seeding: boolean
   tags: string
   time_active: number

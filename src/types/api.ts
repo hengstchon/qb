@@ -1,6 +1,6 @@
 import { Categories } from './category'
 import { Tags } from './tag'
-import { Torrents } from './torrent'
+import { Torrent, Torrents } from './torrent'
 import { Trackers } from './tracker'
 
 export type ServerState = {
@@ -38,9 +38,14 @@ export interface MainData {
   server_state: ServerState
 }
 
-export interface SyncData extends Partial<Omit<MainData, 'server_state'>> {
+export interface SyncData
+  extends Partial<Omit<MainData, 'server_state' | 'torrents'>> {
   rid: number
   full_update?: boolean
+  torrents?: Record<
+    string,
+    Partial<Omit<Torrent, 'state'>> & { state?: unknown }
+  >
   torrents_removed?: string[]
   categories_removed?: string[]
   tags_removed?: string[]

@@ -25,6 +25,25 @@ Validation:
 - `pnpm run test`
 - `pnpm run build`
 
+CI uses Node.js 24 and pnpm 11.21.0. The local validation host used the current
+Node.js 26 release and therefore emitted the expected engine warning, but all
+checks completed.
+
+## P0.2 — TypeScript build repair
+
+Completed:
+
+- Restored the TanStack Table `ColumnMeta.className` module augmentation.
+- Changed table and atom symbols used only as types to type-only imports.
+- Aliased TanStack's `Row` type to avoid colliding with the local `Row`
+  component.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run build`
+
 ## P0.3 — Minimum automated tests and CI
 
 Completed:
@@ -43,23 +62,4 @@ Validation:
 - `pnpm run typecheck`
 - `pnpm run lint`
 - `pnpm run test` (14 tests)
-- `pnpm run build`
-
-CI uses Node.js 24 and pnpm 11.21.0. The local validation host used the current
-Node.js 26 release and therefore emitted the expected engine warning, but all
-checks completed.
-
-## P0.2 — TypeScript build repair
-
-Completed:
-
-- Restored the TanStack Table `ColumnMeta.className` module augmentation.
-- Changed table and atom symbols used only as types to type-only imports.
-- Aliased TanStack's `Row` type to avoid colliding with the local `Row`
-  component.
-
-Validation:
-
-- `pnpm run typecheck`
-- `pnpm run lint`
 - `pnpm run build`

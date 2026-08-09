@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { produce } from 'immer'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import useSWRImmutable from 'swr/immutable'
 import { API } from '@/services'
+import { mergeMainData } from '@/services/mainData'
 import {
   categoriesAtom,
   refreshIntervalAtom,
@@ -11,69 +11,27 @@ import {
   torrentsAtom,
   trackersAtom,
 } from '@/store'
-import { ServerState, SyncData, Torrent } from '@/types'
+import { SyncData } from '@/types'
 
 export const mainRidAtom = atom(0)
 
-const removeProducer = (value: string[]) =>
-  produce((draft) => {
-    value.forEach((key) => delete draft[key])
-  })
+const updateMainDataAtom = atom(null, (get, set, newData: SyncData) => {
+  const next = mergeMainData(
+    {
+      torrents: get(torrentsAtom),
+      trackers: get(trackersAtom),
+      categories: get(categoriesAtom),
+      tags: get(tagsAtom),
+      server_state: get(serverStateAtom),
+    },
+    newData,
+  )
 
-const updateMainDataAtom = atom(null, (_, set, newData: SyncData) => {
-  if (newData.full_update) {
-    const { torrents, trackers, categories, tags, server_state } = newData
-    set(torrentsAtom, torrents!)
-    set(trackersAtom, trackers!)
-    set(categoriesAtom, categories!)
-    set(tagsAtom, tags!)
-    set(serverStateAtom, server_state as ServerState)
-    return
-  }
-
-  for (const [key, value] of Object.entries(newData)) {
-    switch (key) {
-      case 'tags':
-        set(tagsAtom, (prev) => [...prev, ...value])
-        break
-      case 'tags_removed':
-        set(tagsAtom, (prev) => prev.filter((v) => !value.includes(v)))
-        break
-      case 'categories':
-        set(categoriesAtom, (prev) => ({ ...prev, ...value }))
-        break
-      case 'categories_removed':
-        set(categoriesAtom, removeProducer(value))
-        break
-      case 'trackers':
-        set(trackersAtom, (prev) => ({ ...prev, ...value }))
-        break
-      case 'trackers_removed':
-        set(trackersAtom, removeProducer(value))
-        break
-      case 'torrents': {
-        set(
-          torrentsAtom,
-          produce((draft) => {
-            Object.entries(value).forEach(([hash, props]) => {
-              if (hash in draft) {
-                Object.assign(draft[hash], props)
-              } else {
-                draft[hash] = props as Torrent
-              }
-            })
-          }),
-        )
-        break
-      }
-      case 'torrents_removed':
-        set(torrentsAtom, removeProducer(value))
-        break
-      case 'server_state':
-        set(serverStateAtom, (prev) => ({ ...prev, ...value }))
-        break
-    }
-  }
+  set(torrentsAtom, next.torrents)
+  set(trackersAtom, next.trackers)
+  set(categoriesAtom, next.categories)
+  set(tagsAtom, next.tags)
+  set(serverStateAtom, next.server_state)
 })
 
 export const useSyncMainData = () => {
@@ -95,5 +53,5 @@ export const useSyncMainData = () => {
         }
       }
     }
-  }, [data, refreshInterval])
+  }, [data, refreshInterval, setRid, setUpdateMainData])
 }
