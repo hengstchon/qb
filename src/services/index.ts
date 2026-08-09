@@ -1,4 +1,5 @@
 export * from './api'
+export * from './addTorrent'
 export * from './client'
 export * from './version'
 export * from './torrents'

@@ -1,8 +1,9 @@
 import { Dispatch, useState } from 'react'
-import { SetStateAction, useAtom } from 'jotai'
+import { SetStateAction, useAtom, useAtomValue } from 'jotai'
 import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
-import { API, qbApi } from '@/services'
-import { categoriesAtom, tagsAtom } from '@/store'
+import { noCapabilities } from '@/domain/capabilities'
+import { addTorrents, type AddTorrentResult } from '@/services'
+import { categoriesAtom, connectionInfoAtom, tagsAtom } from '@/store'
 import { AddTorrentPayload } from '@/types'
 import { Button } from '@/ui/Button'
 import { Checkbox } from '@/ui/Checkbox'
@@ -59,12 +60,14 @@ type FromLinksTabType = {
   setUrls: Dispatch<SetStateAction<string>>
   cookie: string
   setCookie: Dispatch<SetStateAction<string>>
+  showCookie: boolean
 }
 function UploadLinksTab({
   urls,
   setUrls,
   cookie,
   setCookie,
+  showCookie,
 }: FromLinksTabType) {
   return (
     <>
@@ -77,22 +80,26 @@ function UploadLinksTab({
         value={urls}
         onChange={(e) => setUrls(e.target.value)}
       />
-      <div className="flex items-center space-x-2">
-        <Label htmlFor="cookie" className="font-normal">
-          Cookie:
-        </Label>
-        <Input
-          id="cookie"
-          className=""
-          value={cookie}
-          onChange={(e) => setCookie(e.target.value)}
-        />
-      </div>
+      {showCookie && (
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="cookie" className="font-normal">
+            Cookie:
+          </Label>
+          <Input
+            id="cookie"
+            value={cookie}
+            onChange={(e) => setCookie(e.target.value)}
+          />
+        </div>
+      )}
     </>
   )
 }
 
 export function AddTorrent() {
+  const [open, setOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [result, setResult] = useState<AddTorrentResult | null>(null)
   const [files, setFiles] = useState<File[]>([])
   const [urls, setUrls] = useState('')
   const [savepath, setSavepath] = useState('')
@@ -111,6 +118,8 @@ export function AddTorrent() {
 
   const [allCategories] = useAtom(categoriesAtom)
   const [allTags] = useAtom(tagsAtom)
+  const connectionInfo = useAtomValue(connectionInfoAtom)
+  const capabilities = connectionInfo?.capabilities ?? noCapabilities
 
   const tabs = [
     {
@@ -125,27 +134,21 @@ export function AddTorrent() {
           setUrls={setUrls}
           cookie={cookie}
           setCookie={setCookie}
+          showCookie={capabilities.supportsAddTorrentCookie}
         />
       ),
     },
   ]
 
-  function handleSubmit() {
-    // console.log('torrents:', files)
-    // console.log('urls:', urls)
-    // console.log('savepath:', savepath)
-    // console.log('cookie:', cookie)
-    // console.log('category:', category)
-    // console.log('tags:', tags)
-    // console.log('skip_checking:', skip_checking)
-    // console.log('startTorrent:', startTorrent)
-    // console.log('root_folder:', root_folder)
-    // console.log('rename:', rename)
-    // console.log('upLimit:', upLimit)
-    // console.log('dlLimit:', dlLimit)
-    // console.log('autoTMM:', autoTMM)
-    // console.log('sequentialDownload:', sequentialDownload)
-    // console.log('firstLastPiecePrio:', firstLastPiecePrio)
+  async function handleSubmit() {
+    if (files.length === 0 && !urls.trim()) {
+      setResult({
+        kind: 'invalid',
+        message: 'Choose a .torrent file or enter at least one URL.',
+      })
+      return
+    }
+
     const params: AddTorrentPayload = {
       torrents: files,
       urls,
@@ -163,14 +166,24 @@ export function AddTorrent() {
       sequentialDownload,
       firstLastPiecePrio,
     }
-    void qbApi
-      .postMultipart<string>(API.torrents.addTorrents, params, 'text')
-      .then((data) => console.log('response text:', data))
-      .catch((error) => console.error('Unable to add torrent:', error))
+    setSubmitting(true)
+    setResult(null)
+    try {
+      setResult(await addTorrents(params, capabilities))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (submitting) return
+        setOpen(nextOpen)
+        if (nextOpen) setResult(null)
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusCircleIcon className="mr-2 h-4 w-4" />
@@ -385,9 +398,22 @@ export function AddTorrent() {
             </CollapsibleContent>
           </Collapsible>
         </div>
+        {result && (
+          <p
+            role={result.kind === 'added' ? 'status' : 'alert'}
+            className={cn(
+              'text-sm',
+              result.kind === 'added' || result.kind === 'pending'
+                ? 'text-green-600'
+                : 'text-destructive',
+            )}
+          >
+            {result.message}
+          </p>
+        )}
         <DialogFooter>
-          <Button type="submit" onClick={handleSubmit}>
-            Upload
+          <Button type="submit" disabled={submitting} onClick={handleSubmit}>
+            {submitting ? 'Uploading…' : 'Upload'}
           </Button>
         </DialogFooter>
       </DialogContent>

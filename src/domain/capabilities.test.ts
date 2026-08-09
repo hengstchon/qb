@@ -8,6 +8,8 @@ describe('qBittorrent WebAPI capabilities', () => {
       supportsClientData: false,
       supportsApiKey: false,
       supportsPieceAvailability: false,
+      supportsAddTorrentCookie: true,
+      supportsStructuredAddResponse: false,
     })
   })
 
@@ -17,6 +19,8 @@ describe('qBittorrent WebAPI capabilities', () => {
       supportsClientData: true,
       supportsApiKey: true,
       supportsPieceAvailability: false,
+      supportsAddTorrentCookie: false,
+      supportsStructuredAddResponse: true,
     })
   })
 

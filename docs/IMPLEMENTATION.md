@@ -160,3 +160,27 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (37 tests)
 - `pnpm run build`
+
+## P0.8 — Add Torrent compatibility and feedback
+
+Completed:
+
+- Added capability gates for the removed Add Torrent `cookie` field (WebAPI
+  2.11.3) and structured add responses (WebAPI 2.14.0).
+- Keep the legacy cookie input and text response parser for qBittorrent 4.x,
+  while omitting that field entirely for supported 5.x servers.
+- Parse structured success, pending, failure, and added-ID counts, including
+  the HTTP 202 background-processing response.
+- Convert duplicate/all-failed HTTP 409 and invalid HTTP 415 responses into
+  explicit result states.
+- Show deterministic dialog feedback for added, processing, partial success,
+  duplicate, invalid, and failed outcomes; block close and repeat submission
+  while a request is active.
+- Validate that a file or URL is present before submitting.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (43 tests)
+- `pnpm run build`

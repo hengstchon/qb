@@ -3,6 +3,8 @@ export type QbCapabilities = {
   supportsClientData: boolean
   supportsApiKey: boolean
   supportsPieceAvailability: boolean
+  supportsAddTorrentCookie: boolean
+  supportsStructuredAddResponse: boolean
 }
 
 export type QbConnectionInfo = {
@@ -32,11 +34,17 @@ const atLeast = (version: string, minimum: [number, number, number]) => {
 
 export const capabilitiesForWebApi = (
   webApiVersion: string,
-): QbCapabilities => ({
-  supportsStartStop: atLeast(webApiVersion, [2, 11, 0]),
-  supportsClientData: atLeast(webApiVersion, [2, 13, 1]),
-  supportsApiKey: atLeast(webApiVersion, [2, 14, 1]),
-  supportsPieceAvailability: atLeast(webApiVersion, [2, 15, 1]),
-})
+): QbCapabilities => {
+  const isKnownVersion = parseVersion(webApiVersion) !== null
+  return {
+    supportsStartStop: atLeast(webApiVersion, [2, 11, 0]),
+    supportsClientData: atLeast(webApiVersion, [2, 13, 1]),
+    supportsApiKey: atLeast(webApiVersion, [2, 14, 1]),
+    supportsPieceAvailability: atLeast(webApiVersion, [2, 15, 1]),
+    supportsAddTorrentCookie:
+      isKnownVersion && !atLeast(webApiVersion, [2, 11, 3]),
+    supportsStructuredAddResponse: atLeast(webApiVersion, [2, 14, 0]),
+  }
+}
 
 export const noCapabilities = capabilitiesForWebApi('unknown')

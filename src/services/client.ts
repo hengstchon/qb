@@ -22,6 +22,7 @@ export class QbApiError extends Error {
   readonly status?: number
   readonly endpoint: string
   readonly serverMessage?: string
+  readonly responseData?: unknown
   override readonly cause?: unknown
 
   constructor({
@@ -29,12 +30,14 @@ export class QbApiError extends Error {
     status,
     endpoint,
     serverMessage,
+    responseData,
     cause,
   }: {
     message: string
     status?: number
     endpoint: string
     serverMessage?: string
+    responseData?: unknown
     cause?: unknown
   }) {
     super(message)
@@ -42,6 +45,7 @@ export class QbApiError extends Error {
     this.status = status
     this.endpoint = endpoint
     this.serverMessage = serverMessage
+    this.responseData = responseData
     this.cause = cause
   }
 }
@@ -57,13 +61,18 @@ const appendQuery = (url: URL, query?: ApiQuery) => {
 
 const readableError = async (response: Response) => {
   const text = await response.text()
-  if (!text) return response.statusText || undefined
+  if (!text) {
+    return { message: response.statusText || undefined, data: undefined }
+  }
   try {
     const parsed = JSON.parse(text) as { message?: unknown; error?: unknown }
     const message = parsed.message ?? parsed.error
-    return typeof message === 'string' ? message : text
+    return {
+      message: typeof message === 'string' ? message : text,
+      data: parsed,
+    }
   } catch {
-    return text
+    return { message: text, data: text }
   }
 }
 
@@ -118,13 +127,15 @@ export class QbApiClient {
       })
 
       if (!response.ok) {
-        const serverMessage = await readableError(response)
+        const errorResponse = await readableError(response)
         throw new QbApiError({
           message:
-            serverMessage || `qBittorrent request failed (${response.status}).`,
+            errorResponse.message ||
+            `qBittorrent request failed (${response.status}).`,
           status: response.status,
           endpoint,
-          serverMessage,
+          serverMessage: errorResponse.message,
+          responseData: errorResponse.data,
         })
       }
 
