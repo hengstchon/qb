@@ -21,10 +21,10 @@ const HomePage = () => {
     <div className="flex h-screen flex-col">
       <Toolbar />
 
-      <ResizablePanelGroup direction="horizontal" autoSaveId="main">
+      <ResizablePanelGroup orientation="horizontal" id="main">
         {isOpened && (
           <>
-            <ResizablePanel order={1} minSize={5} defaultSize={15}>
+            <ResizablePanel id="sidebar" minSize="5%" defaultSize="15%">
               <Sidebar />
             </ResizablePanel>
 
@@ -32,7 +32,7 @@ const HomePage = () => {
           </>
         )}
 
-        <ResizablePanel className="flex flex-col" order={2} minSize={5}>
+        <ResizablePanel id="content" className="flex flex-col" minSize="5%">
           <Torrents />
           <Details />
         </ResizablePanel>

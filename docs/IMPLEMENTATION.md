@@ -373,3 +373,34 @@ Validation:
 - `pnpm peers check`
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+
+## P2.14c — React 19 and peer-compatible UI libraries
+
+Completed:
+
+- Upgraded the React and React DOM runtimes and declarations from 18.3 to
+  19.2.8, retaining the existing application-wide Strict Mode boundary.
+- Upgraded Radix UI, cmdk, next-themes, SWR, and react-resizable-panels to
+  current releases with a clean peer dependency graph.
+- Replaced the removed global `JSX` namespace reference with React's explicit
+  element type.
+- Migrated resizable panels to its v4 `Group` and `Separator` API, stable panel
+  identifiers, CSS percentage sizes, and ARIA orientation selectors.
+- Used an interactive Chromium geometry check to identify that the migrated
+  separator was covering the viewport, then corrected its horizontal-group
+  orientation semantics and verified the Add Torrent dialog remained usable.
+- Recorded a 644.31 kB minified / 201.01 kB gzip main JavaScript asset after
+  the runtime upgrades; P2.16 will establish the ongoing bundle threshold.
+- Re-ran synchronization fake-timer coverage and both production Docker smoke
+  workflows to guard the effect lifecycle and user flows during the upgrade.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests on React 19.2.8)
+- `pnpm run build`
+- `pnpm peers check`
+- Interactive Chromium layout and Add Torrent dialog inspection
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)

@@ -100,7 +100,7 @@ function NormalTableHeader() {
   )
 }
 
-function TableHeaderDndContext({ children }: { children: JSX.Element }) {
+function TableHeaderDndContext({ children }: { children: React.ReactElement }) {
   const [columnOrder, setColumnOrder] = useAtom(torsColOrderAtom)
 
   const reorderColumn = (
