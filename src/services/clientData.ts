@@ -1,6 +1,7 @@
 import type {
   FilesTableState,
   PeerTableState,
+  SettingsStorage,
   TorrentTableState,
   TrackerTableState,
 } from '@/types'
@@ -39,6 +40,16 @@ export type SharedClientSettings = {
     FilesTableState,
     'columnOrder' | 'columnSizing' | 'columnVisibility'
   >
+  interface?: Pick<
+    SettingsStorage,
+    | 'detailsTab'
+    | 'openDetails'
+    | 'openSidebar'
+    | 'openSidebarStatus'
+    | 'openSidebarCategories'
+    | 'openSidebarTags'
+    | 'openSidebarTrackers'
+  >
 }
 
 type ClientDataApi = Pick<QbApiClient, 'getJson' | 'postForm'>
@@ -53,6 +64,20 @@ const isTableState = (value: unknown): value is SharedTableState =>
   isRecord(value.columnSizing) &&
   isRecord(value.columnVisibility)
 
+const isInterfaceSettings = (
+  value: unknown,
+): value is NonNullable<SharedClientSettings['interface']> =>
+  isRecord(value) &&
+  typeof value.detailsTab === 'string' &&
+  [
+    'openDetails',
+    'openSidebar',
+    'openSidebarStatus',
+    'openSidebarCategories',
+    'openSidebarTags',
+    'openSidebarTrackers',
+  ].every((key) => typeof value[key] === 'boolean')
+
 export const parseSharedClientSettings = (
   value: unknown,
 ): SharedClientSettings | null => {
@@ -64,7 +89,8 @@ export const parseSharedClientSettings = (
     !isTableState(value.trackerTable) ||
     !isTableState(value.peerTable) ||
     !isTableState(value.fileTable) ||
-    (value.theme !== undefined && typeof value.theme !== 'string')
+    (value.theme !== undefined && typeof value.theme !== 'string') ||
+    (value.interface !== undefined && !isInterfaceSettings(value.interface))
   ) {
     return null
   }

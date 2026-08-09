@@ -1,4 +1,5 @@
 export * from './api'
+export * from './batchActions'
 export * from './addTorrent'
 export * from './client'
 export * from './clientData'

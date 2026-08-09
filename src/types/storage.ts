@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table'
 
 export type SettingsStorage = {
+  detailsTab: string
   openDetails: boolean
   refreshInterval: number
   openSidebar: boolean

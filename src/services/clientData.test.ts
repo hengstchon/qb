@@ -22,6 +22,15 @@ const settings: SharedClientSettings = {
   trackerTable: table,
   peerTable: table,
   fileTable: table,
+  interface: {
+    detailsTab: 'Trackers',
+    openDetails: true,
+    openSidebar: true,
+    openSidebarStatus: false,
+    openSidebarCategories: true,
+    openSidebarTags: false,
+    openSidebarTrackers: true,
+  },
 }
 
 describe('shared qBittorrent client data', () => {
@@ -42,6 +51,12 @@ describe('shared qBittorrent client data', () => {
     ).toBeNull()
     expect(
       parseSharedClientSettings({ ...settings, torrentTable: {} }),
+    ).toBeNull()
+    expect(
+      parseSharedClientSettings({
+        ...settings,
+        interface: { ...settings.interface, openDetails: 'yes' },
+      }),
     ).toBeNull()
   })
 

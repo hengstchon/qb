@@ -44,6 +44,7 @@ export const useClientDataSync = () => {
         setSettings((current) => ({
           ...current,
           refreshInterval: remote.refreshInterval,
+          ...(remote.interface ?? {}),
         }))
         setTorrentTable((current) => ({ ...current, ...remote.torrentTable }))
         setTrackerTable((current) => ({ ...current, ...remote.trackerTable }))
@@ -67,6 +68,15 @@ export const useClientDataSync = () => {
       schemaVersion: 1,
       refreshInterval: settings.refreshInterval,
       theme,
+      interface: {
+        detailsTab: settings.detailsTab,
+        openDetails: settings.openDetails,
+        openSidebar: settings.openSidebar,
+        openSidebarStatus: settings.openSidebarStatus,
+        openSidebarCategories: settings.openSidebarCategories,
+        openSidebarTags: settings.openSidebarTags,
+        openSidebarTrackers: settings.openSidebarTrackers,
+      },
       torrentTable: pickSharedTableState(torrentTable),
       trackerTable: pickSharedTableState(trackerTable),
       peerTable: pickSharedTableState(peerTable),
@@ -81,6 +91,13 @@ export const useClientDataSync = () => {
     loaded,
     peerTable,
     settings.refreshInterval,
+    settings.detailsTab,
+    settings.openDetails,
+    settings.openSidebar,
+    settings.openSidebarCategories,
+    settings.openSidebarStatus,
+    settings.openSidebarTags,
+    settings.openSidebarTrackers,
     supportsClientData,
     theme,
     torrentTable,

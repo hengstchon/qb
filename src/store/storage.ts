@@ -17,6 +17,7 @@ import { atomWithLocalStorage, removeItem } from '@/utils'
 removeItem('auth')
 
 const defaultSettings: SettingsStorage = {
+  detailsTab: 'Peers',
   openDetails: false,
   refreshInterval: 5000,
   openSidebar: true,

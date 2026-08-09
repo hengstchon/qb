@@ -109,6 +109,16 @@ test('renders detailed swarm data and virtualizes large peer and file sets', asy
   await expect(trackerTable).toContainText('Unreachable')
   await expect(trackerTable).toContainText('Unknown (9)')
   await expect(trackerTable).toContainText('Network unreachable')
+  await trackerTable.getByRole('checkbox', { name: 'Select row 0' }).click()
+  const trackerReannounce = page.waitForRequest((request) =>
+    request.url().endsWith('/api/v2/torrents/reannounce'),
+  )
+  await page
+    .getByRole('button', { name: 'Reannounce selected trackers' })
+    .click()
+  expect((await trackerReannounce).postData()).toContain(
+    'urls=https%3A%2F%2Ftracker.example%2Fannounce',
+  )
 
   await page.getByRole('tab', { name: 'Peers' }).click()
   const peerTable = page.getByRole('table', { name: 'Peers' })

@@ -9,6 +9,7 @@ import { focusAtom } from 'jotai-optics'
 import useSWR from 'swr'
 import DataTable from '@/components/common/DataTable'
 import { trksColumns } from '@/config/columns'
+import { noCapabilities } from '@/domain/capabilities'
 import { API } from '@/services'
 import { normalizeTrackers } from '@/services/normalizers'
 import {
@@ -42,7 +43,7 @@ const Trackers = () => {
     currHash ? API.torrents.trackers(currHash) : null,
     { keepPreviousData: true, fallbackData: [], refreshInterval: 5000 },
   )
-  const trackers = normalizeTrackers(data)
+  const trackers = useMemo(() => normalizeTrackers(data), [data])
   const connectionInfo = useAtomValue(connectionInfoAtom)
   const columns = useMemo(
     () =>
@@ -82,7 +83,10 @@ const Trackers = () => {
 
   return (
     <div className="grid gap-2">
-      <Actions />
+      <Actions
+        table={table}
+        capabilities={connectionInfo?.capabilities ?? noCapabilities}
+      />
       <div className="overflow-auto">
         <DataTable<Tracker>
           table={table}

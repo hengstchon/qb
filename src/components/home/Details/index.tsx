@@ -14,6 +14,9 @@ import Trackers from './Tracker'
 const openDetailsAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('openDetails'),
 )
+const detailsTabAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop('detailsTab'),
+)
 
 const tabs = [
   { name: 'General', content: <General /> },
@@ -25,11 +28,13 @@ const tabs = [
 
 const Details = () => {
   const [openDetails, setOpenDetails] = useAtom(openDetailsAtom)
+  const [detailsTab, setDetailsTab] = useAtom(detailsTabAtom)
 
   return (
     <Tabs
       className={cn('flex flex-col px-4', openDetails && 'h-96')}
-      defaultValue={tabs[2].name}
+      value={detailsTab}
+      onValueChange={setDetailsTab}
     >
       <TabsList className="flex justify-between rounded-b-none">
         <div>

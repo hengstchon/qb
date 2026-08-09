@@ -2,6 +2,7 @@ import { Table } from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { statusList } from '@/config/constants'
+import type { BatchActionFeedback } from '@/domain/batchActions'
 import {
   Categories,
   ServerState,
@@ -82,6 +83,9 @@ export const serverStateAtom = atom<ServerState>({
 })
 
 export const currTorAtom = atom(-1)
+
+export const batchActionFeedbackAtom = atom<BatchActionFeedback | null>(null)
+export const batchActionPendingAtom = atom(false)
 
 export const torsTableAtom = atom<Table<Torrent> | null>(null)
 

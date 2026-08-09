@@ -581,3 +581,47 @@ Validation:
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed; no new endpoint request)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
 - `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
+
+## P3.19 — Batch torrent actions and shared interface settings
+
+Completed:
+
+- Replaced the selected-row action stubs with working category, tag, upload and
+  download rate, share limit, location, recheck, reannounce, force-start,
+  automatic-management, sequential-download, first/last-piece-priority, and
+  super-seeding operations. Empty selections and pending operations disable the
+  applicable controls, and the limits form rejects invalid or empty changes.
+- Added per-torrent batch execution with `Promise.allSettled`. Successful items
+  remain successful when another request fails, feedback lists every failed
+  hash and server message, and failed deletion rows remain selected for retry.
+- Clarified deletion semantics in the confirmation dialog. Removing a torrent
+  defaults to preserving downloaded data; permanent data deletion requires an
+  explicit checkbox and changes the confirmation copy. Destructive 5.x share
+  limit actions require a separate acknowledgement.
+- Added capability boundaries for WebAPI 2.11.10 single-tracker reannounce and
+  WebAPI 2.12.0 share-limit actions. qBittorrent 4.4.5 receives only its legacy
+  share-limit fields and whole-torrent reannounce request, while 5.2.3 receives
+  inactive-seeding/action fields and selected tracker URLs.
+- Added persisted shared interface preferences through `clientdata`, including
+  the active details tab, details-panel visibility, and sidebar section states.
+  Existing clientdata without the optional interface object remains valid.
+- Stabilized normalized tracker data so row selection does not trigger table
+  auto-reset loops. Added accessible row-selection labels and exact action
+  selectors to keep keyboard and cross-browser automation unambiguous.
+- Added a fixed-version batch E2E covering zero, one, and multiple selections,
+  partial category failure, tag updates, limits, location, recheck, reannounce,
+  and destructive confirmation. The details E2E verifies selected tracker URLs,
+  and the core/visual suites cover the updated start and deletion controls.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (78 tests)
+- `pnpm run build` (665.89 kB main JS; 675.00 kB enforced limit)
+- `pnpm run e2e:bulk:qb445` (1 Playwright batch scenario passed)
+- `pnpm run e2e:bulk:qb523` (1 Playwright batch scenario passed)
+- `pnpm run e2e:details` (1 Playwright test passed with tracker selection)
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+- `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)

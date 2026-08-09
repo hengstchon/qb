@@ -95,13 +95,15 @@ test('themes, responsive layout, and Radix overlays render correctly', async ({
   await expect(torrentNameCell).toBeVisible({ timeout: 15_000 })
   await torrentNameCell.dispatchEvent('click')
 
-  await page.getByRole('button', { name: 'Start selected torrents' }).hover()
+  await page
+    .getByRole('button', { name: 'Start selected torrents', exact: true })
+    .hover()
   await expect(page.getByRole('tooltip')).toContainText('Start Torrents')
   await assertInsideViewport(page, 'Start Torrents')
 
   await page.getByRole('button', { name: 'Set torrent tags' }).click()
-  await expect(page.getByText('Set Tags:', { exact: true })).toBeVisible()
-  await assertInsideViewport(page, 'Set Tags:')
+  await expect(page.getByText('Tag operation', { exact: true })).toBeVisible()
+  await assertInsideViewport(page, 'Tag operation')
   await page.keyboard.press('Escape')
 
   await page.getByRole('button', { name: 'Copy torrent data' }).click()
@@ -117,6 +119,6 @@ test('themes, responsive layout, and Radix overlays render correctly', async ({
   })
 
   await page.getByRole('button', { name: 'Delete selected torrents' }).click()
-  await page.getByRole('button', { name: 'Confirm' }).click()
+  await page.getByRole('button', { name: 'Remove torrents only' }).click()
   await expect(torrentNameCell).toBeHidden({ timeout: 15_000 })
 })

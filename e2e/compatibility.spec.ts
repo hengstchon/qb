@@ -61,7 +61,9 @@ test('login, sync, filter, add, stop, start, and delete without files', async ({
       response.request().method() === 'POST' &&
       /\/api\/v2\/torrents\/(resume|start)$/.test(response.url()),
   )
-  await page.getByRole('button', { name: 'Start selected torrents' }).click()
+  await page
+    .getByRole('button', { name: 'Start selected torrents', exact: true })
+    .click()
   expect((await startResponse).ok()).toBe(true)
 
   const stopResponse = page.waitForResponse(
@@ -73,14 +75,16 @@ test('login, sync, filter, add, stop, start, and delete without files', async ({
   expect((await stopResponse).ok()).toBe(true)
 
   await page.getByRole('button', { name: 'Delete selected torrents' }).click()
-  const deleteFiles = page.getByLabel('Also delete the files on the hard disk')
+  const deleteFiles = page.getByLabel(
+    'Also permanently delete downloaded data from disk',
+  )
   await expect(deleteFiles).not.toBeChecked()
   const deleteRequest = page.waitForRequest(
     (request) =>
       request.method() === 'POST' &&
       request.url().endsWith('/api/v2/torrents/delete'),
   )
-  await page.getByRole('button', { name: 'Confirm' }).click()
+  await page.getByRole('button', { name: 'Remove torrents only' }).click()
   expect((await deleteRequest).postData()).toContain('deleteFiles=false')
   await expect(torrentNameCell).toBeHidden({ timeout: 15_000 })
 })

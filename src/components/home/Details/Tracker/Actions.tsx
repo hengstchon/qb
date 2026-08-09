@@ -1,28 +1,49 @@
-import {
-  ClipboardCopyIcon,
-  FileEditIcon,
-  FilePlus2Icon,
-  Trash2Icon,
-} from 'lucide-react'
+import type { Table } from '@tanstack/react-table'
+import { useAtomValue } from 'jotai'
+import { SatelliteDishIcon } from 'lucide-react'
+import type { QbCapabilities } from '@/domain/capabilities'
+import { useTorrentActions } from '@/hooks'
+import { reannounceTorrents } from '@/services'
+import { batchActionPendingAtom } from '@/store'
+import type { Tracker } from '@/types'
 import { Button } from '@/ui/Button'
 
-const Actions = () => {
+export default function Actions({
+  table,
+  capabilities,
+}: {
+  table: Table<Tracker>
+  capabilities: QbCapabilities
+}) {
+  const pending = useAtomValue(batchActionPendingAtom)
+  const { runSelected } = useTorrentActions()
+  if (!capabilities.supportsTrackerReannounce) return null
+
+  const urls = table
+    .getSelectedRowModel()
+    .rows.map((row) => row.original)
+    .filter((tracker) => tracker.tier >= 0)
+    .map((tracker) => tracker.url)
+
   return (
-    <div className="flex">
-      <Button variant="ghost" size="sm">
-        <FilePlus2Icon className="h-5 w-5" />
+    <div className="flex items-center gap-2">
+      <Button
+        aria-label="Reannounce selected trackers"
+        variant="ghost"
+        size="sm"
+        disabled={pending || urls.length === 0}
+        onClick={() =>
+          void runSelected('Reannounce tracker', (hashes) =>
+            reannounceTorrents(hashes, urls, capabilities),
+          )
+        }
+      >
+        <SatelliteDishIcon className="mr-2 h-4 w-4" />
+        Reannounce selected
       </Button>
-      <Button variant="ghost" size="sm">
-        <FileEditIcon className="h-5 w-5" />
-      </Button>
-      <Button variant="ghost" size="sm">
-        <Trash2Icon className="h-5 w-5" />
-      </Button>
-      <Button variant="ghost" size="sm">
-        <ClipboardCopyIcon className="h-5 w-5" />
-      </Button>
+      <span className="text-muted-foreground text-xs">
+        {urls.length} tracker(s) selected
+      </span>
     </div>
   )
 }
-
-export default Actions

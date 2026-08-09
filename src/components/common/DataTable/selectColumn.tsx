@@ -9,6 +9,7 @@ export const selectColumnDef = ch.display({
   enableResizing: false,
   header: ({ table }) => (
     <Checkbox
+      aria-label="Select all rows"
       checked={
         table.getIsSomeRowsSelected()
           ? 'indeterminate'
@@ -21,6 +22,7 @@ export const selectColumnDef = ch.display({
   ),
   cell: ({ row }) => (
     <Checkbox
+      aria-label={`Select row ${row.id}`}
       checked={row.getIsSelected()}
       onCheckedChange={row.getToggleSelectedHandler()}
       disabled={!row.getCanSelect()}

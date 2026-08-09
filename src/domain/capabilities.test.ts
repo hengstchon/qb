@@ -10,6 +10,8 @@ describe('qBittorrent WebAPI capabilities', () => {
       supportsPieceAvailability: false,
       supportsDetailedTrackers: false,
       supportsPeerHostName: false,
+      supportsTrackerReannounce: false,
+      supportsShareLimitAction: false,
       supportsAddTorrentCookie: true,
       supportsStructuredAddResponse: false,
       supportsTorrentMetadata: false,
@@ -24,6 +26,8 @@ describe('qBittorrent WebAPI capabilities', () => {
       supportsPieceAvailability: true,
       supportsDetailedTrackers: true,
       supportsPeerHostName: true,
+      supportsTrackerReannounce: true,
+      supportsShareLimitAction: true,
       supportsAddTorrentCookie: false,
       supportsStructuredAddResponse: true,
       supportsTorrentMetadata: true,
@@ -35,6 +39,8 @@ describe('qBittorrent WebAPI capabilities', () => {
       supportsDetailedTrackers: true,
       supportsPeerHostName: true,
       supportsPieceAvailability: true,
+      supportsTrackerReannounce: true,
+      supportsShareLimitAction: true,
     })
   })
 
