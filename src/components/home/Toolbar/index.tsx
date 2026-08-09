@@ -3,6 +3,7 @@ import {
   Info,
   Languages,
   LogOutIcon,
+  Monitor,
   Moon,
   Rss,
   Settings,
@@ -27,12 +28,15 @@ const Toolbar = () => {
   const { logout } = useAuth()
   const [openSidebar, setOpenSidebar] = useAtom(openSidebarAtom)
   const [refreshInterval, setRefreshInterval] = useAtom(refreshIntervalAtom)
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, theme = 'system', setTheme } = useTheme()
+  const nextTheme =
+    theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light'
 
   return (
-    <div className="flex h-12 items-center justify-between border-b bg-background p-2">
+    <div className="bg-background flex h-12 items-center justify-between border-b p-2">
       <div className="flex">
         <Button
+          aria-label="Toggle sidebar"
           variant="ghost"
           size="sm"
           onClick={() => setOpenSidebar((v) => !v)}
@@ -75,13 +79,20 @@ const Toolbar = () => {
         </Select>
 
         <Button
+          aria-label="Toggle color theme"
           variant="ghost"
           size="sm"
           onClick={() => {
-            setTheme(theme === 'dark' ? 'light' : 'dark')
+            setTheme(nextTheme)
           }}
         >
-          {theme === 'dark' ? <Sun /> : <Moon />}
+          {theme === 'system' ? (
+            <Monitor />
+          ) : resolvedTheme === 'dark' ? (
+            <Sun />
+          ) : (
+            <Moon />
+          )}
         </Button>
 
         <Button variant="ghost" size="sm">

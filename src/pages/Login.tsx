@@ -59,7 +59,7 @@ const Login = () => {
         <CardFooter>
           <div className="w-full space-y-2">
             {authError && (
-              <p role="alert" className="text-sm text-destructive">
+              <p role="alert" className="text-destructive text-sm">
                 {authError}
               </p>
             )}

@@ -404,3 +404,48 @@ Validation:
 - Interactive Chromium layout and Add Torrent dialog inspection
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+
+## P2.15 — Tailwind CSS 4 and cross-browser visual checks
+
+Completed:
+
+- Upgraded Tailwind CSS to 4.3.3 and integrated its first-party Vite plugin.
+  Replaced the legacy directives and CJS configuration with a CSS-first theme
+  while preserving all existing HSL variables, semantic color utilities,
+  radius tokens, and class-driven dark mode.
+- Reimplemented the small set of Radix enter/exit and accordion animations as
+  local CSS utilities, then removed tailwindcss-animate, PostCSS, Autoprefixer,
+  `postcss.config.cjs`, and `tailwind.config.cjs`.
+- Applied the Tailwind 4-aware Prettier class order across existing components;
+  these edits only reorder class tokens.
+- Added a Docker-backed visual smoke workflow that runs serially in current
+  Playwright Chromium, Firefox, and WebKit engines. It captures light, dark,
+  system-dark, desktop, and narrow layouts and checks Dialog, Popover,
+  Dropdown Menu, and Tooltip placement and interaction. Context Menu uses the
+  same generated Radix state, side, and animation utilities and its dormant UI
+  component remains available for future product wiring.
+- Extended the toolbar theme control to cycle through light, dark, and system
+  instead of making system mode impossible to restore after a manual choice.
+- Fixed a cross-browser race uncovered by the visual suite: Strict Mode effect
+  replay issued multiple client-data loads whose late response could overwrite
+  a fresh theme choice. The hook now shares one load promise per capability
+  lifecycle, and the visual test asserts exactly one request.
+- Scoped the fixed-version compatibility commands to their core spec so the
+  qBittorrent 5-only visual workflow is not run against 4.4.5.
+- Verified the production CSS contains the required Radix `data-state`,
+  `data-side`, animation, semantic color, and dark selectors. The resulting CSS
+  is 35.97 kB minified / 7.21 kB gzip; the main JavaScript asset is 644.79 kB
+  minified / 201.13 kB gzip before P2.16 dependency and bundle work.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests)
+- `pnpm run build`
+- `pnpm peers check`
+- Generated production CSS contract inspection
+- `pnpm run preview` plus successful production HTML request
+- `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)

@@ -2,6 +2,7 @@
 set -eu
 
 profile="${1:-}"
+shift || true
 case "$profile" in
   qb445) port=8090 ;;
   qb523) port=8091 ;;
@@ -38,4 +39,4 @@ if [ "$profile" = "qb523" ]; then
 fi
 
 E2E_BASE_URL="http://127.0.0.1:$port" E2E_PASSWORD="$password" \
-  pnpm exec playwright test
+  pnpm exec playwright test "$@"

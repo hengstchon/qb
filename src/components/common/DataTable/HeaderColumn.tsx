@@ -31,7 +31,7 @@ const HeaderColumn = <T,>({
     >
       <div
         className={cn(
-          'flex cursor-pointer select-none items-center justify-center gap-1 px-1 text-sm font-semibold',
+          'flex cursor-pointer items-center justify-center gap-1 px-1 text-sm font-semibold select-none',
           className,
         )}
         onClick={header.column.getToggleSortingHandler()}
@@ -48,7 +48,7 @@ const HeaderColumn = <T,>({
       {/* resizer */}
       <div
         className={cn(
-          'absolute right-0 top-0 flex h-full opacity-0 group-hover:opacity-100',
+          'absolute top-0 right-0 flex h-full opacity-0 group-hover:opacity-100',
         )}
       >
         {header.column.getCanResize() && (
@@ -56,7 +56,7 @@ const HeaderColumn = <T,>({
             onMouseDown={header.getResizeHandler()}
             onTouchStart={header.getResizeHandler()}
             className={cn(
-              'w-[4px] cursor-col-resize touch-none select-none bg-gray-400',
+              'w-[4px] cursor-col-resize touch-none bg-gray-400 select-none',
               header.column.getIsResizing() && 'bg-blue-500',
             )}
           />

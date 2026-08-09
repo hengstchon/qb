@@ -7,7 +7,7 @@ export default function SetTags() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button aria-label="Set torrent tags" variant="ghost" size="sm">
           <TagsIcon className="h-4 w-4" />
         </Button>
       </PopoverTrigger>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useTheme } from 'next-themes'
 import {
@@ -25,15 +25,20 @@ export const useClientDataSync = () => {
   const [fileTable, setFileTable] = useAtom(fileTableStateAtom)
   const { theme, setTheme } = useTheme()
   const [loaded, setLoaded] = useState(false)
+  const loadPromise = useRef<ReturnType<typeof loadSharedClientSettings>>(null)
   const supportsClientData =
     connectionInfo?.capabilities.supportsClientData ?? false
 
   useEffect(() => {
     setLoaded(false)
-    if (!supportsClientData) return
+    if (!supportsClientData) {
+      loadPromise.current = null
+      return
+    }
     let cancelled = false
 
-    void loadSharedClientSettings()
+    loadPromise.current ??= loadSharedClientSettings()
+    void loadPromise.current
       .then((remote) => {
         if (cancelled || !remote) return
         setSettings((current) => ({
@@ -54,15 +59,7 @@ export const useClientDataSync = () => {
     return () => {
       cancelled = true
     }
-  }, [
-    setFileTable,
-    setPeerTable,
-    setSettings,
-    setTheme,
-    setTorrentTable,
-    setTrackerTable,
-    supportsClientData,
-  ])
+  }, [supportsClientData])
 
   useEffect(() => {
     if (!supportsClientData || !loaded) return

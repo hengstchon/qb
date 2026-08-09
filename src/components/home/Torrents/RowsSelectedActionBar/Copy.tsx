@@ -13,7 +13,7 @@ export default function Copy() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button aria-label="Copy torrent data" variant="ghost" size="sm">
           <ClipboardCopy className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>

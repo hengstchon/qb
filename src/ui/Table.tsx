@@ -40,7 +40,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
     <div
       ref={ref}
       className={cn(
-        'bg-primary font-medium text-primary-foreground',
+        'bg-primary text-primary-foreground font-medium',
         className,
       )}
       {...props}
@@ -55,7 +55,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     <div
       ref={ref}
       className={cn(
-        'flex select-none truncate border-b hover:bg-muted/50 data-[state=selected]:bg-muted',
+        'hover:bg-muted/50 data-[state=selected]:bg-muted flex truncate border-b select-none',
         className,
       )}
       {...props}
@@ -70,7 +70,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <div
       ref={ref}
       className={cn(
-        'flex h-8 items-center px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0',
+        'text-muted-foreground flex h-8 items-center px-2 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0',
         className,
       )}
       {...props}
@@ -101,7 +101,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn('mt-4 text-sm text-muted-foreground', className)}
+    className={cn('text-muted-foreground mt-4 text-sm', className)}
     {...props}
   />
 ))

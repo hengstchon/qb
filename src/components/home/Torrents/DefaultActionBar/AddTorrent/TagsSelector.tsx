@@ -33,7 +33,7 @@ function TagsSelector({ tags, setTags, allTags }: TagsSelectorProps) {
             size="sm"
             role="combobox"
             aria-label="Select tags..."
-            className="col-span-2 h-auto min-h-[32px] flex-1 justify-between py-1 font-normal text-muted-foreground"
+            className="text-muted-foreground col-span-2 h-auto min-h-[32px] flex-1 justify-between py-1 font-normal"
           >
             {tags.length ? (
               <div className="flex flex-wrap gap-1">

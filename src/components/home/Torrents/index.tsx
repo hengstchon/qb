@@ -61,7 +61,7 @@ const torsSortAtom = focusAtom(torrentTableStateAtom, (optic) =>
 function NormalTableHeader() {
   const torsTable = useAtomValue(torsTableAtom)
   return (
-    <TableHeader className="sticky top-0 z-10 h-8 select-none bg-background">
+    <TableHeader className="bg-background sticky top-0 z-10 h-8 select-none">
       {torsTable?.getHeaderGroups().map((headerGroup) => (
         // tr
         <TableRow key={headerGroup.id} className="select-none">
@@ -75,7 +75,7 @@ function NormalTableHeader() {
                     key={header.id}
                     variant="ghost"
                     size="sm"
-                    className="-ml-2 h-6 px-2 data-[state=open]:bg-accent"
+                    className="data-[state=open]:bg-accent -ml-2 h-6 px-2"
                     onClick={column.getToggleSortingHandler()}
                   >
                     <span>
@@ -162,7 +162,7 @@ function EditTableColumnHeader({
       className={cn(
         'relative px-0',
         isDragging && 'opacity-50',
-        isOver && !isDragging && 'border border-primary',
+        isOver && !isDragging && 'border-primary border',
       )}
       style={{
         width: header.getSize(),
@@ -178,7 +178,7 @@ function EditTableColumnHeader({
       {!isDragging && !isOver && (
         <div
           onMouseDown={header.getResizeHandler()}
-          className="absolute right-0 flex h-full w-0.5 cursor-col-resize bg-muted-foreground"
+          className="bg-muted-foreground absolute right-0 flex h-full w-0.5 cursor-col-resize"
         />
       )}
     </TableHead>
@@ -189,7 +189,7 @@ function EditTableHeader() {
   const torsTable = useAtomValue(torsTableAtom)
   return (
     <TableHeaderDndContext>
-      <TableHeader className="sticky top-0 z-10 h-8 select-none bg-background">
+      <TableHeader className="bg-background sticky top-0 z-10 h-8 select-none">
         {torsTable?.getHeaderGroups().map((headerGroup) => (
           // tr
           <TableRow key={headerGroup.id} className="select-none">

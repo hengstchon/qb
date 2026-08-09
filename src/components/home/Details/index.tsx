@@ -53,7 +53,7 @@ const Details = () => {
           <TabsContent
             key={name}
             value={name}
-            className="mt-0 flex-1 overflow-auto border-l border-r px-2"
+            className="mt-0 flex-1 overflow-auto border-r border-l px-2"
           >
             {content}
           </TabsContent>
