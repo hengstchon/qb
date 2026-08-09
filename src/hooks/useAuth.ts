@@ -1,16 +1,36 @@
 import { useAtom } from 'jotai'
-import { API, client } from '@/services'
-import { authAtom } from '@/store'
+import { API, client, detectQbittorrent } from '@/services'
+import {
+  authAtom,
+  authCheckedAtom,
+  authErrorAtom,
+  connectionInfoAtom,
+} from '@/store'
 
 export const useAuth = () => {
   const [isAuthed, setIsAuthed] = useAtom(authAtom)
+  const [, setAuthChecked] = useAtom(authCheckedAtom)
+  const [, setAuthError] = useAtom(authErrorAtom)
+  const [, setConnectionInfo] = useAtom(connectionInfoAtom)
+
+  const finishAuthentication = async () => {
+    const connectionInfo = await detectQbittorrent()
+    setConnectionInfo(connectionInfo)
+    setAuthError(null)
+    setIsAuthed(true)
+  }
 
   const checkAuth = async () => {
     try {
-      await client.get(API.version).res()
-      setIsAuthed(true)
-    } catch (error) {
+      await finishAuthentication()
+    } catch {
+      setConnectionInfo(null)
       setIsAuthed(false)
+      setAuthError(
+        'Unable to detect the qBittorrent and WebAPI versions. Sign in to retry.',
+      )
+    } finally {
+      setAuthChecked(true)
     }
   }
 
@@ -30,12 +50,18 @@ export const useAuth = () => {
         .post(`username=${username}&password=${password}`)
         .text()
       if (res == 'Ok.') {
-        setIsAuthed(true)
+        await finishAuthentication()
       } else if (res == 'Fails.') {
-        console.log('Wrong username or password!')
+        setAuthError('The username or password is incorrect.')
       }
-    } catch (error) {
-      console.error('Login failed:', error)
+    } catch {
+      setConnectionInfo(null)
+      setIsAuthed(false)
+      setAuthError(
+        'Login succeeded, but qBittorrent version detection failed. Please retry.',
+      )
+    } finally {
+      setAuthChecked(true)
     }
   }
 
@@ -45,6 +71,7 @@ export const useAuth = () => {
     } catch (error) {
       console.error('Logout failed:', error)
     } finally {
+      setConnectionInfo(null)
       setIsAuthed(false)
     }
   }

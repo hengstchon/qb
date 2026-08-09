@@ -1,5 +1,7 @@
 import { KeyboardEvent, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { useAuth } from '@/hooks/useAuth'
+import { authErrorAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/ui/card'
 import { Input } from '@/ui/Input'
@@ -9,6 +11,7 @@ const Login = () => {
   const { login } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const authError = useAtomValue(authErrorAtom)
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -48,9 +51,16 @@ const Login = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={handleSubmit}>
-            Sign in
-          </Button>
+          <div className="w-full space-y-2">
+            {authError && (
+              <p role="alert" className="text-sm text-destructive">
+                {authError}
+              </p>
+            )}
+            <Button className="w-full" onClick={handleSubmit}>
+              Sign in
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </div>

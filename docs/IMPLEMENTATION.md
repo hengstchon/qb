@@ -63,3 +63,29 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (14 tests)
 - `pnpm run build`
+
+## P0.4 — Version detection and capability layer
+
+Completed:
+
+- Probe `/app/version` and `/app/webapiVersion` after session restoration and
+  login; `/app/buildInfo` is collected when the server provides it.
+- Keep authentication incomplete until mandatory version detection succeeds,
+  with a visible retryable error when it fails.
+- Centralize WebAPI feature gates for start/stop (2.11.0), shared client data
+  (2.13.1), API keys (2.14.1), and piece availability (2.15.1).
+- Use conservative all-disabled capabilities for malformed version strings.
+- Deduplicate simultaneous probes, including React StrictMode's development
+  remount cycle.
+- Display the detected qBittorrent and WebAPI versions in the status bar.
+
+The thresholds follow qBittorrent's official
+[WebAPI changelog](https://github.com/qbittorrent/qBittorrent/blob/master/WebAPI_Changelog.md),
+not application-version guesses.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (17 tests, including 4.4.5 and 5.2.3 capability maps)
+- `pnpm run build`

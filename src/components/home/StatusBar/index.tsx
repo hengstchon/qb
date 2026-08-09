@@ -1,10 +1,11 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from 'lucide-react'
-import { serverStateAtom } from '@/store'
+import { connectionInfoAtom, serverStateAtom } from '@/store'
 import { formatBytes, formatSpeed } from '@/utils'
 
 const StatusBar = () => {
   const [serverState] = useAtom(serverStateAtom)
+  const connectionInfo = useAtomValue(connectionInfoAtom)
   const {
     free_space_on_disk,
     dl_info_speed,
@@ -15,6 +16,11 @@ const StatusBar = () => {
 
   return (
     <div className="flex h-8 items-center justify-end gap-8 border-t px-2 text-sm">
+      {connectionInfo && (
+        <span>
+          qB {connectionInfo.appVersion} · WebAPI {connectionInfo.webApiVersion}
+        </span>
+      )}
       <span>Free space: {formatBytes(free_space_on_disk)}</span>
       <span className="flex items-center gap-1">
         <ArrowDownCircleIcon className="h-4 w-4" />

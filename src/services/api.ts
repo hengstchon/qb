@@ -2,6 +2,8 @@ export const API = {
   login: '/auth/login',
   logout: '/auth/logout',
   version: '/app/version',
+  webapiVersion: '/app/webapiVersion',
+  buildInfo: '/app/buildInfo',
   sync: {
     maindata: (rid = 0) => `/sync/maindata?rid=${rid}`,
     torrentPeers: (hash: string, rid = 0) =>
