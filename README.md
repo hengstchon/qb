@@ -75,6 +75,22 @@ Customization of headers:
 
 ## Development
 
+Use Node.js 22 and pnpm 9.15.5 (the versions used by CI):
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Before opening a pull request, run:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
 ### Qbittorrent test client
 
 #### Start container
@@ -87,38 +103,16 @@ docker-compose up -d
 
 to start the test Qbittorrent client.
 
-#### Setup Qbittorrent client
+#### Setup qBittorrent client
 
-- Disable `Ban client after consecutive failures`
-- Disable CSRF so that we will not have 401 Unauthorized error
-
-Two kinds of setup: Config file or Web UI.
-
-1. Stop the container first:
+Keep qBittorrent's CSRF protection, Host header validation, and login-failure
+protection enabled. Set `QBIT_URL` to the qBittorrent origin when starting the
+development server; Vite proxies `/api` requests and rewrites the relevant
+origin headers.
 
 ```bash
-docker stop qbittorrent
+QBIT_URL=http://localhost:8090 pnpm dev
 ```
-
-Then edit config file: `./docker/config/qBittorrent/qBittorrent.conf`, add
-
-```
-WebUI\CSRFProtection=false
-WebUI\MaxAuthenticationFailCount=0
-```
-
-under `[Preferences]`.
-
-Start container again:
-
-```bash
-docker start qbittorrent
-```
-
-2. Open `http://localhost:8090` in browser, go to options -> Web UI.
-
-- Set `Ban client after consecutive failures` to 0
-- Uncheck `Enable Cross-Site Request Forgery (CSRF) protection`
 
 ## FAQ
 

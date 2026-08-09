@@ -1,19 +1,9 @@
 import {
   CheckCheck,
-  CheckCircle,
-  ClipboardCopy,
   FastForward,
-  Gauge,
-  LayoutList,
-  MapPin,
   Pause,
-  PauseCircle,
   Play,
-  PlayCircle,
   SatelliteDish,
-  Settings2,
-  TagsIcon,
-  Wrench,
 } from 'lucide-react'
 import { Button } from '@/ui/Button'
 import { Separator } from '@/ui/Separator'
