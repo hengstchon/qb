@@ -1,3 +1,10 @@
+import type { ApiQuery, ApiRequest } from './client'
+
+const request = (endpoint: string, query?: ApiQuery): ApiRequest => ({
+  endpoint,
+  query,
+})
+
 export const API = {
   login: '/auth/login',
   logout: '/auth/logout',
@@ -5,19 +12,19 @@ export const API = {
   webapiVersion: '/app/webapiVersion',
   buildInfo: '/app/buildInfo',
   sync: {
-    maindata: (rid = 0) => `/sync/maindata?rid=${rid}`,
+    maindata: (rid = 0) => request('/sync/maindata', { rid }),
     torrentPeers: (hash: string, rid = 0) =>
-      `/sync/torrentPeers?rid=${rid}&hash=${hash}`,
+      request('/sync/torrentPeers', { rid, hash }),
   },
   torrents: {
-    info: () => `/torrents/info`,
-    preperties: (hash: string) => `/torrents/properties?hash=${hash}`,
-    trackers: (hash: string) => `/torrents/trackers?hash=${hash}`,
-    webseeds: (hash: string) => `/torrents/webseeds?hash=${hash}`,
-    files: (hash: string) => `/torrents/files?hash=${hash}`,
-    pieceStates: (hash: string) => `/torrents/pieceStates?hash=${hash}`,
-    pieceHashes: (hash: string) => `/torrents/pieceHashes?hash=${hash}`,
-    categories: '/torrents/categories',
+    info: () => request('/torrents/info'),
+    properties: (hash: string) => request('/torrents/properties', { hash }),
+    trackers: (hash: string) => request('/torrents/trackers', { hash }),
+    webseeds: (hash: string) => request('/torrents/webseeds', { hash }),
+    files: (hash: string) => request('/torrents/files', { hash }),
+    pieceStates: (hash: string) => request('/torrents/pieceStates', { hash }),
+    pieceHashes: (hash: string) => request('/torrents/pieceHashes', { hash }),
+    categories: request('/torrents/categories'),
     addTorrents: '/torrents/add',
   },
 }

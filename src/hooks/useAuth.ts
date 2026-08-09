@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { API, client, detectQbittorrent } from '@/services'
+import { API, detectQbittorrent, qbApi } from '@/services'
 import {
   authAtom,
   authCheckedAtom,
@@ -42,13 +42,11 @@ export const useAuth = () => {
     password: string
   }) => {
     try {
-      const res = await client
-        .url(API.login)
-        .headers({
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        })
-        .post(`username=${username}&password=${password}`)
-        .text()
+      const res = await qbApi.postForm<string>(
+        API.login,
+        { username, password },
+        'text',
+      )
       if (res == 'Ok.') {
         await finishAuthentication()
       } else if (res == 'Fails.') {
@@ -67,7 +65,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      await client.url(API.logout).post().res()
+      await qbApi.postForm(API.logout, {})
     } catch (error) {
       console.error('Logout failed:', error)
     } finally {

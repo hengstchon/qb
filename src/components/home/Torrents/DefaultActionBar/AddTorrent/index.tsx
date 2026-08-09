@@ -1,8 +1,7 @@
 import { Dispatch, useState } from 'react'
 import { SetStateAction, useAtom } from 'jotai'
 import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
-import FormDataAddon from 'wretch/addons/formData'
-import { API, client } from '@/services'
+import { API, qbApi } from '@/services'
 import { categoriesAtom, tagsAtom } from '@/store'
 import { AddTorrentPayload } from '@/types'
 import { Button } from '@/ui/Button'
@@ -164,14 +163,10 @@ export function AddTorrent() {
       sequentialDownload,
       firstLastPiecePrio,
     }
-    client
-      .url(API.torrents.addTorrents)
-      .addon(FormDataAddon)
-      .formData(params)
-      .post()
-      .error(415, (e) => console.log('err:', e))
-      .text((d) => console.log('response text:', d))
-      .catch((e) => console.log('catch error:', e))
+    void qbApi
+      .postMultipart<string>(API.torrents.addTorrents, params, 'text')
+      .then((data) => console.log('response text:', data))
+      .catch((error) => console.error('Unable to add torrent:', error))
   }
 
   return (

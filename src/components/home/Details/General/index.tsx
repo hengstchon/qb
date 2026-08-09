@@ -15,7 +15,7 @@ const General = () => {
   const [currHash] = useAtom(getCurrHashAtom)
 
   const { data } = useSWR<Propperties>(
-    currHash ? API.torrents.preperties(currHash) : null,
+    currHash ? API.torrents.properties(currHash) : null,
     { keepPreviousData: true },
   )
 

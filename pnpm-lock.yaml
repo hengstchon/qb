@@ -113,9 +113,6 @@ importers:
       virtua:
         specifier: ^0.35.1
         version: 0.35.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      wretch:
-        specifier: ^2.10.0
-        version: 2.10.0
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.1
@@ -3516,10 +3513,6 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  wretch@2.10.0:
-    resolution: {integrity: sha512-umAgGsgEfWVm2GT9Gl+Uyl2AI0q1P8WqXMGiDbSf5QImZW7bdnUbTUrgXYzYH+VmtlM6RqwJQH7JNizSNwt6kw==}
-    engines: {node: '>=14'}
 
   ws@8.21.3:
     resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
@@ -6985,8 +6978,6 @@ snapshots:
       strip-ansi: 7.1.0
 
   wrappy@1.0.2: {}
-
-  wretch@2.10.0: {}
 
   ws@8.21.3: {}
 

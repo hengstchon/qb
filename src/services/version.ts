@@ -3,19 +3,19 @@ import {
   type QbConnectionInfo,
 } from '@/domain/capabilities'
 import { API } from './api'
-import { client } from './client'
+import { qbApi } from './client'
 
 let pendingDetection: Promise<QbConnectionInfo> | null = null
 
 const probeQbittorrent = async (): Promise<QbConnectionInfo> => {
   const [appVersion, webApiVersion] = await Promise.all([
-    client.url(API.version).get().text(),
-    client.url(API.webapiVersion).get().text(),
+    qbApi.getText(API.version),
+    qbApi.getText(API.webapiVersion),
   ])
 
   let buildInfo: Record<string, unknown> | undefined
   try {
-    buildInfo = await client.url(API.buildInfo).get().json()
+    buildInfo = await qbApi.getJson(API.buildInfo)
   } catch {
     // buildInfo is supplemental and is unavailable on some supported releases.
   }

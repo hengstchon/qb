@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { SWRConfiguration } from 'swr'
-import AbortAddon from 'wretch/addons/abort'
-import { client } from '@/services'
+import { qbApi } from '@/services'
+import type { ApiRequest } from '@/services/client'
 import { useAuth } from './useAuth'
 
 export const useSwrConfig = () => {
@@ -9,8 +9,7 @@ export const useSwrConfig = () => {
 
   const swrConfig: SWRConfiguration = useMemo(
     () => ({
-      fetcher: (url) =>
-        client.addon(AbortAddon()).get(url).setTimeout(5000).json(),
+      fetcher: (request: string | ApiRequest) => qbApi.getJson(request),
       onError: (err) => {
         if (err.status == 403) {
           setIsAuthed(false)

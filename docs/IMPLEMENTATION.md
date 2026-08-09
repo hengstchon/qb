@@ -89,3 +89,25 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (17 tests, including 4.4.5 and 5.2.3 capability maps)
 - `pnpm run build`
+
+## P0.5 — Unified typed qB API client
+
+Completed:
+
+- Replaced Wretch with one typed Fetch client that owns the `/api/v2` base
+  URL, timeouts, cancellation, credentials, query encoding, and error mapping.
+- Added explicit JSON, text, void/204, and blob response modes.
+- Added safe URL-encoded and multipart POST helpers; callers pass structured
+  values instead of concatenating query strings or form bodies.
+- Converted all existing reads, authentication mutations, version probes, and
+  Add Torrent submission to the unified client.
+- Added `QbApiError`, preserving HTTP status, endpoint, server message, and the
+  original cause for network, cancellation, and timeout failures.
+- Removed the Wretch runtime dependency.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (30 tests)
+- `pnpm run build`
