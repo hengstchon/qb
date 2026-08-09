@@ -75,7 +75,7 @@ Customization of headers:
 
 ## Development
 
-Use Node.js 22 and pnpm 9.15.5 (the versions used by CI):
+Use the latest Node.js LTS release (Node.js 24) and pnpm 11.21.0, matching CI:
 
 ```bash
 pnpm install --frozen-lockfile

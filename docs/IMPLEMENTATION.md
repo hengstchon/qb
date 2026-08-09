@@ -7,9 +7,9 @@ corresponds to one numbered plan step and the commit that completed it.
 
 Completed:
 
-- Pinned Node.js 22 through `.nvmrc` and declared Node/pnpm support in
-  `package.json`.
-- Pinned pnpm 9.15.5 through the `packageManager` field.
+- Declared the latest Node.js LTS line (Node.js 24) in `package.json` without
+  coupling the repository to a specific version-manager file.
+- Pinned the latest pnpm release, 11.21.0, through the `packageManager` field.
 - Added independent `lint`, `typecheck`, `test`, and side-effect-free `build`
   scripts.
 - Ignored pnpm store, coverage, Playwright, test, and build outputs.
@@ -25,8 +25,29 @@ Validation:
 - `pnpm run test`
 - `pnpm run build`
 
-CI uses Node.js 22. The local validation host used a newer Node.js release and
-therefore emitted the expected engine warning, but all checks completed.
+## P0.3 — Minimum automated tests and CI
+
+Completed:
+
+- Added Vitest, jsdom, React Testing Library, and MSW test infrastructure.
+- Added qBittorrent 4.x and 5.x API fixtures served by MSW.
+- Extracted `sync/maindata` merging into a pure function and wired the runtime
+  sync atom through it.
+- Added tests for full updates, partial updates, removals, state normalization,
+  shared status predicates, and formatters.
+- Added a GitHub Actions workflow that runs frozen installation, lint,
+  typecheck, tests, and the production build without publishing artifacts.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (14 tests)
+- `pnpm run build`
+
+CI uses Node.js 24 and pnpm 11.21.0. The local validation host used the current
+Node.js 26 release and therefore emitted the expected engine warning, but all
+checks completed.
 
 ## P0.2 — TypeScript build repair
 
