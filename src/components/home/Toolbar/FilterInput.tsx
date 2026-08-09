@@ -30,6 +30,7 @@ const FilterInput = () => {
 
   return (
     <Input
+      aria-label="Filter torrents by name"
       className="w-[400px]"
       value={value}
       onChange={(e) => setValue(e.target.value)}

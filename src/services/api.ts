@@ -31,5 +31,6 @@ export const API = {
     pieceHashes: (hash: string) => request('/torrents/pieceHashes', { hash }),
     categories: request('/torrents/categories'),
     addTorrents: '/torrents/add',
+    deleteTorrents: '/torrents/delete',
   },
 }

@@ -91,19 +91,25 @@ pnpm test
 pnpm build
 ```
 
-### Qbittorrent test client
+### qBittorrent compatibility tests
 
-#### Start container
-
-Go to `docker` directory,
+Install the Playwright Chromium runtime once, then run either fixed-version
+profile. Each command rebuilds the Alternate WebUI image, creates fresh and
+isolated config/download directories, runs the same smoke workflow, and removes
+the container afterward.
 
 ```bash
-docker-compose up -d
+pnpm exec playwright install chromium
+pnpm e2e:qb445
+pnpm e2e:qb523
 ```
 
-to start the test Qbittorrent client.
+The profiles use the official `qbittorrent-nox` images pinned to 4.4.5-1 and
+5.2.3-1. No compatibility test uses a `latest` image tag. The smoke workflow
+covers login, list synchronization, name filtering, magnet addition, stop,
+start, and deletion with `deleteFiles=false`.
 
-#### Setup qBittorrent client
+### Local qBittorrent development
 
 Keep qBittorrent's CSRF protection, Host header validation, and login-failure
 protection enabled. Set `QBIT_URL` to the qBittorrent origin when starting the

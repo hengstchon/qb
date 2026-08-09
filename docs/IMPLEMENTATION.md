@@ -258,3 +258,36 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (60 tests)
 - `pnpm run build`
+
+## P1.12 — Fixed-version end-to-end compatibility environment
+
+Completed:
+
+- Replaced the mutable single `latest` container with isolated Docker Compose
+  profiles based on the official qBittorrent images pinned to 4.4.5-1 and
+  5.2.3-1.
+- Build the Alternate WebUI into each test image under its required `public/`
+  directory, avoiding host bind-mount file-type differences while keeping the
+  production artifact unchanged.
+- Reset per-version runtime config and download directories before every run;
+  generated state and Playwright artifacts are ignored by Git.
+- Added a Playwright smoke workflow covering login, incremental list sync,
+  name filtering, magnet addition, legacy/current stop and start operations,
+  and torrent deletion with `deleteFiles=false`.
+- Implemented the previously stubbed selected-torrent deletion action and
+  exposed stable accessible names for filter, start, stop, and delete controls.
+- Accept both legacy `200 Ok.` and qBittorrent 5.2.3's observed empty HTTP 204
+  login success response. The 5.2.3 runner securely reads its generated
+  temporary password without storing it in the repository.
+- Verified both fixed registry tags provide multi-platform manifests and ran
+  the complete smoke workflow successfully against both target versions.
+
+Validation:
+
+- `docker compose -f docker/docker-compose.yml --profile qb445 --profile qb523 config --quiet`
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (62 tests)
+- `pnpm run build`
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)

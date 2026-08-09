@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { loginErrorMessage } from '@/domain/auth'
+import { isSuccessfulLoginResponse, loginErrorMessage } from '@/domain/auth'
 import { API, detectQbittorrent, qbApi, QbApiError } from '@/services'
 import {
   authAtom,
@@ -46,7 +46,7 @@ export const useAuth = () => {
   }) => {
     setAuthError(null)
 
-    let response: string
+    let response: string | undefined
     try {
       response = await qbApi.postForm<string>(
         API.login,
@@ -65,7 +65,7 @@ export const useAuth = () => {
       return
     }
 
-    if (response !== 'Ok.') {
+    if (!isSuccessfulLoginResponse(response)) {
       setIsAuthed(false)
       setAuthChecked(true)
       setAuthError('The username or password is incorrect.')

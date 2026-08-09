@@ -1,6 +1,10 @@
 import { useAtomValue } from 'jotai'
 import { noCapabilities } from '@/domain/capabilities'
-import { setTorrentsRunning, type TorrentHashes } from '@/services/torrents'
+import {
+  deleteTorrents,
+  setTorrentsRunning,
+  type TorrentHashes,
+} from '@/services/torrents'
 import { connectionInfoAtom, torsTableAtom } from '@/store'
 
 export const useTorrentActions = () => {
@@ -12,10 +16,17 @@ export const useTorrentActions = () => {
     setTorrentsRunning(hashes, running, capabilities)
 
   const setSelectedRunning = (running: boolean) => {
-    const hashes =
-      table?.getSelectedRowModel().rows.map((row) => row.original.hash) ?? []
+    const hashes = getSelectedHashes()
     return setRunning(hashes, running)
   }
 
-  return { setRunning, setSelectedRunning }
+  const getSelectedHashes = () =>
+    table?.getSelectedRowModel().rows.map((row) => row.original.hash) ?? []
+
+  const deleteSelected = async (deleteFiles: boolean) => {
+    await deleteTorrents(getSelectedHashes(), deleteFiles)
+    table?.resetRowSelection()
+  }
+
+  return { deleteSelected, setRunning, setSelectedRunning }
 }

@@ -32,6 +32,7 @@ function TorrentsActions() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              aria-label="Start selected torrents"
               variant="ghost"
               size="sm"
               onClick={() => void setSelectedRunning(true)}
@@ -46,6 +47,7 @@ function TorrentsActions() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              aria-label="Stop selected torrents"
               variant="ghost"
               size="sm"
               onClick={() => void setSelectedRunning(false)}

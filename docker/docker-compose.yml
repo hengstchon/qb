@@ -1,15 +1,72 @@
-version: "3.9"
+name: qb-webui-e2e
+
+x-qbittorrent-common: &qbittorrent-common
+  environment:
+    QBT_LEGAL_NOTICE: confirm
+    PUID: 1000
+    PGID: 1000
+    TZ: UTC
+  read_only: true
+  restart: "no"
+  stop_grace_period: 30m
+  tmpfs:
+    - /tmp
+
 services:
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: qbittorrent
+  qb445:
+    <<: *qbittorrent-common
+    profiles: [qb445]
+    image: qb-webui-e2e:4.4.5-1
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.e2e
+      args:
+        QBT_VERSION: 4.4.5-1
+    container_name: qb-webui-e2e-445
     environment:
-      - PUID=1000
-      - PGID=1000
-      - WEBUI_PORT=8090
-    volumes:
-      - ./config:/config
-      - ./downloads:/downloads
+      QBT_LEGAL_NOTICE: confirm
+      QBT_TORRENTING_PORT: 6881
+      QBT_WEBUI_PORT: 8090
+      PUID: 1000
+      PGID: 1000
+      TZ: UTC
     ports:
-      - 8090:8090
-    restart: unless-stopped
+      - "8090:8090/tcp"
+    volumes:
+      - ./.runtime/qb445/config:/config
+      - ./.runtime/qb445/downloads:/downloads
+    healthcheck:
+      test: [CMD-SHELL, "wget -q -O /dev/null http://127.0.0.1:8090/ || exit 1"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
+
+  qb523:
+    <<: *qbittorrent-common
+    profiles: [qb523]
+    image: qb-webui-e2e:5.2.3-1
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.e2e
+      args:
+        QBT_VERSION: 5.2.3-1
+    container_name: qb-webui-e2e-523
+    environment:
+      QBT_LEGAL_NOTICE: confirm
+      QBT_TORRENTING_PORT: 6882
+      QBT_WEBUI_PORT: 8091
+      PUID: 1000
+      PGID: 1000
+      TZ: UTC
+    ports:
+      - "8091:8091/tcp"
+    volumes:
+      - ./.runtime/qb523/config:/config
+      - ./.runtime/qb523/downloads:/downloads
+    healthcheck:
+      test: [CMD-SHELL, "wget -q -O /dev/null http://127.0.0.1:8091/ || exit 1"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s

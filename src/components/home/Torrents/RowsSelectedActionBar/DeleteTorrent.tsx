@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
+import { useTorrentActions } from '@/hooks'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,15 +18,22 @@ import { Label } from '@/ui/Label'
 
 function DeleteTorrent() {
   const [deleteFiles, setDeleteFiles] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const { deleteSelected } = useTorrentActions()
 
-  function handleDelete() {
-    console.log('deleteFiles:', deleteFiles)
+  async function handleDelete() {
+    setDeleting(true)
+    try {
+      await deleteSelected(deleteFiles)
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button aria-label="Delete selected torrents" variant="ghost" size="sm">
           <Trash2 className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>
@@ -48,7 +56,12 @@ function DeleteTorrent() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>Confirm</AlertDialogAction>
+          <AlertDialogAction
+            disabled={deleting}
+            onClick={() => void handleDelete()}
+          >
+            {deleting ? 'Deleting…' : 'Confirm'}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

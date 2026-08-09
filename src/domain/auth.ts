@@ -1,3 +1,6 @@
+export const isSuccessfulLoginResponse = (response: string | undefined) =>
+  response === 'Ok.' || response === undefined
+
 export const loginErrorMessage = (status?: number) => {
   if (status === 401) return 'The username or password is incorrect.'
   if (status === 403) {

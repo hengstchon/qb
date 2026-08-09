@@ -1,0 +1,4 @@
+ARG QBT_VERSION=5.2.3-1
+FROM qbittorrentofficial/qbittorrent-nox:${QBT_VERSION}
+
+COPY --chown=qbtUser:qbtUser dist/public/ /webui/public/

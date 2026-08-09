@@ -1,4 +1,5 @@
 import type { QbCapabilities } from '@/domain/capabilities'
+import { API } from './api'
 import { qbApi, type QbApiClient } from './client'
 
 export type TorrentHashes = 'all' | string[]
@@ -28,4 +29,16 @@ export const setTorrentsRunning = async (
     torrentActionEndpoint(running ? 'start' : 'stop', capabilities),
     { hashes: hashValue },
   )
+}
+
+export const deleteTorrents = async (
+  hashes: string[],
+  deleteFiles: boolean,
+  api: Pick<QbApiClient, 'postForm'> = qbApi,
+) => {
+  if (hashes.length === 0) return
+  await api.postForm(API.torrents.deleteTorrents, {
+    hashes: hashes.join('|'),
+    deleteFiles,
+  })
 }

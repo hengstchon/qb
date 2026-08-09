@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 import { capabilitiesForWebApi } from '@/domain/capabilities'
-import { setTorrentsRunning, torrentActionEndpoint } from './torrents'
+import {
+  deleteTorrents,
+  setTorrentsRunning,
+  torrentActionEndpoint,
+} from './torrents'
 
 describe('torrent start/stop compatibility', () => {
   const qb4 = capabilitiesForWebApi('2.8.3')
@@ -23,6 +27,17 @@ describe('torrent start/stop compatibility', () => {
 
     expect(postForm).toHaveBeenCalledWith('/torrents/stop', {
       hashes: 'abc|def',
+    })
+  })
+
+  it('deletes selected torrents without deleting files when requested', async () => {
+    const postForm = vi.fn().mockResolvedValue(undefined)
+
+    await deleteTorrents(['abc', 'def'], false, { postForm })
+
+    expect(postForm).toHaveBeenCalledWith('/torrents/delete', {
+      hashes: 'abc|def',
+      deleteFiles: false,
     })
   })
 })
