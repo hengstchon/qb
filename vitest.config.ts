@@ -4,10 +4,11 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   test: {
+    execArgv: ['--no-experimental-webstorage'],
     include: ['src/**/*.test.{ts,tsx}'],
     environment: 'jsdom',
     environmentOptions: {

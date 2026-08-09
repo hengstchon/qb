@@ -344,3 +344,32 @@ Validation:
 - `pnpm run test` (62 tests)
 - `pnpm run build`
 - `pnpm peers check`
+
+## P2.14b — Vite, SWC plugin, and Vitest majors
+
+Completed:
+
+- Upgraded Vite from 5.4 to 8.2.1 and the React SWC plugin from 3.7 to 4.3.3
+  without changing the React runtime major.
+- Upgraded Vitest from 3.2 to 4.1.10 now that its Vite 6–8 peer requirement is
+  satisfied.
+- Replaced config-time `__dirname` usage with `import.meta.dirname`, making both
+  Vite and Vitest configs compatible with Vite's current and future native
+  config loader.
+- Disabled Node's experimental native web storage only inside Vitest workers so
+  jsdom owns localStorage deterministically and the test suite no longer emits
+  one experimental warning per worker.
+- Preserved the qBittorrent Alternate WebUI `dist/public` structure and verified
+  the production artifact in both fixed-version Docker profiles.
+- Reduced the main minified JavaScript asset from 612.09 kB to 588.26 kB as a
+  side effect of the Vite/Rolldown upgrade.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests on Vitest 4.1.10)
+- `pnpm run build`
+- `pnpm peers check`
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)
