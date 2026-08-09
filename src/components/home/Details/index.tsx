@@ -42,6 +42,9 @@ const Details = () => {
         <Button
           variant="ghost"
           size="sm"
+          aria-label={
+            openDetails ? 'Collapse details panel' : 'Expand details panel'
+          }
           onClick={() => setOpenDetails((v) => !v)}
         >
           {openDetails ? <ChevronsDownIcon /> : <ChevronsUpIcon />}

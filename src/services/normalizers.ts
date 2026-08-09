@@ -13,7 +13,7 @@ const optionalNumber = (value: unknown) =>
 
 export const normalizePeer = (value: unknown): PeerType => {
   const peer = asRecord(value) ?? {}
-  return {
+  const normalized: PeerType = {
     client: optionalString(peer.client),
     connection: optionalString(peer.connection),
     country: optionalString(peer.country),
@@ -23,6 +23,7 @@ export const normalizePeer = (value: unknown): PeerType => {
     files: optionalString(peer.files),
     flags: optionalString(peer.flags),
     flags_desc: optionalString(peer.flags_desc),
+    host_name: optionalString(peer.host_name),
     ip: optionalString(peer.ip),
     i2p_dest: optionalString(peer.i2p_dest),
     port: optionalNumber(peer.port),
@@ -31,6 +32,9 @@ export const normalizePeer = (value: unknown): PeerType => {
     up_speed: optionalNumber(peer.up_speed),
     uploaded: optionalNumber(peer.uploaded),
   }
+  return Object.fromEntries(
+    Object.entries(normalized).filter(([, item]) => item !== undefined),
+  ) as PeerType
 }
 
 export const normalizePeersData = (value: unknown): PeersData => {
@@ -55,9 +59,7 @@ export const normalizePeersData = (value: unknown): PeersData => {
 }
 
 const trackerStatus = (value: unknown): Tracker['status'] =>
-  typeof value === 'number' && value >= 0 && value <= 6
-    ? (value as Tracker['status'])
-    : 0
+  optionalNumber(value) ?? -1
 
 const normalizeTrackerEndpoints = (value: unknown): Tracker['endpoints'] => {
   if (!Array.isArray(value)) return undefined
@@ -117,4 +119,4 @@ export const trackerStatusLabel = (status: Tracker['status']) =>
     'Not working',
     'Tracker error',
     'Unreachable',
-  ][status] ?? 'Unknown'
+  ][status] ?? `Unknown (${status})`

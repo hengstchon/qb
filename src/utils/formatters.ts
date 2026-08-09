@@ -36,3 +36,12 @@ export const formatDuration = (seconds: number, maxCap = -1) => {
   if (d.minutes() > 1 && d.minutes() < 60) return `${d.minutes()}m`
   return '< 1m'
 }
+
+export const formatAnnounceTime = (
+  timestamp: number,
+  nowSeconds = Date.now() / 1000,
+) => {
+  if (!Number.isFinite(timestamp) || timestamp <= 0) return '—'
+  const remaining = Math.max(0, Math.round(timestamp - nowSeconds))
+  return remaining === 0 ? 'now' : `in ${formatDuration(remaining)}`
+}

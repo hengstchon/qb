@@ -8,6 +8,7 @@ export type PeerType = {
   files?: string
   flags?: string
   flags_desc?: string
+  host_name?: string
   ip?: string
   i2p_dest?: string
   port?: number

@@ -2,6 +2,7 @@ import ReactCountryFlag from 'react-country-flag'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { selectColumnDef } from '@/components/common/DataTable/selectColumn'
 import { PeerType } from '@/types'
+import { Badge } from '@/ui/Badge'
 import { formatBytes, formatPercentage, formatSpeed } from '@/utils'
 
 const ch = createColumnHelper<PeerType>()
@@ -23,10 +24,27 @@ export const peersColumns = [
       ) : null
     },
   }),
-  ch.accessor(({ ip, i2p_dest }) => ip ?? i2p_dest ?? 'I2P peer', {
+  ch.accessor(({ ip, i2p_dest }) => ({ ip, i2p_dest }), {
     id: 'ip',
-    header: 'IP',
+    header: 'Address',
     size: 200,
+    cell: (p) => {
+      const { ip, i2p_dest } = p.getValue()
+      return (
+        <span className="flex min-w-0 items-center gap-2">
+          {i2p_dest && <Badge variant="outline">I2P</Badge>}
+          <span className="truncate" title={i2p_dest ?? ip}>
+            {i2p_dest ?? ip ?? 'Unknown peer'}
+          </span>
+        </span>
+      )
+    },
+  }),
+  ch.accessor('host_name', {
+    id: 'hostName',
+    header: 'Host name',
+    size: 200,
+    cell: (p) => p.getValue() || '—',
   }),
   ch.accessor('port', {
     id: 'port',

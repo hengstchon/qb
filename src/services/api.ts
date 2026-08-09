@@ -28,6 +28,8 @@ export const API = {
     webseeds: (hash: string) => request('/torrents/webseeds', { hash }),
     files: (hash: string) => request('/torrents/files', { hash }),
     pieceStates: (hash: string) => request('/torrents/pieceStates', { hash }),
+    pieceAvailability: (hash: string) =>
+      request('/torrents/pieceAvailability', { hash }),
     pieceHashes: (hash: string) => request('/torrents/pieceHashes', { hash }),
     categories: request('/torrents/categories'),
     fetchMetadata: '/torrents/fetchMetadata',

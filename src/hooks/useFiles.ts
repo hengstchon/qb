@@ -32,18 +32,22 @@ function recalcNode(node: FileNode, file: FileType): void {
   }
 }
 
-function buildTree(fileArray: Files): FileNode[] {
+export function buildFileTree(fileArray: Files): FileNode[] {
   const tree: FileNode[] = []
+  const childIndexes = new WeakMap<FileNode, Map<string, FileNode>>()
+  const rootIndex = new Map<string, FileNode>()
 
   for (const file of fileArray) {
     const pathComponents = file.name.split(PathSeparator)
     let currentTree = tree
+    let currentIndex = rootIndex
 
     for (const name of pathComponents) {
-      const existingNode = currentTree.find((node) => node.name === name)
+      const existingNode = currentIndex.get(name)
 
       if (existingNode) {
         currentTree = existingNode.subRows
+        currentIndex = childIndexes.get(existingNode)!
         const isIgnored = file.priority == FilePriority.Ignored
         if (!isIgnored) {
           recalcNode(existingNode, file)
@@ -51,7 +55,11 @@ function buildTree(fileArray: Files): FileNode[] {
       } else {
         const newNode: FileNode = initNode(name, file)
         currentTree.push(newNode)
+        currentIndex.set(name, newNode)
+        const newIndex = new Map<string, FileNode>()
+        childIndexes.set(newNode, newIndex)
         currentTree = newNode.subRows
+        currentIndex = newIndex
       }
     }
   }
@@ -69,7 +77,7 @@ export const useFiles = () => {
   if (!data) return []
   // console.log(new Date().toLocaleTimeString(), { data })
 
-  const rows = useMemo(() => buildTree(data), [data])
+  const rows = useMemo(() => buildFileTree(data), [data])
   // console.log(new Date().toLocaleTimeString(), { rows })
   return rows
 }

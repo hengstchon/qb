@@ -4,7 +4,7 @@ export type Tracker = {
   num_leeches?: number
   num_peers?: number
   num_seeds?: number
-  status: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  status: number
   tier: number
   url: string
   next_announce?: number

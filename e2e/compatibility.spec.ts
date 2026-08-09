@@ -43,6 +43,19 @@ test('login, sync, filter, add, stop, start, and delete without files', async ({
   await expect(torrentNameCell).toBeVisible({ timeout: 2_000 })
 
   await torrentNameCell.click()
+  let pieceAvailabilityRequests = 0
+  page.on('request', (request) => {
+    if (request.url().includes('/api/v2/torrents/pieceAvailability')) {
+      pieceAvailabilityRequests += 1
+    }
+  })
+  await page.getByRole('button', { name: 'Expand details panel' }).click()
+  await page.getByRole('tab', { name: 'General' }).click()
+  await page.waitForTimeout(250)
+  expect(pieceAvailabilityRequests).toBe(
+    process.env.E2E_PROFILE === 'qb523' ? 1 : 0,
+  )
+
   const startResponse = page.waitForResponse(
     (response) =>
       response.request().method() === 'POST' &&

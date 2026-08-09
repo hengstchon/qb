@@ -3,6 +3,8 @@ export type QbCapabilities = {
   supportsClientData: boolean
   supportsApiKey: boolean
   supportsPieceAvailability: boolean
+  supportsDetailedTrackers: boolean
+  supportsPeerHostName: boolean
   supportsAddTorrentCookie: boolean
   supportsStructuredAddResponse: boolean
   supportsTorrentMetadata: boolean
@@ -42,6 +44,8 @@ export const capabilitiesForWebApi = (
     supportsClientData: atLeast(webApiVersion, [2, 13, 1]),
     supportsApiKey: atLeast(webApiVersion, [2, 14, 1]),
     supportsPieceAvailability: atLeast(webApiVersion, [2, 15, 1]),
+    supportsDetailedTrackers: atLeast(webApiVersion, [2, 13, 0]),
+    supportsPeerHostName: atLeast(webApiVersion, [2, 15, 1]),
     supportsAddTorrentCookie:
       isKnownVersion && !atLeast(webApiVersion, [2, 11, 3]),
     supportsStructuredAddResponse: atLeast(webApiVersion, [2, 14, 0]),

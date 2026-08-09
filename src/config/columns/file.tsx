@@ -27,6 +27,11 @@ export const filesColumns = [
           className="h-4 p-0"
           variant="ghost"
           size="sm"
+          aria-label={
+            table.getIsAllRowsExpanded()
+              ? 'Collapse all files'
+              : 'Expand all files'
+          }
           onClick={table.getToggleAllRowsExpandedHandler()}
         >
           {table.getIsAllRowsExpanded() ? expandedIcon : collapsedIcon}
@@ -42,6 +47,11 @@ export const filesColumns = [
               className="h-4 p-0"
               variant="ghost"
               size="sm"
+              aria-label={
+                row.getIsExpanded()
+                  ? `Collapse ${getValue()}`
+                  : `Expand ${getValue()}`
+              }
               onClick={row.getToggleExpandedHandler()}
               style={{ marginLeft: `${row.depth * 2}rem` }}
             >

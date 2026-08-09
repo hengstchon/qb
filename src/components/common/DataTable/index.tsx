@@ -5,6 +5,7 @@ import {
   type Table as ReactTable,
 } from '@tanstack/react-table'
 import type { PrimitiveAtom, WritableAtom } from 'jotai'
+import { VList } from 'virtua'
 import {
   Table,
   TableBody,
@@ -13,11 +14,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/ui/Table'
+import { cn } from '@/utils'
 
 const DataTable = <T,>({
   table,
+  label,
+  virtualized = false,
 }: {
   table: ReactTable<T>
+  label: string
+  virtualized?: boolean
   colOrderAtom: WritableAtom<
     ColumnOrderState,
     [arg: SetStateAction<ColumnOrderState>],
@@ -25,9 +31,24 @@ const DataTable = <T,>({
   >
   currRowAtom: PrimitiveAtom<number>
 }) => {
+  const rows = table.getRowModel().rows
+  const renderRow = (row: (typeof rows)[number]) => (
+    <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  )
+
   return (
     <div className="rounded-md">
-      <Table style={{ width: table.getTotalSize() }}>
+      <Table
+        aria-label={label}
+        aria-rowcount={rows.length}
+        style={{ width: table.getTotalSize() }}
+      >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -49,23 +70,15 @@ const DataTable = <T,>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+        <TableBody className={cn(virtualized && rows.length && 'h-[300px]')}>
+          {rows.length ? (
+            virtualized ? (
+              <VList className="h-full" data-testid={`${label}-virtual-list`}>
+                {rows.map(renderRow)}
+              </VList>
+            ) : (
+              rows.map(renderRow)
+            )
           ) : (
             <TableRow>
               <TableCell

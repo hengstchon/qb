@@ -1,16 +1,21 @@
+import { useMemo } from 'react'
 import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import useSWR from 'swr'
 import DataTable from '@/components/common/DataTable'
 import { trksColumns } from '@/config/columns'
 import { API } from '@/services'
 import { normalizeTrackers } from '@/services/normalizers'
-import { getCurrHashAtom, trackerTableStateAtom } from '@/store'
+import {
+  connectionInfoAtom,
+  getCurrHashAtom,
+  trackerTableStateAtom,
+} from '@/store'
 import { Tracker } from '@/types'
 import Actions from './Actions'
 
@@ -35,9 +40,22 @@ const Trackers = () => {
 
   const { data } = useSWR<unknown>(
     currHash ? API.torrents.trackers(currHash) : null,
-    { keepPreviousData: true, fallbackData: [] },
+    { keepPreviousData: true, fallbackData: [], refreshInterval: 5000 },
   )
   const trackers = normalizeTrackers(data)
+  const connectionInfo = useAtomValue(connectionInfoAtom)
+  const columns = useMemo(
+    () =>
+      connectionInfo?.capabilities.supportsDetailedTrackers
+        ? trksColumns
+        : trksColumns.filter(
+            (column) =>
+              !['nextAnnounce', 'minAnnounce', 'endpoints'].includes(
+                column.id!,
+              ),
+          ),
+    [connectionInfo?.capabilities.supportsDetailedTrackers],
+  )
 
   const [columnOrder, onColumnOrderChange] = useAtom(trksColOrderAtom)
   const [columnSizing, onColumnSizingChange] = useAtom(trksColSizingAtom)
@@ -46,7 +64,7 @@ const Trackers = () => {
 
   const table = useReactTable({
     data: trackers,
-    columns: trksColumns,
+    columns,
     state: {
       columnOrder,
       columnSizing,
@@ -68,6 +86,7 @@ const Trackers = () => {
       <div className="overflow-auto">
         <DataTable<Tracker>
           table={table}
+          label="Trackers"
           colOrderAtom={trksColOrderAtom}
           currRowAtom={currTrkAtom}
         />

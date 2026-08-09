@@ -7,30 +7,18 @@ export const peersRidAtom = atom(0)
 
 export const peersAtom = atom<Peers>({})
 
+export const applyPeerDelta = (current: Peers, value: PeersData): Peers => {
+  if (value.full_update) return (value.peers ?? {}) as Peers
+
+  return produce(current, (draft) => {
+    for (const [peer, props] of Object.entries(value.peers ?? {})) {
+      draft[peer] = peer in draft ? { ...draft[peer], ...props } : props
+    }
+    for (const peer of value.peers_removed ?? []) delete draft[peer]
+  })
+}
+
 export const updatePeersAtom = atom(null, (_, set, value: unknown) => {
   const val: PeersData = normalizePeersData(value)
-  if (val.full_update) {
-    set(peersAtom, (val.peers ?? {}) as Peers)
-  } else {
-    if (val.peers) {
-      set(peersAtom, (prev) => {
-        return produce(prev, (draft) => {
-          for (const [peer, props] of Object.entries(val.peers!)) {
-            if (Object.keys(draft).includes(peer)) {
-              draft[peer] = { ...draft[peer], ...props }
-            } else {
-              draft[peer] = props
-            }
-          }
-        })
-      })
-    }
-    if (val.peers_removed) {
-      set(peersAtom, (prev) =>
-        Object.fromEntries(
-          Object.entries(prev).filter(([k]) => !val.peers_removed?.includes(k)),
-        ),
-      )
-    }
-  }
+  set(peersAtom, (current) => applyPeerDelta(current, val))
 })

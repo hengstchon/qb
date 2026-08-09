@@ -1,8 +1,13 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import useSWR from 'swr'
 import { MAX_ETA } from '@/config/constants'
+import {
+  normalizePieceAvailability,
+  normalizePieceStates,
+  pieceAvailabilityKey,
+} from '@/domain/pieces'
 import { API } from '@/services'
-import { getCurrHashAtom } from '@/store'
+import { connectionInfoAtom, getCurrHashAtom } from '@/store'
 import { Propperties } from '@/types'
 import {
   formatBytes,
@@ -10,14 +15,35 @@ import {
   formatSpeed,
   formatTimestamp,
 } from '@/utils'
+import { PieceAvailability } from './PieceAvailability'
 
 const General = () => {
   const [currHash] = useAtom(getCurrHashAtom)
+  const connectionInfo = useAtomValue(connectionInfoAtom)
+  const supportsPieceAvailability =
+    connectionInfo?.capabilities.supportsPieceAvailability ?? false
 
   const { data } = useSWR<Propperties>(
     currHash ? API.torrents.properties(currHash) : null,
     { keepPreviousData: true },
   )
+  const { data: rawPieceStates } = useSWR<unknown>(
+    currHash ? API.torrents.pieceStates(currHash) : null,
+    { keepPreviousData: true, refreshInterval: 5000 },
+  )
+  const { data: rawPieceAvailability } = useSWR<unknown>(
+    currHash
+      ? pieceAvailabilityKey(
+          API.torrents.pieceAvailability(currHash),
+          supportsPieceAvailability,
+        )
+      : null,
+    { keepPreviousData: true, refreshInterval: 5000 },
+  )
+  const pieceStates = normalizePieceStates(rawPieceStates)
+  const pieceAvailability = supportsPieceAvailability
+    ? normalizePieceAvailability(rawPieceAvailability)
+    : undefined
 
   const {
     addition_date = null,
@@ -67,6 +93,10 @@ const General = () => {
 
   return (
     <div className="grid gap-4">
+      <PieceAvailability
+        states={pieceStates}
+        availability={pieceAvailability}
+      />
       <div className="">
         <h2 className="mb-2 border-b font-semibold">Transfer</h2>
         <div className="grid grid-cols-3 gap-2 text-sm">

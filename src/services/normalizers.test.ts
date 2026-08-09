@@ -9,14 +9,27 @@ describe('qBittorrent 5.x response normalization', () => {
   it('accepts an I2P peer without IP or port', () => {
     const result = normalizePeersData({
       rid: 1,
-      peers: { i2p: { i2p_dest: 'example.b32.i2p', progress: 0.5 } },
+      peers: {
+        i2p: {
+          i2p_dest: 'example.b32.i2p',
+          host_name: 'resolved.example',
+          progress: 0.5,
+        },
+      },
     })
 
     expect(result.peers?.i2p).toMatchObject({
       i2p_dest: 'example.b32.i2p',
-      ip: undefined,
-      port: undefined,
+      host_name: 'resolved.example',
     })
+    expect(result.peers?.i2p.ip).toBeUndefined()
+    expect(result.peers?.i2p.port).toBeUndefined()
+  })
+
+  it('preserves unknown tracker states for forward-compatible display', () => {
+    const [tracker] = normalizeTrackers([{ url: 'https://future', status: 9 }])
+    expect(tracker.status).toBe(9)
+    expect(trackerStatusLabel(tracker.status)).toBe('Unknown (9)')
   })
 
   it('accepts missing optional fields and tracker status 5/6', () => {

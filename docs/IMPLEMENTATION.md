@@ -534,3 +534,50 @@ Validation:
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
 - `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
+
+## P3.18 — Tracker, piece, and peer visualization
+
+Completed:
+
+- Added explicit WebAPI capability boundaries for detailed tracker fields,
+  peer host names, and piece availability. Fixed-version detection now reflects
+  qBittorrent 5.2.3's observed WebAPI 2.15.1, while 4.4.5 keeps the legacy
+  tracker and piece-state paths.
+- Added a canvas-based piece map that renders piece state (`missing`,
+  `downloading`, and `downloaded`) separately from the top availability band.
+  The canvas samples arbitrarily large piece arrays into a fixed pixel budget,
+  provides an accessible summary and legend, and only calls
+  `torrents/pieceAvailability` when the server capability is present.
+- Expanded tracker rendering with styled warning/not-working, tracker-error,
+  unreachable, and forward-compatible unknown status badges. Detailed servers
+  show each endpoint's state, message, updating flag, and next/minimum announce
+  countdown; legacy servers hide the unavailable columns. Corrected announce
+  handling from duration formatting to Unix-epoch countdown formatting.
+- Added peer host-name display and explicit I2P address badges while retaining
+  compatibility with the I2P response shape that omits IP and port. Partial
+  peer normalization now omits missing fields instead of overwriting previously
+  known values with `undefined`.
+- Virtualized peer and expanded file rows through the existing Virtua boundary,
+  added table roles and labels, and retained TanStack Table as the state and row
+  model owner.
+- Reworked incremental peer updates into one Immer pass with structural sharing
+  for unchanged rows. Removed repeated full-object scans and the previous second
+  state update for removals.
+- Replaced the file tree's per-path sibling scans with Map indexes. A 5,000-file
+  unit fixture guards against returning to quadratic tree construction.
+- Added a live qBittorrent 5.2.3 detail E2E that verifies the piece endpoint,
+  tracker endpoint/error rendering, I2P and host-name fields, and scrolling to
+  the final entry in 5,000-peer and 5,000-file fixtures while fewer than 100
+  rows remain mounted. The fixed-version core E2E asserts 4.4.5 sends zero
+  `pieceAvailability` requests and 5.2.3 sends the supported request.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (75 tests)
+- `pnpm run build` (655.80 kB main JS; 675.00 kB enforced limit)
+- `pnpm run e2e:details` (1 Playwright test passed with 5,000 peers and files)
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed; no new endpoint request)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+- `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)

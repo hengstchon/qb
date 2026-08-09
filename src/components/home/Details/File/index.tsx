@@ -60,6 +60,8 @@ const Content = () => {
       <div className="overflow-auto">
         <DataTable<FileNode>
           table={table}
+          label="Content"
+          virtualized
           colOrderAtom={filesColOrderAtom}
           currRowAtom={currRowAtom}
         />
