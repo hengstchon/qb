@@ -247,7 +247,8 @@ const Torrents = () => {
     setTorsTable(table)
   }, [table, setTorsTable])
 
-  const isSomeRowsSelected = table.getIsSomeRowsSelected()
+  const isSomeRowsSelected =
+    table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()
 
   const { rows } = table.getRowModel()
 

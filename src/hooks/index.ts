@@ -1,4 +1,5 @@
 export * from './useFiles'
+export * from './useTorrentActions'
 export * from './useMainSync'
 export * from './useRenderCounter'
 export * from './useTorPeers'

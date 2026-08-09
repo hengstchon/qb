@@ -5,6 +5,7 @@ import {
   Play,
   SatelliteDish,
 } from 'lucide-react'
+import { useTorrentActions } from '@/hooks'
 import { Button } from '@/ui/Button'
 import { Separator } from '@/ui/Separator'
 import {
@@ -22,27 +23,37 @@ import SetOthers from './SetOthers'
 import SetTags from './SetTags'
 
 function TorrentsActions() {
+  const { setSelectedRunning } = useTorrentActions()
+
   return (
     <div className="flex h-8 items-center rounded-md border px-2">
       <TooltipProvider delayDuration={300}>
         {/* resume */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => void setSelectedRunning(true)}
+            >
               <Play className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Resume Torrents</TooltipContent>
+          <TooltipContent>Start Torrents</TooltipContent>
         </Tooltip>
 
         {/* pause */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => void setSelectedRunning(false)}
+            >
               <Pause className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Pause Torrents</TooltipContent>
+          <TooltipContent>Stop Torrents</TooltipContent>
         </Tooltip>
 
         <DeleteTorrent />

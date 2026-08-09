@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   normalizeTorrentState,
+  torrentFilterForApi,
   torrentStatePredicates,
   type TorrentState,
 } from './torrentState'
@@ -29,5 +30,12 @@ describe('torrent state compatibility', () => {
   it('uses transfer speed for active and inactive groups', () => {
     expect(torrentStatePredicates.active(torrent('downloading', 1))).toBe(true)
     expect(torrentStatePredicates.inactive(torrent('downloading'))).toBe(true)
+  })
+
+  it('maps running and stopped filters to each server generation', () => {
+    expect(torrentFilterForApi('running', false)).toBe('resumed')
+    expect(torrentFilterForApi('stopped', false)).toBe('paused')
+    expect(torrentFilterForApi('running', true)).toBe('running')
+    expect(torrentFilterForApi('stopped', true)).toBe('stopped')
   })
 })

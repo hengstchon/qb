@@ -23,6 +23,19 @@ export const torrentStates = [
 
 export type TorrentState = (typeof torrentStates)[number]
 
+export type TorrentFilter =
+  | 'all'
+  | 'downloading'
+  | 'seeding'
+  | 'completed'
+  | 'running'
+  | 'stopped'
+  | 'active'
+  | 'inactive'
+  | 'stalled'
+  | 'checking'
+  | 'errored'
+
 const knownStates = new Set<string>(torrentStates)
 
 export const normalizeTorrentState = (state: unknown): TorrentState => {
@@ -31,6 +44,15 @@ export const normalizeTorrentState = (state: unknown): TorrentState => {
   return typeof state === 'string' && knownStates.has(state)
     ? (state as TorrentState)
     : 'unknown'
+}
+
+export const torrentFilterForApi = (
+  filter: TorrentFilter,
+  supportsStartStop: boolean,
+) => {
+  if (filter === 'running') return supportsStartStop ? 'running' : 'resumed'
+  if (filter === 'stopped') return supportsStartStop ? 'stopped' : 'paused'
+  return filter
 }
 
 type TorrentActivity = {

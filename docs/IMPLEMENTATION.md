@@ -111,3 +111,27 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (30 tests)
 - `pnpm run build`
+
+## P0.6 — Torrent states, filters, and start/stop operations
+
+Completed:
+
+- Defined a strict internal `TorrentState` union and normalized legacy
+  `pausedDL`/`pausedUP` values to `stoppedDL`/`stoppedUP` at the API boundary.
+- Centralized predicates for All, Downloading, Seeding, Completed, Running,
+  Stopped, Active, Inactive, Stalled, Checking, and Errored groups.
+- Added a filter adapter that maps internal Running/Stopped filters to the
+  legacy `resumed`/`paused` names for qBittorrent 4.x.
+- Added a capability-driven mutation adapter: qBittorrent 4.x receives
+  `pause`/`resume`, while qBittorrent 5.x receives `stop`/`start`.
+- Wired both all-torrent and selected-torrent toolbar actions to POST through
+  the typed API client.
+- Added explicit UI labels for stopped downloads, stopped completed torrents,
+  and unknown states.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (35 tests)
+- `pnpm run build`

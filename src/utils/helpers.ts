@@ -1,6 +1,7 @@
 import { cx } from 'class-variance-authority'
 import { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import type { TorrentState } from '@/domain/torrentState'
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(cx(inputs))
@@ -8,7 +9,7 @@ export const cn = (...inputs: ClassValue[]) => {
 
 export const getRound = (n: number, d = 1) => parseFloat(n.toFixed(d))
 
-export function getStatusValue(state: string) {
+export function getStatusValue(state: TorrentState) {
   let status
   switch (state) {
     case 'downloading':
@@ -41,17 +42,17 @@ export function getStatusValue(state: string) {
     case 'checkingUP':
       status = 'Checking'
       break
-    case 'queuedForChecking':
-      status = 'Queued for checking'
-      break
     case 'checkingResumeData':
       status = 'Checking resume data'
       break
-    case 'pausedDL':
-      status = 'Paused'
+    case 'stoppedDL':
+      status = 'Stopped'
       break
-    case 'pausedUP':
-      status = 'Completed'
+    case 'stoppedUP':
+      status = 'Completed (stopped)'
+      break
+    case 'allocating':
+      status = 'Allocating'
       break
     case 'moving':
       status = 'Moving'
@@ -62,6 +63,7 @@ export function getStatusValue(state: string) {
     case 'error':
       status = 'Errored'
       break
+    case 'unknown':
     default:
       status = 'Unknown'
   }
