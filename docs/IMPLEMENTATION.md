@@ -291,3 +291,32 @@ Validation:
 - `pnpm run build`
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+
+## P2.13 — Flat lint, format, and test toolchain
+
+Completed:
+
+- Replaced `.eslintrc.cjs` with the shared `eslint.config.js` flat config,
+  combining ESLint's recommended rules, typescript-eslint, React JSX/runtime
+  rules, and Prettier conflict handling.
+- Upgraded to the newest peer-compatible ESLint 9 release because the current
+  React plugin does not yet declare ESLint 10 support.
+- Replaced the split TypeScript parser/plugin packages with the current
+  `typescript-eslint` flat-config package and enabled unused-disable reporting.
+- Upgraded Prettier, import sorting, Tailwind class sorting, React linting, and
+  Prettier ESLint integration; reformatted files affected by the new formatter.
+- Upgraded Testing Library, jest-dom, user-event, MSW, jsdom, and Vitest. Vitest
+  stays on the newest 3.x release compatible with Vite 5; its 4.x upgrade is
+  coupled to the Vite major in P2.14.
+- Removed the obsolete README workaround for an old React prop-types plugin
+  issue and replaced terse conditional expressions rejected by the current
+  TypeScript rules with explicit branches.
+- Confirmed the installed dependency graph has no peer dependency issues.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests on Vitest 3.2.7)
+- `pnpm run build`
+- `pnpm peers check`

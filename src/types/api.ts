@@ -40,8 +40,9 @@ export interface MainData {
   server_state: ServerState
 }
 
-export interface SyncData
-  extends Partial<Omit<MainData, 'server_state' | 'torrents'>> {
+export interface SyncData extends Partial<
+  Omit<MainData, 'server_state' | 'torrents'>
+> {
   rid: number
   full_update?: boolean
   torrents?: Record<

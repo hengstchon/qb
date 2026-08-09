@@ -17,7 +17,7 @@ const Status = () => {
             key={name}
             selected={currentFilter === filterValue}
             onClick={() => {
-              currentFilter !== filterValue && setCurrentFilter(filterValue)
+              if (currentFilter !== filterValue) setCurrentFilter(filterValue)
             }}
           >
             <span className="truncate">{name}</span>
