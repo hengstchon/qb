@@ -320,3 +320,27 @@ Validation:
 - `pnpm run test` (62 tests on Vitest 3.2.7)
 - `pnpm run build`
 - `pnpm peers check`
+
+## P2.14a — TypeScript and matching type definitions
+
+Completed:
+
+- Upgraded TypeScript from 5.6 to 6.0.3, the newest release supported by the
+  current typescript-eslint toolchain. TypeScript 7 is intentionally deferred
+  until typescript-eslint declares a compatible peer range.
+- Aligned Node declarations with the supported Node 24 LTS runtime and updated
+  React/React DOM declarations to their latest 18.x releases, keeping runtime
+  and declaration majors synchronized.
+- Migrated the application compiler from deprecated Node 10 module resolution
+  to bundler resolution and removed deprecated `baseUrl` and explicit
+  `esModuleInterop=false` options instead of suppressing TypeScript 6 migration
+  diagnostics.
+- Confirmed the resulting dependency graph has no peer dependency issues.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests)
+- `pnpm run build`
+- `pnpm peers check`
