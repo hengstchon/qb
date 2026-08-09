@@ -11,6 +11,7 @@ const Login = () => {
   const { login } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const authError = useAtomValue(authErrorAtom)
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -20,7 +21,12 @@ const Login = () => {
   }
 
   const handleSubmit = async () => {
-    await login({ username, password })
+    setSubmitting(true)
+    try {
+      await login({ username, password })
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -57,8 +63,12 @@ const Login = () => {
                 {authError}
               </p>
             )}
-            <Button className="w-full" onClick={handleSubmit}>
-              Sign in
+            <Button
+              className="w-full"
+              disabled={submitting || !username || !password}
+              onClick={handleSubmit}
+            >
+              {submitting ? 'Signing in…' : 'Sign in'}
             </Button>
           </div>
         </CardFooter>

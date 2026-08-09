@@ -68,10 +68,16 @@ const readableError = async (response: Response) => {
 }
 
 export class QbApiClient {
+  private authorization?: string
+
   constructor(
     private readonly baseUrl = '/api/v2',
     private readonly defaultTimeoutMs = 10_000,
   ) {}
+
+  setAuthorization(authorization?: string) {
+    this.authorization = authorization
+  }
 
   private buildUrl(endpoint: string, query?: ApiQuery) {
     const base = /^https?:\/\//.test(this.baseUrl)
@@ -100,10 +106,13 @@ export class QbApiClient {
     options.signal?.addEventListener('abort', abortFromCaller, { once: true })
 
     try {
+      const headers = new Headers(options.headers)
+      if (this.authorization) headers.set('Authorization', this.authorization)
+
       const response = await fetch(this.buildUrl(endpoint, options.query), {
         method: options.method ?? 'GET',
         body: options.body,
-        headers: options.headers,
+        headers,
         credentials: 'same-origin',
         signal: controller.signal,
       })

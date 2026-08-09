@@ -5,6 +5,8 @@ import { defineConfig, loadEnv } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   const env = loadEnv('', process.cwd(), '')
+  const target = env.QBIT_URL || 'http://localhost:8090'
+  const targetOrigin = new URL(target).origin
 
   return {
     resolve: {
@@ -16,8 +18,14 @@ export default defineConfig(() => {
     server: {
       proxy: {
         '/api': {
-          target: env.QBIT_URL,
+          target,
           changeOrigin: true,
+          configure(proxy) {
+            proxy.on('proxyReq', (proxyRequest) => {
+              proxyRequest.setHeader('Origin', targetOrigin)
+              proxyRequest.setHeader('Referer', `${targetOrigin}/`)
+            })
+          },
         },
       },
     },

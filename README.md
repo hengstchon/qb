@@ -114,6 +114,11 @@ origin headers.
 QBIT_URL=http://localhost:8090 pnpm dev
 ```
 
+Alternate WebUI deployments use qBittorrent's SID cookie session by default.
+An independently hosted integration may configure an API key or Basic
+Authorization header in memory with `qbApi.setAuthorization(...)`; credentials
+must not be written to localStorage or logs.
+
 ## FAQ
 
 1. 'className' is missing in props validation

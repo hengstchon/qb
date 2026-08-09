@@ -79,6 +79,21 @@ describe('QbApiClient', () => {
     })
   })
 
+  it('uses optional authorization only from in-memory configuration', async () => {
+    apiServer.use(
+      http.get('*/api/v2/authorization', ({ request }) =>
+        HttpResponse.text(request.headers.get('Authorization') ?? ''),
+      ),
+    )
+
+    api.setAuthorization('Bearer qbt_example')
+    await expect(api.getText('/authorization')).resolves.toBe(
+      'Bearer qbt_example',
+    )
+    api.setAuthorization()
+    await expect(api.getText('/authorization')).resolves.toBe('')
+  })
+
   it.each([400, 401, 403, 404, 405, 409, 415])(
     'converts HTTP %s into a structured error',
     async (status) => {

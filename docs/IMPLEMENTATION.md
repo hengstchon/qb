@@ -135,3 +135,28 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (35 tests)
 - `pnpm run build`
+
+## P0.7 — Authentication and secure development proxy
+
+Completed:
+
+- Replaced the persisted `auth` atom with in-memory state and delete the legacy
+  `QB_auth` localStorage key at startup.
+- Restore authentication only by successfully probing the authenticated
+  qBittorrent version endpoints.
+- Distinguish invalid credentials (401), temporary IP bans (403), version
+  detection failures, network failures, and expired sessions in user-facing
+  messages without exposing server secrets.
+- Clear connection metadata when a session expires or the user logs out.
+- Rewrite Host (through `changeOrigin`), Origin, and Referer in the Vite proxy
+  so local development works with qBittorrent CSRF and Host validation enabled.
+- Keep SID cookies as the Alternate WebUI default while allowing independent
+  deployments to configure an Authorization header in memory only.
+- Removed README guidance that disabled CSRF and login-failure protection.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (37 tests)
+- `pnpm run build`

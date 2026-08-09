@@ -11,9 +11,10 @@ import {
   TorrentTableState,
   TrackerTableState,
 } from '@/types'
-import { atomWithLocalStorage } from '@/utils'
+import { atomWithLocalStorage, removeItem } from '@/utils'
 
-export const authAtom = atomWithLocalStorage('auth', false)
+// Authentication is server-owned. Remove the key written by older releases.
+removeItem('auth')
 
 const defaultSettings: SettingsStorage = {
   openDetails: false,

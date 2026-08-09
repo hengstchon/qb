@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
-import { API, detectQbittorrent, qbApi } from '@/services'
+import { loginErrorMessage } from '@/domain/auth'
+import { API, detectQbittorrent, qbApi, QbApiError } from '@/services'
 import {
   authAtom,
   authCheckedAtom,
@@ -23,11 +24,13 @@ export const useAuth = () => {
   const checkAuth = async () => {
     try {
       await finishAuthentication()
-    } catch {
+    } catch (error) {
       setConnectionInfo(null)
       setIsAuthed(false)
       setAuthError(
-        'Unable to detect the qBittorrent and WebAPI versions. Sign in to retry.',
+        error instanceof QbApiError && [401, 403].includes(error.status ?? 0)
+          ? null
+          : 'Unable to detect the qBittorrent and WebAPI versions. Sign in to retry.',
       )
     } finally {
       setAuthChecked(true)
@@ -41,17 +44,36 @@ export const useAuth = () => {
     username: string
     password: string
   }) => {
+    setAuthError(null)
+
+    let response: string
     try {
-      const res = await qbApi.postForm<string>(
+      response = await qbApi.postForm<string>(
         API.login,
         { username, password },
         'text',
       )
-      if (res == 'Ok.') {
-        await finishAuthentication()
-      } else if (res == 'Fails.') {
-        setAuthError('The username or password is incorrect.')
-      }
+    } catch (error) {
+      setConnectionInfo(null)
+      setIsAuthed(false)
+      setAuthChecked(true)
+      setAuthError(
+        loginErrorMessage(
+          error instanceof QbApiError ? error.status : undefined,
+        ),
+      )
+      return
+    }
+
+    if (response !== 'Ok.') {
+      setIsAuthed(false)
+      setAuthChecked(true)
+      setAuthError('The username or password is incorrect.')
+      return
+    }
+
+    try {
+      await finishAuthentication()
     } catch {
       setConnectionInfo(null)
       setIsAuthed(false)
@@ -70,6 +92,7 @@ export const useAuth = () => {
       console.error('Logout failed:', error)
     } finally {
       setConnectionInfo(null)
+      setAuthError(null)
       setIsAuthed(false)
     }
   }
