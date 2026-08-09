@@ -38,5 +38,5 @@ if [ "$profile" = "qb523" ]; then
   fi
 fi
 
-E2E_BASE_URL="http://127.0.0.1:$port" E2E_PASSWORD="$password" \
+E2E_BASE_URL="http://127.0.0.1:$port" E2E_PASSWORD="$password" E2E_PROFILE="$profile" \
   pnpm exec playwright test "$@"

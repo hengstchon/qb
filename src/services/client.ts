@@ -178,6 +178,7 @@ export class QbApiClient {
     endpoint: string,
     values: Record<string, ApiQueryValue>,
     responseType: ApiResponseType = 'void',
+    signal?: AbortSignal,
   ) {
     const body = new URLSearchParams()
     for (const [key, value] of Object.entries(values)) {
@@ -187,6 +188,7 @@ export class QbApiClient {
       method: 'POST',
       body,
       responseType,
+      signal,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },

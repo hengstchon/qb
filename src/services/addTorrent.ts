@@ -71,10 +71,12 @@ export const addTorrents = async (
   capabilities: QbCapabilities,
   api: AddTorrentApi = qbApi,
 ): Promise<AddTorrentResult> => {
-  const { cookie, ...currentPayload } = payload
-  const requestPayload = capabilities.supportsAddTorrentCookie
-    ? { ...currentPayload, cookie }
-    : currentPayload
+  const { cookie, filePriorities, ...commonPayload } = payload
+  const requestPayload = {
+    ...commonPayload,
+    ...(capabilities.supportsAddTorrentCookie ? { cookie } : {}),
+    ...(capabilities.supportsTorrentMetadata ? { filePriorities } : {}),
+  }
 
   try {
     if (capabilities.supportsStructuredAddResponse) {

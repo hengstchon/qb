@@ -18,6 +18,15 @@ test('login, sync, filter, add, stop, start, and delete without files', async ({
   await expect(page.getByRole('button', { name: 'Add Torrents' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Add Torrents' }).click()
+  if (process.env.E2E_PROFILE === 'qb523') {
+    await expect(
+      page.getByRole('button', { name: 'Preview files' }),
+    ).toBeVisible()
+  } else {
+    await expect(
+      page.getByRole('button', { name: 'Preview files' }),
+    ).toHaveCount(0)
+  }
   await page.getByRole('tab', { name: 'Links' }).click()
   await page.getByPlaceholder('Input your torrent links...').fill(magnet)
   await page.getByRole('button', { name: 'Upload' }).click()

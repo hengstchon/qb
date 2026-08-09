@@ -45,6 +45,25 @@ describe('Add Torrent compatibility', () => {
     expect(api.postMultipart.mock.calls[0][2]).toBe('json')
   })
 
+  it('only forwards metadata file priorities to supported servers', async () => {
+    const legacyApi = apiWithResponse('Ok.')
+    const currentApi = apiWithResponse({
+      success_count: 1,
+      pending_count: 0,
+      failure_count: 0,
+    })
+
+    await addTorrents({ filePriorities: '0,1' }, qb4, legacyApi)
+    await addTorrents({ filePriorities: '0,1' }, qb5, currentApi)
+
+    expect(legacyApi.postMultipart.mock.calls[0][1]).not.toHaveProperty(
+      'filePriorities',
+    )
+    expect(currentApi.postMultipart.mock.calls[0][1]).toMatchObject({
+      filePriorities: '0,1',
+    })
+  })
+
   it.each([
     [{ success_count: 0, pending_count: 1, failure_count: 0 }, 'pending'],
     [{ success_count: 1, pending_count: 0, failure_count: 1 }, 'partial'],

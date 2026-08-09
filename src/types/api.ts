@@ -67,6 +67,8 @@ export interface AddTorrentPayload {
   dlLimit?: number
   /** Prioritize download first last piece. Possible values are true, false (default) */
   firstLastPiecePrio?: boolean
+  /** Per-file priorities, split by ',': 0 skip, 1 normal, 6 high, 7 maximum */
+  filePriorities?: string
   /** Add torrents in the paused state. Possible values are true, false (default) */
   paused?: boolean
   /** Set torrent share ratio limit */

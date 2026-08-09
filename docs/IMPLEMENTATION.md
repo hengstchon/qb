@@ -493,3 +493,44 @@ Validation:
 - `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+
+## P3.17 — Torrent metadata preview and file priorities
+
+Completed:
+
+- Added a WebAPI 2.11.9 capability boundary for torrent metadata operations.
+  qBittorrent 4.4.5 does not render the preview entry and the request service
+  strips metadata-only fields defensively; newer servers expose the enhanced
+  flow.
+- Added typed `fetchMetadata`, `parseMetadata`, and `saveMetadata` services.
+  Link metadata is polled until ready, local torrent responses preserve request
+  order, invalid response shapes fail explicitly, and cached metadata can be
+  downloaded as a `.torrent` file.
+- Accounted for the fixed qBittorrent 5.2.3 response schema observed in the
+  production container (`hash` and `infohash_v*`) while retaining aliases for
+  newer `torrent_id` and `info_hash_v*` names.
+- Added an explicit preview stage to the Add Torrent dialog for one local file
+  or one link. It displays a nested file tree, selected and total sizes, per-file
+  include controls, and Normal, High, or Maximum priority choices.
+- Submit cached metadata by source with the exact comma-separated qBittorrent
+  priority values (`0`, `1`, `6`, and `7`). This avoids the server restriction
+  against combining uploaded torrent bodies with `filePriorities`.
+- Kept preview errors isolated from form state. Users can retry metadata loading
+  or choose direct upload while retaining the selected file, links, and all add
+  options.
+- Added fixed-version and metadata-specific Playwright coverage. The live 5.2.3
+  workflow parses a two-file torrent, saves its cached metadata, sets priorities
+  to `6,0`, and verifies the final request. Separate cases cover live link
+  metadata fetching and failed-preview recovery; the 4.4.5 smoke test confirms
+  the unavailable entry is absent and direct add remains functional.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (68 tests)
+- `pnpm run build` (650.90 kB main JS; 675.00 kB enforced limit)
+- `pnpm run e2e:metadata` (3 Playwright tests passed on qBittorrent 5.2.3)
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+- `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)

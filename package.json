@@ -16,6 +16,7 @@
     "e2e": "playwright test",
     "e2e:qb445": "sh scripts/e2e-compat.sh qb445 e2e/compatibility.spec.ts",
     "e2e:qb523": "sh scripts/e2e-compat.sh qb523 e2e/compatibility.spec.ts",
+    "e2e:metadata": "sh scripts/e2e-compat.sh qb523 e2e/metadata.spec.ts",
     "e2e:visual": "sh scripts/e2e-compat.sh qb523 e2e/visual.spec.ts --browser=all --workers=1",
     "typecheck": "tsc --noEmit --pretty false && tsc -p tsconfig.node.json --noEmit --pretty false",
     "test": "vitest run",

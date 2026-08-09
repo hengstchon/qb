@@ -1,8 +1,20 @@
 import { Dispatch, useState } from 'react'
 import { SetStateAction, useAtom, useAtomValue } from 'jotai'
-import { ChevronRightIcon, PlusCircleIcon } from 'lucide-react'
+import { ChevronRightIcon, PlusCircleIcon, SearchIcon } from 'lucide-react'
 import { noCapabilities } from '@/domain/capabilities'
-import { addTorrents, type AddTorrentResult } from '@/services'
+import {
+  initialFilePriorities,
+  torrentMetadataId,
+  type TorrentFilePriority,
+  type TorrentMetadata,
+} from '@/domain/torrentMetadata'
+import {
+  addTorrents,
+  fetchTorrentMetadata,
+  parseTorrentMetadata,
+  saveTorrentMetadata,
+  type AddTorrentResult,
+} from '@/services'
 import { categoriesAtom, connectionInfoAtom, tagsAtom } from '@/store'
 import { AddTorrentPayload } from '@/types'
 import { Button } from '@/ui/Button'
@@ -33,6 +45,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
 import { Textarea } from '@/ui/Textarea'
 import { cn } from '@/utils'
+import { MetadataPreview } from './MetadataPreview'
 import TagsSelector from './TagsSelector'
 
 type FromLocalTabType = {
@@ -115,23 +128,51 @@ export function AddTorrent() {
   const [autoTMM, setAutoTMM] = useState(false)
   const [sequentialDownload, setSequentialDownload] = useState(false)
   const [firstLastPiecePrio, setFirstLastPiecePrio] = useState(false)
+  const [sourceTab, setSourceTab] = useState('Local')
+  const [metadata, setMetadata] = useState<TorrentMetadata | null>(null)
+  const [metadataSource, setMetadataSource] = useState('')
+  const [filePriorities, setFilePriorities] = useState<TorrentFilePriority[]>(
+    [],
+  )
+  const [metadataLoading, setMetadataLoading] = useState(false)
+  const [metadataSaving, setMetadataSaving] = useState(false)
+  const [metadataError, setMetadataError] = useState('')
+  const [metadataNotice, setMetadataNotice] = useState('')
 
   const [allCategories] = useAtom(categoriesAtom)
   const [allTags] = useAtom(tagsAtom)
   const connectionInfo = useAtomValue(connectionInfoAtom)
   const capabilities = connectionInfo?.capabilities ?? noCapabilities
 
+  const clearMetadata = () => {
+    setMetadata(null)
+    setMetadataSource('')
+    setFilePriorities([])
+    setMetadataError('')
+    setMetadataNotice('')
+  }
+
   const tabs = [
     {
       name: 'Local',
-      content: <UploadLocalTab setFiles={setFiles} />,
+      content: (
+        <UploadLocalTab
+          setFiles={(value) => {
+            clearMetadata()
+            setFiles(value)
+          }}
+        />
+      ),
     },
     {
       name: 'Links',
       content: (
         <UploadLinksTab
           urls={urls}
-          setUrls={setUrls}
+          setUrls={(value) => {
+            clearMetadata()
+            setUrls(value)
+          }}
           cookie={cookie}
           setCookie={setCookie}
           showCookie={capabilities.supportsAddTorrentCookie}
@@ -139,6 +180,66 @@ export function AddTorrent() {
       ),
     },
   ]
+
+  async function handleMetadataPreview() {
+    const linkSources = urls
+      .split('\n')
+      .map((source) => source.trim())
+      .filter(Boolean)
+    if (sourceTab === 'Local' && files.length !== 1) {
+      setMetadataError('Choose exactly one .torrent file to preview.')
+      return
+    }
+    if (sourceTab === 'Links' && linkSources.length !== 1) {
+      setMetadataError('Enter exactly one URL or magnet link to preview.')
+      return
+    }
+
+    setMetadataLoading(true)
+    setMetadataError('')
+    setMetadataNotice('')
+    try {
+      const nextMetadata =
+        sourceTab === 'Local'
+          ? (await parseTorrentMetadata(files))[0]
+          : await fetchTorrentMetadata(linkSources[0])
+      setMetadata(nextMetadata)
+      setMetadataSource(
+        sourceTab === 'Local'
+          ? torrentMetadataId(nextMetadata)
+          : linkSources[0],
+      )
+      setFilePriorities(initialFilePriorities(nextMetadata.info.files))
+    } catch (error) {
+      setMetadata(null)
+      setMetadataError(
+        error instanceof Error ? error.message : 'Unable to load metadata.',
+      )
+    } finally {
+      setMetadataLoading(false)
+    }
+  }
+
+  async function handleSaveMetadata() {
+    if (!metadata || !metadataSource) return
+    setMetadataSaving(true)
+    setMetadataError('')
+    try {
+      const blob = await saveTorrentMetadata(metadataSource)
+      const objectUrl = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      anchor.href = objectUrl
+      anchor.download = `${metadata.info.name.replaceAll(/[/\\:*?"<>|]/g, '_')}.torrent`
+      anchor.click()
+      URL.revokeObjectURL(objectUrl)
+    } catch (error) {
+      setMetadataError(
+        error instanceof Error ? error.message : 'Unable to save metadata.',
+      )
+    } finally {
+      setMetadataSaving(false)
+    }
+  }
 
   async function handleSubmit() {
     if (files.length === 0 && !urls.trim()) {
@@ -150,8 +251,9 @@ export function AddTorrent() {
     }
 
     const params: AddTorrentPayload = {
-      torrents: files,
-      urls,
+      torrents: metadata ? [] : files,
+      urls: metadata ? metadataSource : urls,
+      filePriorities: metadata ? filePriorities.join(',') : undefined,
       savepath,
       cookie,
       category,
@@ -200,7 +302,14 @@ export function AddTorrent() {
         </DialogHeader>
 
         <div className="grid gap-8 py-4">
-          <Tabs className={cn('flex flex-col')} defaultValue={tabs[0].name}>
+          <Tabs
+            className={cn('flex flex-col')}
+            value={sourceTab}
+            onValueChange={(value) => {
+              clearMetadata()
+              setSourceTab(value)
+            }}
+          >
             <TabsList className="flex justify-between">
               <div>
                 {tabs.map(({ name }) => (
@@ -220,6 +329,75 @@ export function AddTorrent() {
               </TabsContent>
             ))}
           </Tabs>
+
+          {capabilities.supportsTorrentMetadata && (
+            <div className="space-y-3 px-4">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={metadataLoading || submitting}
+                onClick={handleMetadataPreview}
+              >
+                <SearchIcon className="mr-2 h-4 w-4" />
+                {metadataLoading
+                  ? 'Loading metadata…'
+                  : metadata
+                    ? 'Refresh file preview'
+                    : 'Preview files'}
+              </Button>
+              {metadataError && (
+                <div
+                  role="alert"
+                  className="text-destructive space-y-2 text-sm"
+                >
+                  <p>{metadataError}</p>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={handleMetadataPreview}
+                    >
+                      Retry
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setMetadataError('')
+                        setMetadataNotice(
+                          'Metadata preview skipped. The original input will be uploaded directly.',
+                        )
+                      }}
+                    >
+                      Add directly
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {metadataNotice && (
+                <p role="status" className="text-muted-foreground text-sm">
+                  {metadataNotice}
+                </p>
+              )}
+              {metadata && (
+                <MetadataPreview
+                  metadata={metadata}
+                  priorities={filePriorities}
+                  saving={metadataSaving}
+                  onPriorityChange={(index, priority) =>
+                    setFilePriorities((current) =>
+                      current.map((value, currentIndex) =>
+                        currentIndex === index ? priority : value,
+                      ),
+                    )
+                  }
+                  onSave={handleSaveMetadata}
+                />
+              )}
+            </div>
+          )}
 
           {/* Options */}
           <Collapsible>

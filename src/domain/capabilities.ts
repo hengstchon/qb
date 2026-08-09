@@ -5,6 +5,7 @@ export type QbCapabilities = {
   supportsPieceAvailability: boolean
   supportsAddTorrentCookie: boolean
   supportsStructuredAddResponse: boolean
+  supportsTorrentMetadata: boolean
 }
 
 export type QbConnectionInfo = {
@@ -44,6 +45,7 @@ export const capabilitiesForWebApi = (
     supportsAddTorrentCookie:
       isKnownVersion && !atLeast(webApiVersion, [2, 11, 3]),
     supportsStructuredAddResponse: atLeast(webApiVersion, [2, 14, 0]),
+    supportsTorrentMetadata: atLeast(webApiVersion, [2, 11, 9]),
   }
 }
 
