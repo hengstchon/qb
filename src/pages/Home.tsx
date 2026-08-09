@@ -4,7 +4,7 @@ import Sidebar from '@/components/home/Sidebar'
 import StatusBar from '@/components/home/StatusBar'
 import Toolbar from '@/components/home/Toolbar'
 import Torrents from '@/components/home/Torrents'
-import { useSyncMainData } from '@/hooks'
+import { useClientDataSync, useSyncMainData } from '@/hooks'
 import { openSidebarAtom } from '@/store'
 import {
   ResizableHandle,
@@ -14,6 +14,7 @@ import {
 
 const HomePage = () => {
   useSyncMainData()
+  useClientDataSync()
   const [isOpened] = useAtom(openSidebarAtom)
 
   return (

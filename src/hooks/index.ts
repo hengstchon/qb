@@ -1,4 +1,5 @@
 export * from './useFiles'
+export * from './useClientDataSync'
 export * from './useTorrentActions'
 export * from './useMainSync'
 export * from './useRenderCounter'

@@ -229,3 +229,32 @@ Validation:
 - `pnpm run lint`
 - `pnpm run test` (53 tests, including a fake-timer 30-minute run)
 - `pnpm run build`
+
+## P1.11 — Local UI and server-state boundaries
+
+Completed:
+
+- Added schema-versioned localStorage envelopes with safe defaults, shallow
+  migration from the legacy unversioned format, and reset behavior for corrupt
+  JSON or unknown future schemas.
+- Kept authentication, transient selections, and server-owned data out of
+  persistent storage; local persistence remains limited to UI preferences.
+- Added capability-gated qBittorrent 5.2+ `clientdata/load` and
+  `clientdata/store` support under one WebUI-specific, versioned namespace.
+- Synchronize only theme, refresh interval, and table column order, sizing, and
+  visibility. Filters, sorting, selections, and torrent data remain local or
+  server-owned and are never included in the shared payload.
+- Debounce server writes and load shared preferences before enabling writes, so
+  an empty local default cannot overwrite an existing server preference during
+  startup.
+- Keep settings isolated by both browser origin and the qBittorrent instance's
+  own client-data store.
+- Added a deterministic localStorage polyfill for Node 24 test workers where
+  the native experimental storage global is unavailable.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run test` (60 tests)
+- `pnpm run build`

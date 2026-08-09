@@ -11,6 +11,11 @@ export const API = {
   version: '/app/version',
   webapiVersion: '/app/webapiVersion',
   buildInfo: '/app/buildInfo',
+  clientData: {
+    load: (keys: string[]) =>
+      request('/clientdata/load', { keys: JSON.stringify(keys) }),
+    store: '/clientdata/store',
+  },
   sync: {
     maindata: (rid = 0) => request('/sync/maindata', { rid }),
     torrentPeers: (hash: string, rid = 0) =>

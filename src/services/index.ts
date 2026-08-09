@@ -1,6 +1,7 @@
 export * from './api'
 export * from './addTorrent'
 export * from './client'
+export * from './clientData'
 export * from './normalizers'
 export * from './syncController'
 export * from './version'
