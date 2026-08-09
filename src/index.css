@@ -159,10 +159,6 @@
   --tw-enter-opacity: 0;
 }
 
-@utility fade-in-80 {
-  --tw-enter-opacity: 0.8;
-}
-
 @utility fade-out-0 {
   --tw-exit-opacity: 0;
 }

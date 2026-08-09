@@ -449,3 +449,47 @@ Validation:
 - `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
+
+## P2.16 — Dependency cleanup and bundle regression control
+
+Completed:
+
+- Audited every direct production dependency against reachable application
+  source. Removed the unused Context Menu and Switch template modules together
+  with their two Radix packages; all remaining production packages have a
+  concrete source import.
+- Confirmed the typed native-fetch qB API client already replaced Wretch in
+  P0.5, so no overlapping HTTP abstraction remains.
+- Replaced `@vitejs/plugin-react-swc` with Vite 8's standard React 6 plugin.
+  The application has no SWC plugins, so the standard Oxc-based path removes an
+  unnecessary development compiler and the preview-time recommendation.
+- Applied pnpm's deterministic lockfile deduplication, removing 48 redundant
+  transitive package instances, then confirmed there is one React/React DOM
+  runtime and no further dedupe candidates.
+- Documented the table boundary: TanStack Table owns the column and table state
+  model, while Virtua only windows torrent rows. No second table model or
+  virtualization implementation is present.
+- Inspected a temporary source-mapped production build. The largest source
+  contributors are React DOM, application code, TanStack Table, dnd-kit, SWR,
+  and the deliberately retained UI primitives; no duplicate large framework
+  or virtualization package was present.
+- Added `check:bundle` to every production build. It reports the largest JS
+  asset and fails above 675.00 kB, leaving 30.40 kB (4.7%) headroom over the
+  644.60 kB baseline. Vite's chunk warning uses the same threshold.
+- Reduced production CSS from 35.97 kB to 34.71 kB by dropping unreachable
+  component utilities. The main JS changes by only 0.19 kB because those
+  modules were already removed by tree shaking.
+
+Validation:
+
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (62 tests)
+- `pnpm run build` (644.60 kB main JS; 675.00 kB enforced limit)
+- `pnpm peers check`
+- `pnpm install --frozen-lockfile`
+- `pnpm dedupe --check`
+- Production source-map composition inspection
+- `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
+- `pnpm run e2e:qb445` (1 Playwright smoke test passed)
+- `pnpm run e2e:qb523` (1 Playwright smoke test passed)

@@ -91,17 +91,29 @@ pnpm test
 pnpm build
 ```
 
+`pnpm build` also enforces a 675 kB regression limit on the largest production
+JavaScript asset.
+
+### Table architecture
+
+TanStack Table owns table semantics and state: columns, sorting, filtering,
+selection, sizing, ordering, and visibility. Virtua only windows the torrent
+rows rendered from that model. Keeping these responsibilities separate avoids
+introducing a second table model or virtualization library.
+
 ### qBittorrent compatibility tests
 
-Install the Playwright Chromium runtime once, then run either fixed-version
+Install the Playwright browser runtimes once, then run either fixed-version
 profile. Each command rebuilds the Alternate WebUI image, creates fresh and
 isolated config/download directories, runs the same smoke workflow, and removes
-the container afterward.
+the container afterward. The visual command checks Chromium, Firefox, and
+WebKit at desktop and narrow viewport sizes.
 
 ```bash
-pnpm exec playwright install chromium
+pnpm exec playwright install chromium firefox webkit
 pnpm e2e:qb445
 pnpm e2e:qb523
+pnpm e2e:visual
 ```
 
 The profiles use the official `qbittorrent-nox` images pinned to 4.4.5-1 and
