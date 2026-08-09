@@ -1,12 +1,12 @@
-import { flexRender, Row } from '@tanstack/react-table'
-import { PrimitiveAtom, useAtom } from 'jotai'
+import { flexRender, type Row as TableRow } from '@tanstack/react-table'
+import { useAtom, type PrimitiveAtom } from 'jotai'
 import { cn } from '@/utils'
 
 const Row = <T,>({
   row,
   currRowAtom,
 }: {
-  row: Row<T>
+  row: TableRow<T>
   currRowAtom: PrimitiveAtom<number>
 }) => {
   const [currRow, setCurrRow] = useAtom(currRowAtom)
@@ -15,7 +15,7 @@ const Row = <T,>({
     <div
       className={cn(
         'flex h-6 hover:bg-yellow-100',
-        currRow === row.index && 'bg-yellow-200'
+        currRow === row.index && 'bg-yellow-200',
       )}
       onClick={() => setCurrRow(row.index)}
     >
@@ -27,7 +27,7 @@ const Row = <T,>({
             key={cell.id}
             className={cn(
               'flex items-center justify-center border border-dotted px-1',
-              className
+              className,
             )}
             style={isFirstCol ? undefined : { width: cell.column.getSize() }}
           >

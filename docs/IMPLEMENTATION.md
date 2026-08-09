@@ -27,3 +27,18 @@ Validation:
 
 CI uses Node.js 22. The local validation host used a newer Node.js release and
 therefore emitted the expected engine warning, but all checks completed.
+
+## P0.2 — TypeScript build repair
+
+Completed:
+
+- Restored the TanStack Table `ColumnMeta.className` module augmentation.
+- Changed table and atom symbols used only as types to type-only imports.
+- Aliased TanStack's `Row` type to avoid colliding with the local `Row`
+  component.
+
+Validation:
+
+- `pnpm run typecheck`
+- `pnpm run lint`
+- `pnpm run build`

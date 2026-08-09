@@ -1,10 +1,10 @@
-import { SetStateAction } from 'react'
+import type { SetStateAction } from 'react'
 import {
-  ColumnOrderState,
   flexRender,
-  Table as ReactTable,
+  type ColumnOrderState,
+  type Table as ReactTable,
 } from '@tanstack/react-table'
-import { PrimitiveAtom, WritableAtom } from 'jotai'
+import type { PrimitiveAtom, WritableAtom } from 'jotai'
 import {
   Table,
   TableBody,
