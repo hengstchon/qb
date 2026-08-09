@@ -625,3 +625,46 @@ Validation:
 - `pnpm run e2e:qb445` (1 Playwright smoke test passed)
 - `pnpm run e2e:qb523` (1 Playwright smoke test passed)
 - `pnpm run e2e:visual` (Chromium, Firefox, and WebKit; 3 tests passed)
+
+## Final release acceptance
+
+Completed:
+
+- Reinstalled the dependency graph from the committed lockfile with pnpm
+  11.21.0. The graph has no peer dependency issues and passes pnpm's dedupe and
+  supply-chain policy checks without modifying tracked files.
+- Re-ran lint, both TypeScript project checks, all 78 unit tests, and the
+  production build. The largest JavaScript asset is 665.89 kB against the
+  enforced 675.00 kB limit.
+- Installed the production `dist/public` output into the official pinned
+  qBittorrent 4.4.5 and 5.2.3 images as their Alternate WebUI. Browser tests
+  loaded the application from qBittorrent itself and completed authenticated
+  login, synchronization, filtering, add, start, stop, and safe removal.
+- Re-ran the metadata, detailed swarm, batch-action, and cross-browser visual
+  suites. This covers qBittorrent 5.2-only capability paths, qBittorrent 4.4.5
+  degradation, 5,000-row virtualization, light/dark/system themes, desktop and
+  narrow viewports, and Chromium, Firefox, and WebKit.
+- Kept qBittorrent's CSRF, Host header, login-failure, and SID-cookie protections
+  enabled throughout the real-image tests. A tracked-file scan found no private
+  keys, AWS access keys, SID values, runtime configuration, downloads, build
+  output, or Playwright result data.
+- The verification host used Node.js 26.7.0 and therefore printed the expected
+  engine warning for the project's Node.js 24 LTS release target. pnpm itself
+  used the pinned 11.21.0 version; CI remains locked to Node.js 24.
+
+Validation:
+
+- `pnpm install --frozen-lockfile`
+- `pnpm peers check`
+- `pnpm dedupe --check`
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test` (20 files, 78 tests)
+- `pnpm run build` (665.89 kB main JS; 675.00 kB enforced limit)
+- `pnpm run e2e:qb445` (1 core scenario passed)
+- `pnpm run e2e:qb523` (1 core scenario passed)
+- `pnpm run e2e:metadata` (3 metadata scenarios passed)
+- `pnpm run e2e:details` (1 large swarm/detail scenario passed)
+- `pnpm run e2e:bulk:qb445` (1 batch scenario passed)
+- `pnpm run e2e:bulk:qb523` (1 batch scenario passed)
+- `pnpm run e2e:visual` (3 browsers passed)
