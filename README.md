@@ -75,9 +75,21 @@ Customization of headers:
 
 ## Development
 
-Use the latest Node.js LTS release (Node.js 24) and pnpm 11.21.0, matching CI:
+Use [mise](https://mise.jdx.dev/) to select the latest Node.js 24 LTS patch for
+this project. Install and activate mise once on macOS with zsh:
 
 ```bash
+brew install mise
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+exec zsh
+```
+
+Then install the project toolchain and dependencies. The committed `mise.toml`
+selects Node.js 24, while `package.json` pins pnpm 11.21.0:
+
+```bash
+mise install
+node --version
 pnpm install --frozen-lockfile
 pnpm dev
 ```
