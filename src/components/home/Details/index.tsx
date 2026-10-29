@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ChevronsDownIcon, ChevronsUpIcon } from 'lucide-react'
@@ -5,11 +6,12 @@ import { settingsAtom } from '@/store'
 import { Button } from '@/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/Tabs'
 import { cn } from '@/utils'
-import Content from './File'
-import General from './General'
-import HTTPSources from './HTTPSource'
-import Peers from './Peer'
-import Trackers from './Tracker'
+
+const Content = lazy(() => import('./File'))
+const General = lazy(() => import('./General'))
+const HTTPSources = lazy(() => import('./HTTPSource'))
+const Peers = lazy(() => import('./Peer'))
+const Trackers = lazy(() => import('./Tracker'))
 
 const openDetailsAtom = focusAtom(settingsAtom, (optic) =>
   optic.prop('openDetails'),
@@ -63,7 +65,9 @@ const Details = () => {
             value={name}
             className="mt-0 flex-1 overflow-auto border-r border-l px-2"
           >
-            {content}
+            <Suspense fallback={<div role="status">Loading…</div>}>
+              {content}
+            </Suspense>
           </TabsContent>
         ))}
     </Tabs>
