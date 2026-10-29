@@ -20,6 +20,6 @@ if (typeof window !== 'undefined' && !window.localStorage) {
   })
 }
 
-beforeAll(() => apiServer.listen({ onUnhandledRequest: 'error' }))
+beforeAll(() => apiServer.listen({ onUnhandledFrame: 'error' }))
 afterEach(() => apiServer.resetHandlers())
 afterAll(() => apiServer.close())
