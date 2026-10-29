@@ -75,7 +75,7 @@ Customization of headers:
 
 ## Development
 
-Use [mise](https://mise.jdx.dev/) to select the latest Node.js 24 LTS patch for
+Use [mise](https://mise.jdx.dev/) to select the latest Node.js 26 LTS patch for
 this project. Install and activate mise once on macOS with zsh:
 
 ```bash
@@ -85,7 +85,7 @@ exec zsh
 ```
 
 Then install the project toolchain and dependencies. The committed `mise.toml`
-selects Node.js 24, while `package.json` pins pnpm 11.21.0:
+selects Node.js 26, while `package.json` pins pnpm 11.21.0:
 
 ```bash
 mise install
