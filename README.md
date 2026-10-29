@@ -90,6 +90,8 @@ selects Node.js 26, while `package.json` pins pnpm 12.16.1:
 ```bash
 mise install
 node --version
+npm install --global pnpm@12.16.1
+pnpm --version
 pnpm install --frozen-lockfile
 pnpm dev
 ```
@@ -105,6 +107,13 @@ pnpm build
 
 `pnpm build` also enforces a 675 kB regression limit on the largest production
 JavaScript asset.
+
+Type checking and builds use the native TypeScript 7 compiler (`tsc`), installed
+as `@typescript/native`. The `typescript` dependency aliases Microsoft's
+TypeScript 6 compatibility package so ESLint and other tools can still use the
+JavaScript compiler API. This follows Microsoft's
+[side-by-side installation guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60).
+The compatibility compiler is available separately as `tsc6`.
 
 ### Table architecture
 
