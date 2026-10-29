@@ -85,7 +85,7 @@ exec zsh
 ```
 
 Then install the project toolchain and dependencies. The committed `mise.toml`
-selects Node.js 26, while `package.json` pins pnpm 11.21.0:
+selects Node.js 26, while `package.json` pins pnpm 12.16.1:
 
 ```bash
 mise install
