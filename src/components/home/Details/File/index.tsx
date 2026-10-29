@@ -1,13 +1,9 @@
-import {
-  getCoreRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import { atom, useAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/common/DataTable'
 import { filesColumns } from '@/config/columns'
+import { appTableFeatures } from '@/config/table'
 import { useFiles } from '@/hooks/useFiles'
 import { fileTableStateAtom } from '@/store'
 import { FileNode } from '@/types'
@@ -35,7 +31,9 @@ const Content = () => {
   const [columnVisibility, onColumnVisibilityChange] = useAtom(filesColVisiAtom)
   const [sorting, onSortingChange] = useAtom(filesSortAtom)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: appTableFeatures,
+    enableRowRangeSelection: false,
     data,
     columns: filesColumns,
     state: {
@@ -50,9 +48,6 @@ const Content = () => {
     onSortingChange,
     columnResizeMode: 'onChange',
     getSubRows: (row) => row.subRows,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
   })
 
   return (

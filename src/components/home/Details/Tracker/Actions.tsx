@@ -1,6 +1,7 @@
 import type { Table } from '@tanstack/react-table'
 import { useAtomValue } from 'jotai'
 import { SatelliteDishIcon } from 'lucide-react'
+import type { AppTableFeatures } from '@/config/table'
 import type { QbCapabilities } from '@/domain/capabilities'
 import { useTorrentActions } from '@/hooks'
 import { reannounceTorrents } from '@/services'
@@ -12,7 +13,7 @@ export default function Actions({
   table,
   capabilities,
 }: {
-  table: Table<Tracker>
+  table: Table<AppTableFeatures, Tracker>
   capabilities: QbCapabilities
 }) {
   const pending = useAtomValue(batchActionPendingAtom)

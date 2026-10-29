@@ -2,8 +2,8 @@ import {
   ColumnFiltersState,
   ColumnOrderState,
   ColumnSizingState,
+  ColumnVisibilityState,
   SortingState,
-  VisibilityState,
 } from '@tanstack/react-table'
 
 export type SettingsStorage = {
@@ -20,7 +20,7 @@ export type SettingsStorage = {
 interface BaseTableState {
   columnOrder: ColumnOrderState
   columnSizing: ColumnSizingState
-  columnVisibility: VisibilityState
+  columnVisibility: ColumnVisibilityState
   sorting: SortingState
 }
 

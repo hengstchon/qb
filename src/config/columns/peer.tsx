@@ -1,14 +1,15 @@
 import ReactCountryFlag from 'react-country-flag'
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { selectColumnDef } from '@/components/common/DataTable/selectColumn'
+import { createColumnHelper } from '@tanstack/react-table'
+import { createSelectColumn } from '@/components/common/DataTable/selectColumn'
+import type { AppTableFeatures } from '@/config/table'
 import { PeerType } from '@/types'
 import { Badge } from '@/ui/Badge'
 import { formatBytes, formatPercentage, formatSpeed } from '@/utils'
 
-const ch = createColumnHelper<PeerType>()
+const ch = createColumnHelper<AppTableFeatures, PeerType>()
 
-export const peersColumns = [
-  selectColumnDef as ColumnDef<PeerType>,
+export const peersColumns = ch.columns([
+  createSelectColumn<PeerType>(),
   ch.accessor(({ country_code, country }) => ({ country_code, country }), {
     id: 'countryRegion',
     header: 'Country/Region',
@@ -108,4 +109,4 @@ export const peersColumns = [
     header: 'Files',
     size: 100,
   }),
-]
+])

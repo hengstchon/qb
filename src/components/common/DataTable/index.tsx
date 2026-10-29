@@ -3,9 +3,11 @@ import {
   flexRender,
   type ColumnOrderState,
   type Table as ReactTable,
+  type RowData,
 } from '@tanstack/react-table'
 import type { PrimitiveAtom, WritableAtom } from 'jotai'
 import { VList } from 'virtua'
+import type { AppTableFeatures } from '@/config/table'
 import {
   Table,
   TableBody,
@@ -16,12 +18,12 @@ import {
 } from '@/ui/Table'
 import { cn } from '@/utils'
 
-const DataTable = <T,>({
+const DataTable = <T extends RowData>({
   table,
   label,
   virtualized = false,
 }: {
-  table: ReactTable<T>
+  table: ReactTable<AppTableFeatures, T>
   label: string
   virtualized?: boolean
   colOrderAtom: WritableAtom<

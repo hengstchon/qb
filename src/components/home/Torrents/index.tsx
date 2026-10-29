@@ -9,19 +9,17 @@ import {
 import {
   ColumnOrderState,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
   Header,
   Row,
   RowSelectionState,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { ArrowDownIcon, ArrowUpIcon, GripVerticalIcon } from 'lucide-react'
 import { VList } from 'virtua'
 import { torsColumns } from '@/config/columns'
+import { appTableFeatures, type AppTableFeatures } from '@/config/table'
 import {
   getFilteredTorsAtom,
   isHeaderEditingAtom,
@@ -140,7 +138,7 @@ function TableHeaderDndContext({ children }: { children: React.ReactElement }) {
 function EditTableColumnHeader({
   header,
 }: {
-  header: Header<Torrent, string>
+  header: Header<AppTableFeatures, Torrent, unknown>
 }) {
   const {
     attributes,
@@ -219,7 +217,9 @@ const Torrents = () => {
   const [torrents] = useAtom(getFilteredTorsAtom)
   // console.log(`torrents: ${new Date().toLocaleTimeString()}`, torrents)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: appTableFeatures,
+    enableRowRangeSelection: false,
     data: torrents,
     columns: torsColumns,
     state: {
@@ -234,11 +234,8 @@ const Torrents = () => {
     onColumnVisibilityChange,
     onColumnFiltersChange,
     onSortingChange,
-    autoResetPageIndex: false,
     columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+
     // debugAll: true,
   })
 
@@ -254,7 +251,7 @@ const Torrents = () => {
 
   function handleClickRow(
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    row: Row<Torrent>,
+    row: Row<AppTableFeatures, Torrent>,
   ) {
     if (e.ctrlKey || e.metaKey) {
       row.toggleSelected()
@@ -297,11 +294,11 @@ const Torrents = () => {
         <DefaultActionBar rowNum={rows.length} />
       )}
       <div className="flex-1 overflow-auto rounded border">
-        <Table className="relative table h-full">
+        <Table className="relative flex h-full min-h-0 flex-col">
           {/* thead */}
           <TorrentsTableHeader />
           {/* tbody */}
-          <TableBody className="relative h-full">
+          <TableBody className="relative min-h-0 flex-1">
             <VList>
               {rows.map((row) => {
                 return (

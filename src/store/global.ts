@@ -2,6 +2,7 @@ import { Table } from '@tanstack/react-table'
 import { atom } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import { statusList } from '@/config/constants'
+import type { AppTableFeatures } from '@/config/table'
 import type { BatchActionFeedback } from '@/domain/batchActions'
 import {
   Categories,
@@ -87,7 +88,7 @@ export const currTorAtom = atom(-1)
 export const batchActionFeedbackAtom = atom<BatchActionFeedback | null>(null)
 export const batchActionPendingAtom = atom(false)
 
-export const torsTableAtom = atom<Table<Torrent> | null>(null)
+export const torsTableAtom = atom<Table<AppTableFeatures, Torrent> | null>(null)
 
 export const getCurrHashAtom = atom((get) => {
   const torsTable = get(torsTableAtom)

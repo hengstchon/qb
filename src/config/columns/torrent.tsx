@@ -1,5 +1,11 @@
-import { createColumnHelper, filterFns, SortingFn } from '@tanstack/react-table'
+import {
+  createColumnHelper,
+  filterFn_equalsString,
+  filterFn_includesString,
+  SortFn,
+} from '@tanstack/react-table'
 import { MAX_ETA } from '@/config/constants'
+import type { AppTableFeatures } from '@/config/table'
 import { Torrent } from '@/types'
 import {
   formatBytes,
@@ -11,16 +17,18 @@ import {
 } from '@/utils'
 
 const sortingFnWithField =
-  <T extends Record<string, number>>(field: string): SortingFn<Torrent> =>
+  <T extends Record<string, number>>(
+    field: string,
+  ): SortFn<AppTableFeatures, Torrent> =>
   (rowA, rowB, columnId) =>
     (rowA.getValue(columnId) as T)[field] >
     (rowB.getValue(columnId) as T)[field]
       ? 1
       : -1
 
-const ch = createColumnHelper<Torrent>()
+const ch = createColumnHelper<AppTableFeatures, Torrent>()
 
-export const torsColumns = [
+export const torsColumns = ch.columns([
   ch.accessor('name', {
     id: 'name',
     header: 'Name',
@@ -77,7 +85,7 @@ export const torsColumns = [
       const { num_seeds, num_complete } = p.getValue()
       return `${num_seeds}(${num_complete})`
     },
-    sortingFn: sortingFnWithField('num_complete'),
+    sortFn: sortingFnWithField('num_complete'),
     size: 120,
   }),
   ch.accessor(
@@ -89,7 +97,7 @@ export const torsColumns = [
         const { num_leechs, num_incomplete } = p.getValue()
         return `${num_leechs}(${num_incomplete})`
       },
-      sortingFn: sortingFnWithField('num_incomplete'),
+      sortFn: sortingFnWithField('num_incomplete'),
       size: 120,
     },
   ),
@@ -125,7 +133,7 @@ export const torsColumns = [
       if (filterValue === null) {
         return true
       } else {
-        return filterFns.equalsString(row, columnId, filterValue, addMeta)
+        return filterFn_equalsString(row, columnId, filterValue, addMeta)
       }
     },
   }),
@@ -137,9 +145,9 @@ export const torsColumns = [
       if (filterValue === null) {
         return true
       } else if (filterValue === '') {
-        return filterFns.equalsString(row, columnId, filterValue, addMeta)
+        return filterFn_equalsString(row, columnId, filterValue, addMeta)
       } else {
-        return filterFns.includesString(row, columnId, filterValue, addMeta)
+        return filterFn_includesString(row, columnId, filterValue, addMeta)
       }
     },
   }),
@@ -204,7 +212,7 @@ export const torsColumns = [
           ? `${fmActive} (seeded for ${fmSeeding})`
           : fmActive
       },
-      sortingFn: sortingFnWithField('time_active'),
+      sortFn: sortingFnWithField('time_active'),
       size: 200,
     },
   ),
@@ -246,4 +254,4 @@ export const torsColumns = [
     cell: (p) => p.getValue().toFixed(3),
     size: 120,
   }),
-]
+])

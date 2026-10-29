@@ -1,11 +1,12 @@
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { selectColumnDef } from '@/components/common/DataTable/selectColumn'
+import { createColumnHelper } from '@tanstack/react-table'
+import { createSelectColumn } from '@/components/common/DataTable/selectColumn'
+import type { AppTableFeatures } from '@/config/table'
 import { trackerStatusLabel } from '@/services/normalizers'
 import { Tracker } from '@/types'
 import { Badge } from '@/ui/Badge'
 import { formatAnnounceTime } from '@/utils'
 
-const ch = createColumnHelper<Tracker>()
+const ch = createColumnHelper<AppTableFeatures, Tracker>()
 
 const statusClassName = (status: number) => {
   if (status === 4) return 'border-amber-500 text-amber-700 dark:text-amber-300'
@@ -22,8 +23,8 @@ const TrackerStatus = ({ status }: { status: number }) => (
   </Badge>
 )
 
-export const trksColumns = [
-  selectColumnDef as ColumnDef<Tracker>,
+export const trksColumns = ch.columns([
+  createSelectColumn<Tracker>(),
   ch.accessor('tier', {
     id: 'tier',
     header: 'Tier',
@@ -107,4 +108,4 @@ export const trksColumns = [
       )
     },
   }),
-]
+])

@@ -1,14 +1,11 @@
 import { useMemo } from 'react'
-import {
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import useSWR from 'swr'
 import DataTable from '@/components/common/DataTable'
 import { trksColumns } from '@/config/columns'
+import { appTableFeatures } from '@/config/table'
 import { noCapabilities } from '@/domain/capabilities'
 import { API } from '@/services'
 import { normalizeTrackers } from '@/services/normalizers'
@@ -63,7 +60,9 @@ const Trackers = () => {
   const [columnVisibility, onColumnVisibilityChange] = useAtom(trksColVisiAtom)
   const [sorting, onSortingChange] = useAtom(trksSortAtom)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: appTableFeatures,
+    enableRowRangeSelection: false,
     data: trackers,
     columns,
     state: {
@@ -77,8 +76,6 @@ const Trackers = () => {
     onColumnVisibilityChange,
     onSortingChange,
     columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   })
 
   return (

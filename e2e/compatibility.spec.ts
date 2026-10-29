@@ -51,10 +51,14 @@ test('login, sync, filter, add, stop, start, and delete without files', async ({
   })
   await page.getByRole('button', { name: 'Expand details panel' }).click()
   await page.getByRole('tab', { name: 'General' }).click()
-  await page.waitForTimeout(250)
-  expect(pieceAvailabilityRequests).toBe(
-    process.env.E2E_PROFILE === 'qb523' ? 1 : 0,
-  )
+  await expect(
+    page.getByRole('heading', { name: 'Transfer', exact: true }),
+  ).toBeVisible()
+  if (process.env.E2E_PROFILE === 'qb523') {
+    await expect.poll(() => pieceAvailabilityRequests).toBe(1)
+  } else {
+    expect(pieceAvailabilityRequests).toBe(0)
+  }
 
   const startResponse = page.waitForResponse(
     (response) =>

@@ -1,4 +1,4 @@
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import {
   ChevronDown,
   ChevronRight,
@@ -6,19 +6,20 @@ import {
   FolderClosedIcon,
   FolderOpenIcon,
 } from 'lucide-react'
-import { selectColumnDef } from '@/components/common/DataTable/selectColumn'
+import { createSelectColumn } from '@/components/common/DataTable/selectColumn'
 import { FilePriority } from '@/config/constants'
+import type { AppTableFeatures } from '@/config/table'
 import { FileNode } from '@/types'
 import { Button } from '@/ui/Button'
 import { formatBytes, formatPercentage } from '@/utils'
 
-const ch = createColumnHelper<FileNode>()
+const ch = createColumnHelper<AppTableFeatures, FileNode>()
 
 const collapsedIcon = <ChevronRight className="mr-1 h-4 w-4 flex-none" />
 const expandedIcon = <ChevronDown className="mr-1 h-4 w-4 flex-none" />
 
-export const filesColumns = [
-  selectColumnDef as ColumnDef<FileNode>,
+export const filesColumns = ch.columns([
+  createSelectColumn<FileNode>(),
   ch.accessor('name', {
     id: 'name',
     header: ({ table }) => (
@@ -125,4 +126,4 @@ export const filesColumns = [
     size: 100,
     cell: (p) => formatPercentage(p.getValue()),
   }),
-]
+])

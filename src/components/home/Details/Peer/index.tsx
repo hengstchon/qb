@@ -1,13 +1,10 @@
 import { useMemo } from 'react'
-import {
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { focusAtom } from 'jotai-optics'
 import DataTable from '@/components/common/DataTable'
 import { peersColumns } from '@/config/columns'
+import { appTableFeatures } from '@/config/table'
 import { useTorPeers } from '@/hooks/useTorPeers'
 import { connectionInfoAtom, peerTableStateAtom } from '@/store'
 import { PeerType } from '@/types'
@@ -43,7 +40,9 @@ const Peers = () => {
   const [columnVisibility, onColumnVisibilityChange] = useAtom(peersColVisiAtom)
   const [sorting, onSortingChange] = useAtom(peersSortAtom)
 
-  const table = useReactTable({
+  const table = useTable({
+    features: appTableFeatures,
+    enableRowRangeSelection: false,
     data,
     columns,
     state: {
@@ -57,8 +56,6 @@ const Peers = () => {
     onColumnVisibilityChange,
     onSortingChange,
     columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   })
 
   return (

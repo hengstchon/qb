@@ -1,12 +1,17 @@
-import { flexRender, type Row as TableRow } from '@tanstack/react-table'
+import {
+  flexRender,
+  type RowData,
+  type Row as TableRow,
+} from '@tanstack/react-table'
 import { useAtom, type PrimitiveAtom } from 'jotai'
+import type { AppTableFeatures } from '@/config/table'
 import { cn } from '@/utils'
 
-const Row = <T,>({
+const Row = <T extends RowData>({
   row,
   currRowAtom,
 }: {
-  row: TableRow<T>
+  row: TableRow<AppTableFeatures, T>
   currRowAtom: PrimitiveAtom<number>
 }) => {
   const [currRow, setCurrRow] = useAtom(currRowAtom)

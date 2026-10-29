@@ -1,13 +1,19 @@
 import { SetStateAction } from 'react'
-import { ColumnOrderState, flexRender, Header } from '@tanstack/react-table'
+import {
+  ColumnOrderState,
+  flexRender,
+  Header,
+  type RowData,
+} from '@tanstack/react-table'
 import { WritableAtom } from 'jotai'
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
+import type { AppTableFeatures } from '@/config/table'
 import { cn } from '@/utils'
 
-const HeaderColumn = <T,>({
+const HeaderColumn = <T extends RowData>({
   header,
 }: {
-  header: Header<T, unknown>
+  header: Header<AppTableFeatures, T, unknown>
   colOrderAtom: WritableAtom<
     ColumnOrderState,
     [arg: SetStateAction<ColumnOrderState>],
